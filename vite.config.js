@@ -5,6 +5,7 @@ import {defineConfig} from 'vite';
 
 export default defineConfig(() => {
   return {
+<<<<<<< HEAD
     plugins: [
       react(),
       tailwindcss(),
@@ -31,6 +32,9 @@ export default defineConfig(() => {
         }
       }
     ],
+=======
+    plugins: [react(), tailwindcss()],
+>>>>>>> origin/main
     resolve: {
       alias: {
         '@': path.resolve(__dirname, '.'),
@@ -49,12 +53,16 @@ export default defineConfig(() => {
           main: path.resolve(__dirname, 'index.html'),
           hub: path.resolve(__dirname, 'hub/index.html'),
           japan: path.resolve(__dirname, 'japan/index.html'),
+<<<<<<< HEAD
           japanMobile: path.resolve(__dirname, 'japan/mobile/index.html'),
           components: path.resolve(__dirname, 'components/index.html'),
           aniwatch: path.resolve(__dirname, 'aniwatch/index.html'),
           aniwatchWatch: path.resolve(__dirname, 'aniwatch/watch/index.html'),
           cloud: path.resolve(__dirname, 'cloud/index.html'),
           cloudMobile: path.resolve(__dirname, 'cloud/mobile/index.html')
+=======
+          japanMobile: path.resolve(__dirname, 'japan/mobile/index.html')
+>>>>>>> origin/main
         }
       }
     }
