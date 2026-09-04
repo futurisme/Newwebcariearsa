@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script>
+    if (window.innerWidth > 768) {
+      window.location.replace('/japan/');
+    }
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CARIEARSA | Interactive Japan Map</title>
+  <link rel="stylesheet" href="/src/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Noto+Sans+JP:wght@400;700;900&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
+  
+  <style>
+    /* Japan Map Specific Styles */
+    /* Mobile Layout Overrides */
+    body {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      overflow: hidden;
+      margin: 0;
+    }
+    .map-container {
+      flex: 1;
+      position: relative;
+      width: 100%;
+      height: auto;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: radial-gradient(circle at center, #2a2a2a 0%, var(--ink-true-black) 100%);
+    }
+    .map-container::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-image: 
+        linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+      z-index: 0;
+    }
+    svg {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      z-index: 1;
+    }
+    .prefecture {
+      fill: #222222;
+      stroke: var(--ink-true-black);
+      stroke-width: 0.5px;
+      transition: fill 0.2s ease-out;
+      cursor: pointer;
+      will-change: fill;
+    }
+    .prefecture:hover, .prefecture.active-pref {
+      fill: var(--manga-accent) !important;
+      stroke: var(--paper-white);
+      stroke-width: 2px;
+    }
+    
+    /* Hokkaido Region */
+    .region-hokkaido { fill: #1C2331; }
+    /* Tohoku Region */
+    .region-tohoku { fill: #2C3E50; }
+    /* Kanto Region */
+    .region-kanto { fill: #480017; } /* Deep manga red variant */
+    /* Chubu Region */
+    .region-chubu { fill: #123440; }
+    /* Kansai Region */
+    .region-kansai { fill: #4B4B4B; }
+    /* Chugoku Region */
+    .region-chugoku { fill: #252525; }
+    /* Shikoku Region */
+    .region-shikoku { fill: #111111; }
+    /* Kyushu Region */
+    .region-kyushu { fill: #3F1515; }
+
+    /* Return button */
+    .back-btn {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      z-index: 50;
+      padding: 6px 12px;
+      background: var(--manga-red);
+      color: var(--paper-white);
+      border: 2px solid var(--paper-white);
+      box-shadow: 4px 4px 0px var(--paper-white);
+      text-decoration: none;
+      font-family: var(--font-display);
+      font-weight: 700;
+      text-transform: uppercase;
+      font-size: 0.9rem;
+      transition: all 0.2s;
+    }
+    .back-btn:hover {
+      transform: translate(-2px, -2px);
+      box-shadow: 6px 6px 0px var(--manga-accent);
+      background: var(--ink-true-black);
+      color: var(--manga-accent);
+    }
+
+    /* Pop-up Panel (Bottom Sheet) */
+    .popup-panel {
+      position: absolute;
+      bottom: -100%;
+      left: 0;
+      right: 0;
+      width: 100%;
+      height: 55vh;
+      background: var(--paper-white);
+      border-top: 4px solid var(--ink-true-black);
+      box-shadow: 0px -4px 0px var(--manga-red);
+      padding: 16px;
+      box-sizing: border-box;
+      color: var(--ink-true-black);
+      font-family: var(--font-body);
+      transition: bottom 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      z-index: 50;
+      display: flex;
+      flex-direction: column;
+    }
+    .popup-panel.active {
+      bottom: 0;
+    }
+    .popup-scroll-area {
+      overflow-y: auto;
+      flex: 1;
+      padding-right: 8px;
+      margin-right: -8px;
+    }
+    .popup-title {
+      font-family: var(--font-display);
+      font-size: 2rem;
+      margin: 0 0 4px 0;
+      text-transform: uppercase;
+      line-height: 1;
+    }
+    .popup-jp {
+      font-family: var(--font-jp);
+      font-size: 1.2rem;
+      color: var(--manga-red);
+      margin: 0 0 16px 0;
+      font-weight: 900;
+    }
+    .popup-region {
+      display: inline-block;
+      background: var(--ink-true-black);
+      color: var(--paper-white);
+      padding: 4px 8px;
+      font-size: 0.8rem;
+      font-weight: bold;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+    
+    /* Gallery Styles */
+    .popup-gallery {
+      position: relative;
+      width: 100%;
+      height: 160px;
+      margin-bottom: 16px;
+      border: 3px solid var(--ink-true-black);
+      box-shadow: 4px 4px 0px var(--manga-red);
+      overflow: hidden;
+      background: var(--ink-true-black);
+    }
+    .gallery-track {
+      display: flex;
+      height: 100%;
+      transition: transform 0.4s cubic-bezier(0.85, 0, 0.15, 1);
+    }
+    .gallery-track img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      flex-shrink: 0;
+      filter: grayscale(100%) contrast(1.2);
+      transition: filter 0.3s;
+    }
+    .gallery-track img:hover {
+      filter: grayscale(0%) contrast(1.1);
+    }
+    .gallery-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: var(--paper-white);
+      color: var(--ink-true-black);
+      border: 2px solid var(--ink-true-black);
+      width: 28px;
+      height: 28px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      font-size: 0.8rem;
+      z-index: 2;
+      transition: all 0.2s;
+    }
+    .gallery-btn:hover {
+      background: var(--manga-accent);
+      transform: translateY(-50%) scale(1.1);
+    }
+    .gallery-btn.prev { left: 4px; }
+    .gallery-btn.next { right: 4px; }
+    .gallery-dots {
+      position: absolute;
+      bottom: 8px;
+      left: 0;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      gap: 6px;
+      z-index: 2;
+    }
+    .dot {
+      width: 8px;
+      height: 8px;
+      background: var(--paper-white);
+      border: 1px solid var(--ink-true-black);
+      border-radius: 50%;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .dot.active {
+      background: var(--manga-red);
+      transform: scale(1.3);
+    }
+
+    .popup-desc {
+      font-size: 0.9rem;
+      line-height: 1.5;
+      margin: 0 0 16px 0;
+    }
+    .popup-cities {
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
+    }
+    .popup-cities li {
+      padding: 8px 0;
+      border-bottom: 2px dashed var(--bg-gray);
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.85rem;
+      font-weight: bold;
+    }
+    .popup-cities li:last-child {
+      border-bottom: none;
+    }
+
+    /* Filters */
+    .filters {
+      position: absolute;
+      top: 60px;
+      left: 16px;
+      right: 16px;
+      z-index: 50;
+      display: flex;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      gap: 8px;
+      padding-bottom: 8px;
+      scrollbar-width: none;
+    }
+    .filters::-webkit-scrollbar {
+      display: none;
+    }
+    .filter-btn {
+      flex-shrink: 0;
+      padding: 6px 12px;
+      background: var(--ink-true-black);
+      color: var(--paper-white);
+      border: 2px solid var(--paper-white);
+      font-family: var(--font-display);
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .filter-btn:hover, .filter-btn.active {
+      background: var(--manga-accent);
+      color: var(--ink-true-black);
+      border-color: var(--ink-true-black);
+      box-shadow: 2px 2px 0px var(--paper-white);
+      transform: translate(-1px, -1px);
+    }
+
+    /* Controls */
+    .controls {
+      position: absolute;
+      top: 110px;
+      right: 16px;
+      z-index: 50;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .control-btn {
+      width: 36px;
+      height: 36px;
+      background: var(--paper-white);
+      color: var(--ink-true-black);
+      border: 3px solid var(--ink-true-black);
+      box-shadow: 2px 2px 0px var(--manga-red);
+      font-size: 1.2rem;
+      font-weight: bold;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: all 0.2s;
+    }
+    .control-btn:hover {
+      background: var(--manga-accent);
+      transform: translate(-2px, -2px);
+      box-shadow: 5px 5px 0px var(--manga-red);
+    }
+  </style>
+</head>
+<body>
+  <div class="map-container" id="map-container">
+    <div style="position: absolute; top: 16px; left: 16px; z-index: 50; display: flex; gap: 8px;">
+      <a href="/" class="back-btn" style="position: static;">← Back</a>
+      <a href="/components/" class="back-btn" style="position: static; background: var(--manga-accent); color: var(--ink-true-black);" title="View Design System">COMPONENTS</a>
+      <a href="/aniwatch/" class="back-btn" style="position: static; background: var(--manga-red); color: var(--paper-white);" title="Anime Streaming">ANIWATCH</a>
+      <a href="/cloud/" class="back-btn" style="position: static; background: #0284c7; color: #ffffff;" title="CARIEARSA-CLOUD">CLOUD</a>
+    </div>
+    
+    <div class="filters" id="filters">
+      <button class="filter-btn active" data-region="all">All Regions</button>
+      <button class="filter-btn" data-region="hokkaido">Hokkaido</button>
+      <button class="filter-btn" data-region="tohoku">Tohoku</button>
+      <button class="filter-btn" data-region="kanto">Kanto</button>
+      <button class="filter-btn" data-region="chubu">Chubu</button>
+      <button class="filter-btn" data-region="kansai">Kansai</button>
+      <button class="filter-btn" data-region="chugoku">Chugoku</button>
+      <button class="filter-btn" data-region="shikoku">Shikoku</button>
+      <button class="filter-btn" data-region="kyushu">Kyushu & Okinawa</button>
+    </div>
+
+    <div class="controls">
+      <button class="control-btn" id="zoom-in">+</button>
+      <button class="control-btn" id="zoom-out">-</button>
+      <button class="control-btn" id="zoom-reset">⟲</button>
+    </div>
+  </div>
+
+  <div class="popup-panel" id="popup-panel">
+    <div class="popup-scroll-area">
+      <h2 class="popup-title" id="p-title">Prefecture</h2>
+      <div class="popup-jp" id="p-jp">都道府県</div>
+      <div class="popup-region" id="p-region">REGION</div>
+      
+      <div class="popup-gallery">
+        <div class="gallery-track" id="p-gallery-track"></div>
+        <button class="gallery-btn prev" id="g-prev">◀</button>
+        <button class="gallery-btn next" id="g-next">▶</button>
+        <div class="gallery-dots" id="p-gallery-dots"></div>
+      </div>
+
+      <p class="popup-desc" id="p-desc">Description of the prefecture.</p>
+      <ul class="popup-cities" id="p-cities">
+      </ul>
+    </div>
+  </div>
+
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <script src="https://unpkg.com/topojson-client@3"></script>
+  <script type="module" src="/src/mobileMap.js"></script>
+</body>
+</html>

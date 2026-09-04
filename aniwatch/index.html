@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="akira">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ANIWATCH - Cyber Anime Streaming</title>
+  <link rel="stylesheet" href="/src/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700;1,900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Sans+JP:wght@400;700;900&family=JetBrains+Mono:wght@400;700;800&display=swap" rel="stylesheet">
+  <style>
+    /* ANIWATCH SPECIFIC STYLES */
+    :root {
+      --header-height: 70px;
+    }
+    
+    body {
+      background: var(--bg-gray);
+      color: var(--ink-true-black);
+      overflow-x: hidden;
+    }
+
+    /* HEADER */
+    .aw-header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: var(--header-height);
+      background: var(--paper-white);
+      border-bottom: 4px solid var(--ink-true-black);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      z-index: 100;
+      box-shadow: 0 4px 0 var(--ink-true-black);
+    }
+    .aw-brand {
+      font-family: var(--font-display);
+      font-size: 2rem;
+      font-weight: 900;
+      color: var(--manga-red);
+      text-decoration: none;
+      text-transform: uppercase;
+      font-style: italic;
+      letter-spacing: -1px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-shadow: 2px 2px 0px var(--ink-true-black);
+    }
+    .aw-brand-jp {
+      font-family: var(--font-jp);
+      font-size: 1rem;
+      color: var(--ink-true-black);
+      text-shadow: none;
+      letter-spacing: 0;
+    }
+    .aw-nav {
+      display: none;
+    }
+    @media (min-width: 768px) {
+      .aw-nav {
+        display: flex;
+        gap: 24px;
+      }
+    }
+    .aw-nav a {
+      font-family: var(--font-mono);
+      font-weight: 700;
+      color: var(--ink-true-black);
+      text-decoration: none;
+      text-transform: uppercase;
+      font-size: 0.9rem;
+      transition: color 0.2s;
+      position: relative;
+    }
+    .aw-nav a:hover, .aw-nav a.active {
+      color: var(--manga-red);
+    }
+    .aw-nav a.active::after {
+      content: '';
+      position: absolute;
+      bottom: -6px;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: var(--manga-red);
+    }
+    .aw-actions {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+    }
+    .aw-btn {
+      background: var(--manga-accent);
+      color: var(--ink-true-black);
+      border: 2px solid var(--ink-true-black);
+      font-family: var(--font-mono);
+      font-weight: 800;
+      padding: 8px 16px;
+      text-transform: uppercase;
+      cursor: pointer;
+      box-shadow: 3px 3px 0 var(--manga-red);
+      transition: all 0.2s;
+      text-decoration: none;
+      font-size: 0.85rem;
+    }
+    .aw-btn:hover {
+      transform: translate(-2px, -2px);
+      box-shadow: 5px 5px 0 var(--manga-red);
+    }
+
+    /* MAIN CONTENT */
+    .aw-main {
+      padding-top: var(--header-height);
+      min-height: 100vh;
+    }
+
+    /* HERO BANNER */
+    .aw-hero {
+      position: relative;
+      height: 65vh;
+      min-height: 500px;
+      background: var(--ink-true-black);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      border-bottom: 4px solid var(--ink-true-black);
+    }
+    .aw-hero-bg {
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background-image: url('https://img.youtube.com/vi/v4E5dGgDoxQ/maxresdefault.jpg');
+      background-size: cover;
+      background-position: center;
+      opacity: 0.5;
+      mix-blend-mode: screen;
+      filter: grayscale(20%) contrast(120%);
+    }
+    .aw-hero-overlay {
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: linear-gradient(90deg, var(--ink-true-black) 0%, rgba(0,0,0,0.4) 50%, transparent 100%);
+    }
+    
+    /* Cyber grid overlay */
+    .aw-hero::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background-image: 
+        linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+    }
+
+    .aw-hero-content {
+      position: relative;
+      z-index: 10;
+      padding: 0 5%;
+      max-width: 800px;
+    }
+    .aw-hero-tag {
+      display: inline-block;
+      background: var(--manga-red);
+      color: var(--paper-white);
+      font-family: var(--font-mono);
+      font-weight: 800;
+      font-size: 0.8rem;
+      padding: 4px 12px;
+      margin-bottom: 16px;
+      border: 2px solid var(--ink-true-black);
+      box-shadow: 2px 2px 0 var(--manga-yellow);
+      transform: skew(-10deg);
+    }
+    .aw-hero-title {
+      font-family: var(--font-display);
+      font-size: 4rem;
+      font-weight: 900;
+      color: var(--paper-white);
+      line-height: 1;
+      margin: 0 0 16px 0;
+      text-transform: uppercase;
+      font-style: italic;
+      text-shadow: 4px 4px 0 var(--manga-red), 8px 8px 0 var(--ink-true-black);
+    }
+    @media (max-width: 767px) {
+      .aw-hero-title { font-size: 2.5rem; text-shadow: 2px 2px 0 var(--manga-red), 4px 4px 0 var(--ink-true-black); }
+    }
+    .aw-hero-desc {
+      font-family: var(--font-body);
+      font-size: 1.1rem;
+      color: var(--paper-white);
+      opacity: 0.9;
+      line-height: 1.6;
+      margin-bottom: 32px;
+      max-width: 600px;
+      text-shadow: 1px 1px 2px #000;
+      border-left: 4px solid var(--manga-accent);
+      padding-left: 16px;
+    }
+    
+    .aw-play-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      background: var(--manga-yellow);
+      color: var(--ink-true-black);
+      border: 3px solid var(--ink-true-black);
+      padding: 16px 32px;
+      font-family: var(--font-display);
+      font-size: 1.4rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      text-decoration: none;
+      box-shadow: 6px 6px 0 var(--ink-true-black);
+      transition: all 0.2s cubic-bezier(0.2, 1, 0.3, 1);
+      clip-path: polygon(0 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0 100%);
+    }
+    .aw-play-btn:hover {
+      background: var(--manga-accent);
+      transform: translate(-3px, -3px);
+      box-shadow: 9px 9px 0 var(--manga-red);
+    }
+    .play-icon {
+      width: 0; 
+      height: 0; 
+      border-top: 10px solid transparent;
+      border-bottom: 10px solid transparent;
+      border-left: 16px solid var(--ink-true-black);
+    }
+
+    /* SECTION */
+    .aw-section {
+      padding: 60px 5%;
+    }
+    .aw-section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      border-bottom: 4px solid var(--ink-true-black);
+      padding-bottom: 12px;
+      margin-bottom: 32px;
+      position: relative;
+    }
+    .aw-section-header::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      right: 0;
+      width: 30%;
+      height: 4px;
+      background: var(--manga-red);
+    }
+    .aw-section-title {
+      font-family: var(--font-display);
+      font-size: 2.2rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      font-style: italic;
+      color: var(--ink-true-black);
+      margin: 0;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .aw-section-title span {
+      font-family: var(--font-jp);
+      font-size: 1.2rem;
+      color: var(--manga-red);
+      font-style: normal;
+    }
+
+    /* ANIME GRID */
+    .aw-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 24px;
+    }
+    .aw-card {
+      background: var(--paper-white);
+      border: 3px solid var(--ink-true-black);
+      box-shadow: 6px 6px 0 var(--ink-true-black);
+      text-decoration: none;
+      color: inherit;
+      display: flex;
+      flex-direction: column;
+      transition: all 0.2s cubic-bezier(0.2, 1, 0.3, 1);
+      position: relative;
+      clip-path: polygon(0 0, 100% 0, 100% calc(100% - 16px), calc(100% - 16px) 100%, 0 100%);
+    }
+    .aw-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 8px 10px 0 var(--manga-red);
+    }
+    .aw-card:hover .aw-card-img-overlay {
+      opacity: 1;
+    }
+    .aw-card:hover .aw-card-img {
+      transform: scale(1.05);
+    }
+    .aw-card-img-wrap {
+      width: 100%;
+      aspect-ratio: 16/9;
+      border-bottom: 3px solid var(--ink-true-black);
+      overflow: hidden;
+      position: relative;
+    }
+    .aw-card-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.4s ease;
+      filter: grayscale(10%) contrast(110%);
+    }
+    .aw-card-img-overlay {
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(229, 9, 20, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .aw-card-play {
+      width: 48px;
+      height: 48px;
+      background: var(--manga-yellow);
+      border: 3px solid var(--ink-true-black);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 3px 3px 0 var(--ink-true-black);
+    }
+    .aw-card-play::after {
+      content: '';
+      width: 0; height: 0;
+      border-top: 8px solid transparent;
+      border-bottom: 8px solid transparent;
+      border-left: 12px solid var(--ink-true-black);
+      margin-left: 4px;
+    }
+    .aw-card-badge {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      background: var(--manga-accent);
+      color: var(--ink-true-black);
+      border: 2px solid var(--ink-true-black);
+      font-family: var(--font-mono);
+      font-weight: 800;
+      font-size: 0.7rem;
+      padding: 2px 6px;
+      box-shadow: 2px 2px 0 var(--ink-true-black);
+      z-index: 2;
+    }
+    .aw-card-info {
+      padding: 16px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    .aw-card-title {
+      font-family: var(--font-display);
+      font-size: 1.2rem;
+      font-weight: 800;
+      margin: 0 0 8px 0;
+      line-height: 1.2;
+      text-transform: uppercase;
+      color: var(--ink-true-black);
+    }
+    .aw-card-meta {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--manga-red);
+      font-weight: 700;
+      margin-bottom: auto;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="aw-header">
+    <a href="/aniwatch/" class="aw-brand">
+      ANIWATCH <span class="aw-brand-jp">アニメ</span>
+    </a>
+    <nav class="aw-nav">
+      <a href="#" class="active">Trending</a>
+      <a href="#">Simulcasts 2026</a>
+      <a href="#">Shonen</a>
+      <a href="#">Seinen</a>
+    </nav>
+    <div class="aw-actions">
+      <a href="/cloud/" class="aw-btn" style="background: #0284c7; color: #fff;">CLOUD VAULT</a>
+      <a href="/japan/" class="aw-btn" style="background: var(--paper-white);">← JAPAN MAP</a>
+      <a href="/" class="aw-btn" style="background: var(--paper-white);">HUB</a>
+    </div>
+  </header>
+
+  <!-- MAIN -->
+  <main class="aw-main">
+    <!-- HERO -->
+    <section class="aw-hero">
+      <div class="aw-hero-bg"></div>
+      <div class="aw-hero-overlay"></div>
+      <div class="aw-hero-content">
+        <div class="aw-hero-tag">NEW EPISODE OUT NOW</div>
+        <h1 class="aw-hero-title">Frieren:<br>Beyond Journey's End</h1>
+        <p class="aw-hero-desc">The mage Frieren has defeated the Demon King alongside the hero Himmel's party after a 10-year quest. As an elf, her life is long, and she embarks on a new journey to understand humanity.</p>
+        <a href="/aniwatch/watch/index.html?id=v4E5dGgDoxQ&title=Frieren:%20Beyond%20Journey's%20End" class="aw-play-btn">
+          <div class="play-icon"></div>
+          WATCH EPISODE 1
+        </a>
+      </div>
+    </section>
+
+    <!-- TRENDING NOW -->
+    <section class="aw-section">
+      <div class="aw-section-header">
+        <h2 class="aw-section-title">TRENDING NOW <span>トレンド</span></h2>
+      </div>
+      
+      <div class="aw-grid">
+        
+        <!-- CARD 1 -->
+        <a href="/aniwatch/watch/index.html?id=aPstCib0EaU&title=Solo%20Leveling" class="aw-card">
+          <div class="aw-card-img-wrap">
+            <div class="aw-card-badge">SUB | DUB</div>
+            <img src="https://img.youtube.com/vi/aPstCib0EaU/maxresdefault.jpg" alt="Solo Leveling" class="aw-card-img" onerror="this.src='https://images.unsplash.com/photo-1626244498305-b1a134d1b7b0?q=80&w=800&auto=format&fit=crop'">
+            <div class="aw-card-img-overlay">
+              <div class="aw-card-play"></div>
+            </div>
+          </div>
+          <div class="aw-card-info">
+            <h3 class="aw-card-title">Solo Leveling</h3>
+            <div class="aw-card-meta">ACTION / FANTASY</div>
+          </div>
+        </a>
+
+        <!-- CARD 2 -->
+        <a href="/aniwatch/watch/index.html?id=O6qVnQGqqkw&title=Jujutsu%20Kaisen" class="aw-card">
+          <div class="aw-card-img-wrap">
+            <div class="aw-card-badge">SUB | DUB</div>
+            <img src="https://img.youtube.com/vi/O6qVnQGqqkw/maxresdefault.jpg" alt="Jujutsu Kaisen" class="aw-card-img" onerror="this.src='https://images.unsplash.com/photo-1618331835717-801e976710b2?q=80&w=800&auto=format&fit=crop'">
+            <div class="aw-card-img-overlay">
+              <div class="aw-card-play"></div>
+            </div>
+          </div>
+          <div class="aw-card-info">
+            <h3 class="aw-card-title">Jujutsu Kaisen</h3>
+            <div class="aw-card-meta">ACTION / SUPERNATURAL</div>
+          </div>
+        </a>
+
+        <!-- CARD 3 -->
+        <a href="/aniwatch/watch/index.html?id=tF4faMbs5oQ&title=Demon%20Slayer" class="aw-card">
+          <div class="aw-card-img-wrap">
+            <div class="aw-card-badge">SUB | DUB</div>
+            <img src="https://img.youtube.com/vi/tF4faMbs5oQ/maxresdefault.jpg" alt="Demon Slayer" class="aw-card-img" onerror="this.src='https://images.unsplash.com/photo-1578632292335-df3f360ebce0?q=80&w=800&auto=format&fit=crop'">
+            <div class="aw-card-img-overlay">
+              <div class="aw-card-play"></div>
+            </div>
+          </div>
+          <div class="aw-card-info">
+            <h3 class="aw-card-title">Demon Slayer</h3>
+            <div class="aw-card-meta">ACTION / HISTORICAL</div>
+          </div>
+        </a>
+
+        <!-- CARD 4 -->
+        <a href="/aniwatch/watch/index.html?id=5-1DhcCpaMs&title=Kaiju%20No.%208" class="aw-card">
+          <div class="aw-card-img-wrap">
+            <div class="aw-card-badge">NEW</div>
+            <img src="https://img.youtube.com/vi/5-1DhcCpaMs/maxresdefault.jpg" alt="Kaiju No. 8" class="aw-card-img" onerror="this.src='https://images.unsplash.com/photo-1542831371-29b0f74f9713?q=80&w=800&auto=format&fit=crop'">
+            <div class="aw-card-img-overlay">
+              <div class="aw-card-play"></div>
+            </div>
+          </div>
+          <div class="aw-card-info">
+            <h3 class="aw-card-title">Kaiju No. 8</h3>
+            <div class="aw-card-meta">SCI-FI / ACTION</div>
+          </div>
+        </a>
+
+      </div>
+    </section>
+
+    <!-- NEW SIMULCASTS -->
+    <section class="aw-section" style="background: var(--ink-true-black); color: var(--paper-white); border-top: 4px solid var(--paper-white); position: relative;">
+      <div class="aw-section-header" style="border-bottom-color: var(--paper-white);">
+        <h2 class="aw-section-title" style="color: var(--paper-white);">SIMULCASTS 2026 <span>新作</span></h2>
+      </div>
+      
+      <div class="aw-grid">
+        
+        <!-- CARD 5 -->
+        <a href="/aniwatch/watch/index.html?id=e8Y4_sJnd40&title=Bleach:%20TYBW" class="aw-card" style="background: var(--bg-gray);">
+          <div class="aw-card-img-wrap">
+            <div class="aw-card-badge" style="background: var(--manga-red); color: var(--paper-white);">HOT</div>
+            <img src="https://img.youtube.com/vi/e8Y4_sJnd40/maxresdefault.jpg" alt="Bleach TYBW" class="aw-card-img" onerror="this.src='https://images.unsplash.com/photo-1618331835717-801e976710b2?q=80&w=800&auto=format&fit=crop'">
+            <div class="aw-card-img-overlay">
+              <div class="aw-card-play"></div>
+            </div>
+          </div>
+          <div class="aw-card-info">
+            <h3 class="aw-card-title">Bleach: TYBW</h3>
+            <div class="aw-card-meta">ACTION / SUPERNATURAL</div>
+          </div>
+        </a>
+
+        <!-- CARD 6 -->
+        <a href="/aniwatch/watch/index.html?id=q15CRdE5Bv0&title=Chainsaw%20Man" class="aw-card" style="background: var(--bg-gray);">
+          <div class="aw-card-img-wrap">
+            <div class="aw-card-badge">SUB | DUB</div>
+            <img src="https://img.youtube.com/vi/q15CRdE5Bv0/maxresdefault.jpg" alt="Chainsaw Man" class="aw-card-img" onerror="this.src='https://images.unsplash.com/photo-1542831371-29b0f74f9713?q=80&w=800&auto=format&fit=crop'">
+            <div class="aw-card-img-overlay">
+              <div class="aw-card-play"></div>
+            </div>
+          </div>
+          <div class="aw-card-info">
+            <h3 class="aw-card-title">Chainsaw Man</h3>
+            <div class="aw-card-meta">DARK FANTASY / GORE</div>
+          </div>
+        </a>
+        
+        <!-- CARD 7 -->
+        <a href="/aniwatch/watch/index.html?id=ofXigq9aIpo&title=Spy%20x%20Family" class="aw-card" style="background: var(--bg-gray);">
+          <div class="aw-card-img-wrap">
+            <div class="aw-card-badge">SUB | DUB</div>
+            <img src="https://img.youtube.com/vi/ofXigq9aIpo/maxresdefault.jpg" alt="Spy x Family" class="aw-card-img" onerror="this.src='https://images.unsplash.com/photo-1578632292335-df3f360ebce0?q=80&w=800&auto=format&fit=crop'">
+            <div class="aw-card-img-overlay">
+              <div class="aw-card-play"></div>
+            </div>
+          </div>
+          <div class="aw-card-info">
+            <h3 class="aw-card-title">Spy x Family</h3>
+            <div class="aw-card-meta">COMEDY / ACTION</div>
+          </div>
+        </a>
+
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+    // Init theme
+    const savedTheme = localStorage.getItem('cariearsa_theme');
+    if (savedTheme) {
+      document.documentElement.setAttribute('data-theme', savedTheme);
+      document.body.setAttribute('data-theme', savedTheme);
+    }
+  </script>
+</body>
+</html>

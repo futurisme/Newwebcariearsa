@@ -1,0 +1,1380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CARIEARSA | Component Library & Design System</title>
+  <link rel="stylesheet" href="/src/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Noto+Sans+JP:wght@400;700;900&family=Oswald:wght@500;700;900&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* COMPONENT SHOWCASE CUSTOM STYLES */
+    :root {
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+    
+    html {
+      overflow-y: auto !important;
+      overflow-x: hidden;
+      height: auto !important;
+      font-size: 14px;
+    }
+    
+    body {
+      height: auto !important;
+      overflow-y: auto !important;
+      overflow-x: hidden;
+      background-color: var(--bg-gray);
+      color: var(--ink-black);
+      padding-bottom: 60px;
+    }
+
+    .lib-container {
+      max-width: 1300px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    /* TOP BAR & THEME CONTROLLER */
+    .lib-header {
+      background: var(--ink-true-black);
+      color: var(--paper-white);
+      border-bottom: 4px solid var(--manga-red);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      padding: 12px 20px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+    }
+    
+    .lib-header-inner {
+      max-width: 1300px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .lib-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .lib-brand h1 {
+      font-family: var(--font-display);
+      font-size: 1.8rem;
+      margin: 0;
+      font-style: italic;
+      letter-spacing: -0.5px;
+      text-transform: uppercase;
+      line-height: 1;
+    }
+
+    .lib-badge {
+      background: var(--manga-red);
+      color: var(--paper-white);
+      font-family: var(--font-display);
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 3px 8px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      border: 1px solid var(--paper-white);
+      box-shadow: 2px 2px 0px var(--paper-white);
+    }
+
+    .lib-theme-switcher {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255,255,255,0.08);
+      padding: 4px 8px;
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 4px;
+      flex-wrap: wrap;
+    }
+
+    .theme-label {
+      font-family: var(--font-display);
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--manga-accent);
+      text-transform: uppercase;
+      margin-right: 4px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .theme-pill {
+      background: transparent;
+      color: var(--paper-white);
+      border: 1px solid rgba(255,255,255,0.3);
+      font-family: var(--font-display);
+      font-size: 0.75rem;
+      padding: 4px 10px;
+      cursor: pointer;
+      font-weight: 700;
+      text-transform: uppercase;
+      transition: all 0.2s cubic-bezier(0.2, 0.9, 0.3, 1);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .theme-pill .dot-indicator {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    .theme-pill:hover {
+      background: rgba(255,255,255,0.2);
+      transform: translateY(-1px);
+    }
+
+    .theme-pill.active {
+      background: var(--manga-accent);
+      color: var(--ink-true-black);
+      border-color: var(--paper-white);
+      box-shadow: 2px 2px 0px var(--paper-white);
+      font-weight: 900;
+    }
+
+    .lib-nav-links {
+      display: flex;
+      gap: 10px;
+    }
+
+    .lib-quick-btn {
+      padding: 4px 12px;
+      background: var(--paper-white);
+      color: var(--ink-true-black);
+      border: 2px solid var(--ink-true-black);
+      box-shadow: 2px 2px 0px var(--paper-white);
+      text-decoration: none;
+      font-family: var(--font-display);
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      transition: all 0.2s;
+    }
+
+    .lib-quick-btn:hover {
+      background: var(--manga-yellow);
+      color: var(--ink-true-black);
+      transform: translate(-2px, -2px);
+      box-shadow: 4px 4px 0px var(--manga-red);
+    }
+
+    /* SUB-NAV JUMP BAR */
+    .lib-subnav {
+      background: var(--paper-white);
+      border-bottom: 3px solid var(--ink-true-black);
+      padding: 8px 20px;
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      position: sticky;
+      top: 59px;
+      z-index: 90;
+      scrollbar-width: none;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .lib-subnav::-webkit-scrollbar { display: none; }
+
+    .subnav-link {
+      padding: 6px 14px;
+      background: var(--bg-gray);
+      color: var(--ink-true-black);
+      border: 2px solid var(--ink-true-black);
+      text-decoration: none;
+      font-family: var(--font-display);
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      white-space: nowrap;
+      transition: all 0.2s;
+      clip-path: polygon(0 0, 100% 0, 100% calc(100% - 6px), calc(100% - 6px) 100%, 0 100%);
+    }
+    .subnav-link:hover, .subnav-link.active {
+      background: var(--ink-true-black);
+      color: var(--paper-white);
+      box-shadow: 2px 2px 0px var(--manga-red);
+      transform: translateY(-2px);
+      text-shadow: 0 0 5px var(--manga-accent);
+    }
+
+    /* HERO BANNER IN LIBRARY */
+    .lib-hero {
+      margin-top: 24px;
+      background: var(--ink-true-black);
+      color: var(--paper-white);
+      border: 4px solid var(--ink-true-black);
+      box-shadow: 8px 8px 0px var(--manga-red);
+      padding: 48px 40px;
+      position: relative;
+      overflow: hidden;
+      clip-path: polygon(0 0, 100% 0, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0 100%);
+      background-image: 
+        linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+      background-size: 30px 30px;
+    }
+    @media (min-width: 768px) {
+      .lib-hero {
+        padding: 60px 50px;
+        clip-path: polygon(0 0, 100% 0, 100% calc(100% - 40px), calc(100% - 40px) 100%, 0 100%);
+      }
+    }
+    .lib-hero-title {
+      font-family: var(--font-display);
+      font-size: 3.2rem;
+      line-height: 0.95;
+      margin: 0 0 12px 0;
+      text-transform: uppercase;
+      font-style: italic;
+      letter-spacing: -1px;
+    }
+    .lib-hero-desc {
+      font-size: 1rem;
+      max-width: 750px;
+      line-height: 1.5;
+      margin: 0 0 16px 0;
+      font-weight: 500;
+      color: var(--paper-white);
+      opacity: 0.9;
+    }
+
+    /* SECTIONS */
+    .lib-section {
+      margin-top: 56px;
+    }
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      border-bottom: 4px solid var(--ink-true-black);
+      padding-bottom: 12px;
+      margin-bottom: 32px;
+      position: relative;
+    }
+    .section-header::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      right: 0;
+      width: 40%;
+      height: 4px;
+      background: var(--manga-red);
+    }
+    .section-header h2 {
+      font-family: var(--font-display);
+      font-size: 2.2rem;
+      margin: 0;
+      text-transform: uppercase;
+      font-style: italic;
+      line-height: 1;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: var(--ink-true-black);
+      text-shadow: 2px 2px 0px rgba(0,0,0,0.1);
+    }
+    .section-header .section-tag {
+      background: var(--ink-true-black);
+      color: var(--paper-white);
+      font-family: var(--font-display);
+      padding: 2px 8px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    /* SWATCH GRID */
+    .swatch-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 20px;
+    }
+    .swatch-card {
+      background: var(--paper-white);
+      color: var(--ink-true-black);
+      border: 3px solid var(--ink-true-black);
+      box-shadow: 4px 4px 0px var(--ink-true-black);
+      padding: 16px;
+      transition: all 0.2s cubic-bezier(0.2, 1, 0.3, 1);
+      cursor: pointer;
+      position: relative;
+      clip-path: polygon(0 0, 100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%);
+    }
+    @media (min-width: 768px) {
+      .swatch-card {
+        padding: 20px;
+      }
+    }
+    .swatch-card:hover {
+      transform: translate(-3px, -3px);
+      box-shadow: 6px 6px 0px var(--manga-red);
+    }
+    .swatch-preview {
+      height: 100px;
+      border: 2px solid var(--ink-true-black);
+      margin-bottom: 14px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      font-size: 1.2rem;
+      font-family: var(--font-jp);
+      color: var(--paper-white);
+      text-shadow: 1px 1px 0 var(--ink-true-black), -1px -1px 0 var(--ink-true-black), 1px -1px 0 var(--ink-true-black), -1px 1px 0 var(--ink-true-black);
+    }
+    .swatch-name {
+      font-family: var(--font-display);
+      font-size: 1.2rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      margin: 0 0 6px 0;
+      line-height: 1.1;
+      color: var(--ink-true-black);
+    }
+    .swatch-token {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--manga-red);
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    .swatch-meta {
+      display: flex;
+      justify-content: space-between;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--ink-true-black);
+      opacity: 0.85;
+      border-top: 1px dashed var(--ink-true-black);
+      padding-top: 8px;
+    }
+    .swatch-copy-hint {
+      font-size: 0.65rem;
+      font-weight: bold;
+      color: var(--paper-white);
+      background: var(--ink-true-black);
+      padding: 3px 8px;
+      margin-top: 10px;
+      display: inline-block;
+      text-transform: uppercase;
+    }
+
+    /* PATTERN SWATCHES */
+    .pattern-card {
+      background: var(--paper-white);
+      border: 3px solid var(--ink-true-black);
+      box-shadow: 4px 4px 0px var(--ink-true-black);
+      padding: 12px;
+    }
+    .pattern-preview {
+      height: 100px;
+      border: 2px solid var(--ink-true-black);
+      margin-bottom: 10px;
+    }
+    .pattern-dot {
+      background-color: var(--bg-gray);
+      background-image: radial-gradient(var(--ink-true-black) 1.5px, transparent 0);
+      background-size: 16px 16px;
+    }
+    .pattern-screentone {
+      background-color: var(--paper-white);
+      background-image: repeating-linear-gradient(45deg, var(--ink-true-black) 0, var(--ink-true-black) 1px, transparent 0, transparent 8px);
+    }
+    .pattern-grid-cyber {
+      background-color: var(--ink-true-black);
+      background-image: 
+        linear-gradient(rgba(0, 240, 255, 0.2) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 240, 255, 0.2) 1px, transparent 1px);
+      background-size: 20px 20px;
+    }
+    .pattern-speedlines {
+      background: repeating-linear-gradient(45deg, var(--ink-true-black) 0, var(--ink-true-black) 15px, rgba(255, 0, 60, 0.8) 15px, rgba(255, 0, 60, 0.8) 30px);
+    }
+
+    /* BUTTON SHOWCASE GRID */
+    .component-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 24px;
+    }
+    @media (min-width: 768px) {
+      .component-grid {
+        grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+        gap: 32px;
+      }
+    }
+    .component-card {
+      background: var(--paper-white);
+      border: 3px solid var(--ink-true-black);
+      box-shadow: 5px 5px 0px var(--ink-true-black);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      clip-path: polygon(0 0, 100% 0, 100% calc(100% - 16px), calc(100% - 16px) 100%, 0 100%);
+      transition: all 0.2s cubic-bezier(0.2, 1, 0.3, 1);
+    }
+    .component-card:hover {
+      box-shadow: 8px 8px 0px var(--manga-red);
+      transform: translateY(-2px);
+    }
+    .comp-title {
+      font-family: var(--font-display);
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin: 0 0 4px 0;
+      text-transform: uppercase;
+      color: var(--ink-true-black);
+    }
+    .comp-tag {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--manga-red);
+      font-weight: 700;
+      margin-bottom: 20px;
+      display: block;
+    }
+    .comp-stage {
+      min-height: 120px;
+      background: var(--bg-gray);
+      border: 2px dashed var(--ink-true-black);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      margin-bottom: 20px;
+      overflow: hidden;
+      position: relative;
+    }
+    .comp-code {
+      background: var(--ink-true-black);
+      color: #A6E22E;
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      padding: 10px 14px;
+      border: 2px solid var(--ink-true-black);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      user-select: all;
+      clip-path: polygon(0 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%);
+    }
+    .comp-code:hover {
+      background: #1e1e1e;
+      color: var(--manga-accent);
+    }
+
+    /* CYBER ACCENT BUTTON */
+    .cyber-btn {
+      background: var(--manga-accent);
+      color: var(--ink-true-black);
+      border: 3px solid var(--ink-true-black);
+      box-shadow: 4px 4px 0px var(--ink-true-black);
+      padding: 10px 20px;
+      font-family: var(--font-display);
+      font-size: 1rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      cursor: pointer;
+      letter-spacing: 1px;
+      transition: all 0.2s;
+    }
+    .cyber-btn:hover {
+      background: var(--manga-yellow);
+      transform: translate(-3px, -3px);
+      box-shadow: 6px 6px 0px var(--manga-red);
+    }
+
+    .outline-ink-btn {
+      background: transparent;
+      color: var(--ink-true-black);
+      border: 3px solid var(--ink-true-black);
+      box-shadow: 4px 4px 0px var(--manga-red);
+      padding: 8px 16px;
+      font-family: var(--font-display);
+      font-size: 0.9rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .outline-ink-btn:hover {
+      background: var(--ink-true-black);
+      color: var(--paper-white);
+      transform: translate(-2px, -2px);
+      box-shadow: 6px 6px 0px var(--manga-accent);
+    }
+
+    .stamped-btn {
+      background: var(--manga-red);
+      color: var(--paper-white);
+      border: 3px solid var(--ink-true-black);
+      box-shadow: 4px 4px 0px var(--ink-true-black);
+      padding: 10px 24px;
+      font-family: var(--font-display);
+      font-weight: 900;
+      font-size: 1.1rem;
+      font-style: italic;
+      text-transform: uppercase;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      transition: all 0.2s;
+    }
+    .stamped-btn .stamped-jp {
+      font-family: var(--font-jp);
+      font-size: 0.65rem;
+      color: var(--manga-yellow);
+      letter-spacing: 2px;
+    }
+    .stamped-btn:hover {
+      background: var(--ink-true-black);
+      color: var(--manga-yellow);
+      transform: scale(1.05);
+      box-shadow: 6px 6px 0px var(--manga-accent);
+    }
+
+    /* ANIMATION STAGES */
+    .anim-trigger-btn {
+      margin-top: 10px;
+      padding: 4px 10px;
+      background: var(--ink-true-black);
+      color: var(--paper-white);
+      border: 2px solid var(--paper-white);
+      font-family: var(--font-display);
+      font-size: 0.75rem;
+      font-weight: bold;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+    .anim-trigger-btn:hover {
+      background: var(--manga-red);
+    }
+
+    /* GLITCH EFFECT */
+    @keyframes glitch-anim {
+      0% { transform: translate(0); filter: hue-rotate(0deg); }
+      20% { transform: translate(-4px, 2px); filter: hue-rotate(90deg); }
+      40% { transform: translate(3px, -2px); filter: hue-rotate(180deg); }
+      60% { transform: translate(-2px, 3px); filter: hue-rotate(270deg); }
+      80% { transform: translate(2px, -1px); filter: hue-rotate(360deg); }
+      100% { transform: translate(0); filter: hue-rotate(0deg); }
+    }
+    .is-glitching {
+      animation: glitch-anim 0.4s ease infinite;
+    }
+
+    /* TOAST NOTIFICATION */
+    .lib-toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: var(--ink-true-black);
+      color: var(--paper-white);
+      border: 3px solid var(--manga-accent);
+      box-shadow: 6px 6px 0px var(--manga-red);
+      padding: 12px 20px;
+      font-family: var(--font-display);
+      font-size: 1rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      z-index: 9999;
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      pointer-events: none;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .lib-toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    /* CODE TOKEN BOX */
+    .token-box {
+      background: var(--ink-true-black);
+      color: #F8F8F2;
+      border: 4px solid var(--ink-true-black);
+      box-shadow: 8px 8px 0px var(--manga-red);
+      padding: 24px;
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      line-height: 1.6;
+      overflow-x: auto;
+      position: relative;
+      clip-path: polygon(0 0, 100% 0, 100% calc(100% - 24px), calc(100% - 24px) 100%, 0 100%);
+    }
+    .token-copy-btn {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      background: var(--manga-accent);
+      color: var(--ink-true-black);
+      border: 2px solid var(--paper-white);
+      font-family: var(--font-display);
+      font-weight: 900;
+      padding: 6px 14px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      text-transform: uppercase;
+      transition: all 0.2s;
+    }
+    .token-copy-btn:hover {
+      background: var(--manga-yellow);
+      transform: translate(-2px, -2px);
+      box-shadow: 3px 3px 0px var(--manga-red);
+    }
+
+    /* AUDIO WAVEFORM CANVAS */
+    #soundCanvas {
+      width: 100%;
+      height: 40px;
+      background: var(--ink-true-black);
+      border: 1px solid var(--manga-accent);
+      margin-top: 10px;
+    }
+
+    @media (max-width: 768px) {
+      .lib-header-inner {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .lib-theme-switcher {
+        width: 100%;
+        overflow-x: auto;
+      }
+      .lib-hero-title {
+        font-size: 2.2rem;
+      }
+      .component-grid {
+        grid-template-columns: 1fr;
+      }
+      .swatch-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- HEADER & THEME SWITCHER BAR -->
+  <header class="lib-header">
+    <div class="lib-header-inner">
+      <div class="lib-brand">
+        <a href="/" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 10px;">
+          <h1>CARIEARSA</h1>
+        </a>
+        <span class="lib-badge">DESIGN SYSTEM &amp; COMPONENT LAB</span>
+      </div>
+
+      <!-- INTERACTIVE PALETTE VARIANT SWITCHER -->
+      <div class="lib-theme-switcher" id="themeSwitcher">
+        <span class="theme-label">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M12 2a7 7 0 0 0 0 14v6"/></svg>
+          THEME:
+        </span>
+        <button class="theme-pill active" data-theme="original" title="Classic White Paper, Manga Red &amp; Cyber Cyan">
+          <span class="dot-indicator" style="background: #FF003C;"></span>
+          ORIGINAL
+        </button>
+        <button class="theme-pill" data-theme="cyberpunk" title="Obsidian Void with Electric Cyan &amp; Hot Magenta">
+          <span class="dot-indicator" style="background: #00F0FF;"></span>
+          CYBERPUNK
+        </button>
+        <button class="theme-pill" data-theme="akira" title="Akira Blood Red &amp; Warning Amber">
+          <span class="dot-indicator" style="background: #E50914;"></span>
+          AKIRA
+        </button>
+        <button class="theme-pill" data-theme="vintage" title="Warm Aged Newsprint &amp; Crimson Ink">
+          <span class="dot-indicator" style="background: #D83A1E;"></span>
+          VINTAGE
+        </button>
+        <button class="theme-pill" data-theme="midnight-violet" title="Midnight Deep Purple &amp; Electric Sky">
+          <span class="dot-indicator" style="background: #A855F7;"></span>
+          MIDNIGHT
+        </button>
+        <button class="theme-pill" data-theme="monochrome" title="Pure Black &amp; White Manga Ink">
+          <span class="dot-indicator" style="background: #FFFFFF; border: 1px solid #000;"></span>
+          MONO
+        </button>
+      </div>
+
+      <div class="lib-nav-links">
+        <a href="/" class="lib-quick-btn">← PORTFOLIO</a>
+        <a href="/hub/" class="lib-quick-btn">PLAY STORE</a>
+        <a href="/japan/" class="lib-quick-btn" style="background: var(--manga-accent);">JAPAN MAP</a>
+        <a href="/aniwatch/" class="lib-quick-btn" style="background: var(--manga-red); color: #fff;">ANIWATCH</a>
+        <a href="/cloud/" class="lib-quick-btn" style="background: #0284c7; color: #fff;">CLOUD</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- STICKY JUMP SUB-NAV -->
+  <nav class="lib-subnav">
+    <a href="#colors" class="subnav-link active">🎨 Colors &amp; Paper</a>
+    <a href="#buttons" class="subnav-link">🔘 Button Matrix</a>
+    <a href="#elements" class="subnav-link">📦 Element Shapes</a>
+    <a href="#animations" class="subnav-link">⚡ Motion &amp; SFX</a>
+    <a href="#modules" class="subnav-link">📱 Interactive Modules</a>
+    <a href="#tokens" class="subnav-link">💻 CSS Tokens</a>
+  </nav>
+
+  <div class="lib-container">
+    <!-- HERO BANNER -->
+    <section class="lib-hero">
+      <div class="speed-lines-bg"></div>
+      <div class="japanese-vertical" style="color: rgba(255,255,255,0.08); font-size: 2.2rem;">デザイン体系</div>
+      <h2 class="lib-hero-title">THE CARIEARSA<br>DESIGN SYSTEM &amp; UI LIBRARY</h2>
+      <p class="lib-hero-desc">
+        A complete, ultra-lightweight design repository showcasing the buttons, architectural containers, manga speedline cards, sound synthesis engines, motion kinetics, and color paper palettes that power the entire CARIEARSA ecosystem.
+      </p>
+      <div style="display: flex; gap: 10px; flex-wrap: wrap; z-index: 2; position: relative;">
+        <span class="lib-badge" style="background: var(--manga-accent); color: var(--ink-true-black);">ZERO EXTERNAL UI LIBS</span>
+        <span class="lib-badge" style="background: var(--manga-yellow); color: var(--ink-true-black);">PURE CSS &amp; DOM SPEED</span>
+        <span class="lib-badge" id="currentThemeBadge">ACTIVE: ORIGINAL MANGA</span>
+      </div>
+    </section>
+
+    <!-- SECTION 1: COLORS & PAPER -->
+    <section id="colors" class="lib-section">
+      <div class="section-header">
+        <h2>🎨 Paper &amp; Color Palettes</h2>
+        <span class="section-tag">7 CORE + 8 REGIONAL TOKENS</span>
+      </div>
+      
+      <p style="margin-bottom: 20px; font-weight: 500; max-width: 800px;">
+        Click any swatch card to automatically copy its CSS Variable and HEX code directly to your clipboard.
+      </p>
+
+      <h3 style="font-family: var(--font-display); font-size: 1.3rem; text-transform: uppercase; margin: 24px 0 12px 0;">Core Brand &amp; UI Tokens</h3>
+      <div class="swatch-grid">
+        <!-- Paper White -->
+        <div class="swatch-card" data-copy="var(--paper-white)">
+          <div class="swatch-preview" style="background: var(--paper-white); color: var(--ink-true-black); border: 2px solid var(--ink-true-black);">白紙</div>
+          <div class="swatch-name">Paper White</div>
+          <div class="swatch-token">var(--paper-white)</div>
+          <div class="swatch-meta"><span>Base Card / Sheet</span><span class="swatch-hex-val">#F8F9FA</span></div>
+          <span class="swatch-copy-hint">CLICK TO COPY</span>
+        </div>
+
+        <!-- Background Gray -->
+        <div class="swatch-card" data-copy="var(--bg-gray)">
+          <div class="swatch-preview" style="background: var(--bg-gray); color: var(--ink-true-black); border: 2px solid var(--ink-true-black);">灰</div>
+          <div class="swatch-name">Background Gray</div>
+          <div class="swatch-token">var(--bg-gray)</div>
+          <div class="swatch-meta"><span>Canvas Backdrop</span><span class="swatch-hex-val">#E9ECEF</span></div>
+          <span class="swatch-copy-hint">CLICK TO COPY</span>
+        </div>
+
+        <!-- Ink True Black -->
+        <div class="swatch-card" data-copy="var(--ink-true-black)">
+          <div class="swatch-preview" style="background: var(--ink-true-black); color: var(--paper-white); border: 2px solid var(--paper-white);">漆黒</div>
+          <div class="swatch-name">Ink True Black</div>
+          <div class="swatch-token">var(--ink-true-black)</div>
+          <div class="swatch-meta"><span>Brutalist Outlines</span><span class="swatch-hex-val">#000000</span></div>
+          <span class="swatch-copy-hint">CLICK TO COPY</span>
+        </div>
+
+        <!-- Ink Charcoal -->
+        <div class="swatch-card" data-copy="var(--ink-black)">
+          <div class="swatch-preview" style="background: var(--ink-black); color: var(--paper-white); border: 2px solid var(--paper-white);">墨</div>
+          <div class="swatch-name">Ink Charcoal</div>
+          <div class="swatch-token">var(--ink-black)</div>
+          <div class="swatch-meta"><span>Body Typography</span><span class="swatch-hex-val">#111111</span></div>
+          <span class="swatch-copy-hint">CLICK TO COPY</span>
+        </div>
+
+        <!-- Manga Red -->
+        <div class="swatch-card" data-copy="var(--manga-red)">
+          <div class="swatch-preview" style="background: var(--manga-red); color: #FFFFFF; border: 2px solid var(--ink-true-black);">紅</div>
+          <div class="swatch-name">Manga Red</div>
+          <div class="swatch-token">var(--manga-red)</div>
+          <div class="swatch-meta"><span>Primary Accent</span><span class="swatch-hex-val">#FF003C</span></div>
+          <span class="swatch-copy-hint">CLICK TO COPY</span>
+        </div>
+
+        <!-- Cyber Accent Cyan -->
+        <div class="swatch-card" data-copy="var(--manga-accent)">
+          <div class="swatch-preview" style="background: var(--manga-accent); color: var(--ink-true-black); border: 2px solid var(--ink-true-black);">電撃</div>
+          <div class="swatch-name">Cyber Neon Cyan</div>
+          <div class="swatch-token">var(--manga-accent)</div>
+          <div class="swatch-meta"><span>Active / Highlight</span><span class="swatch-hex-val">#00F0FF</span></div>
+          <span class="swatch-copy-hint">CLICK TO COPY</span>
+        </div>
+
+        <!-- Manga Yellow -->
+        <div class="swatch-card" data-copy="var(--manga-yellow)">
+          <div class="swatch-preview" style="background: var(--manga-yellow); color: var(--ink-true-black); border: 2px solid var(--ink-true-black);">黄金</div>
+          <div class="swatch-name">Manga Yellow</div>
+          <div class="swatch-token">var(--manga-yellow)</div>
+          <div class="swatch-meta"><span>Warning / SFX</span><span class="swatch-hex-val">#FFEA00</span></div>
+          <span class="swatch-copy-hint">CLICK TO COPY</span>
+        </div>
+      </div>
+
+      <h3 style="font-family: var(--font-display); font-size: 1.3rem; text-transform: uppercase; margin: 36px 0 12px 0;">Regional Map Geography Tokens</h3>
+      <div class="swatch-grid">
+        <div class="swatch-card" data-copy="#1C2331">
+          <div class="swatch-preview" style="background: #1C2331; color: #fff;">北海道</div>
+          <div class="swatch-name">Hokkaido Navy</div>
+          <div class="swatch-token">.region-hokkaido</div>
+          <div class="swatch-meta"><span>Northern Island</span><span>#1C2331</span></div>
+          <span class="swatch-copy-hint">CLICK TO COPY</span>
+        </div>
+
+        <div class="swatch-card" data-copy="#2C3E50">
+          <div class="swatch-preview" style="background: #2C3E50; color: #fff;">東北</div>
+          <div class="swatch-name">Tohoku Slate</div>
+          <div class="swatch-token">.region-tohoku</div>
+          <div class="swatch-meta"><span>Northern Honshu</span><span>#2C3E50</span></div>
+          <span class="swatch-copy-hint">CLICK TO COPY</span>
+        </div>
+
+        <div class="swatch-card" data-copy="#480017">
+          <div class="swatch-preview" style="background: #480017; color: #fff;">関東</div>
+          <div class="swatch-name">Kanto Crimson</div>
+          <div class="swatch-token">.region-kanto</div>
+          <div class="swatch-meta"><span>Tokyo Metropolis</span><span>#480017</span></div>
+          <span class="swatch-copy-hint">CLICK TO COPY</span>
+        </div>
+
+        <div class="swatch-card" data-copy="#123440">
+          <div class="swatch-preview" style="background: #123440; color: #fff;">中部</div>
+          <div class="swatch-name">Chubu Ocean</div>
+          <div class="swatch-token">.region-chubu</div>
+          <div class="swatch-meta"><span>Mount Fuji Coast</span><span>#123440</span></div>
+          <span class="swatch-copy-hint">CLICK TO COPY</span>
+        </div>
+
+        <div class="swatch-card" data-copy="#4B4B4B">
+          <div class="swatch-preview" style="background: #4B4B4B; color: #fff;">関西</div>
+          <div class="swatch-name">Kansai Steel</div>
+          <div class="swatch-token">.region-kansai</div>
+          <div class="swatch-meta"><span>Kyoto &amp; Osaka</span><span>#4B4B4B</span></div>
+          <span class="swatch-copy-hint">CLICK TO COPY</span>
+        </div>
+
+        <div class="swatch-card" data-copy="#252525">
+          <div class="swatch-preview" style="background: #252525; color: #fff;">中国</div>
+          <div class="swatch-name">Chugoku Charcoal</div>
+          <div class="swatch-token">.region-chugoku</div>
+          <div class="swatch-meta"><span>Western Honshu</span><span>#252525</span></div>
+          <span class="swatch-copy-hint">CLICK TO COPY</span>
+        </div>
+
+        <div class="swatch-card" data-copy="#111111">
+          <div class="swatch-preview" style="background: #111111; color: #fff;">四国</div>
+          <div class="swatch-name">Shikoku Jet</div>
+          <div class="swatch-token">.region-shikoku</div>
+          <div class="swatch-meta"><span>Southern Island</span><span>#111111</span></div>
+          <span class="swatch-copy-hint">CLICK TO COPY</span>
+        </div>
+
+        <div class="swatch-card" data-copy="#3F1515">
+          <div class="swatch-preview" style="background: #3F1515; color: #fff;">九州・沖縄</div>
+          <div class="swatch-name">Kyushu Blood</div>
+          <div class="swatch-token">.region-kyushu</div>
+          <div class="swatch-meta"><span>Kyushu &amp; Okinawa</span><span>#3F1515</span></div>
+          <span class="swatch-copy-hint">CLICK TO COPY</span>
+        </div>
+      </div>
+
+      <h3 style="font-family: var(--font-display); font-size: 1.3rem; text-transform: uppercase; margin: 36px 0 12px 0;">Screentone &amp; Halftone Patterns</h3>
+      <div class="swatch-grid">
+        <div class="pattern-card">
+          <div class="pattern-preview pattern-dot"></div>
+          <div class="swatch-name">Halftone Ben-Day Dot</div>
+          <div class="swatch-token">radial-gradient(ink 1.5px, transparent 0)</div>
+        </div>
+        <div class="pattern-card">
+          <div class="pattern-preview pattern-screentone"></div>
+          <div class="swatch-name">Diagonal Screentone 45°</div>
+          <div class="swatch-token">repeating-linear-gradient(45deg)</div>
+        </div>
+        <div class="pattern-card">
+          <div class="pattern-preview pattern-grid-cyber"></div>
+          <div class="swatch-name">Cyber Coordinate Grid</div>
+          <div class="swatch-token">linear-gradient(cyan 1px, transparent 1px)</div>
+        </div>
+        <div class="pattern-card">
+          <div class="pattern-preview pattern-speedlines"></div>
+          <div class="swatch-name">Manga Speedlines Accent</div>
+          <div class="swatch-token">.speed-lines-bg</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 2: BUTTON STYLES -->
+    <section id="buttons" class="lib-section">
+      <div class="section-header">
+        <h2>🔘 Button Styles &amp; Matrix</h2>
+        <span class="section-tag">10 SIGNATURE STYLES</span>
+      </div>
+
+      <p style="margin-bottom: 20px; font-weight: 500;">
+        All buttons are engineered with pure CSS3 hardware acceleration, featuring brutalist drop shadows, skew transformations, and tactile hover physics. Click to test interactions!
+      </p>
+
+      <div class="component-grid">
+        <!-- 1. Standard Manga Button -->
+        <div class="component-card">
+          <div>
+            <h3 class="comp-title">Manga Standard Button</h3>
+            <span class="comp-tag">.manga-btn</span>
+            <div class="comp-stage">
+              <a href="javascript:void(0)" class="manga-btn demo-btn"><span>ENTER REALM</span></a>
+            </div>
+          </div>
+          <div class="comp-code" data-copy="<a href='#' class='manga-btn'><span>BUTTON TEXT</span></a>">
+            <code>&lt;a class="manga-btn"&gt;&lt;span&gt;...&lt;/span&gt;&lt;/a&gt;</code>
+            <span>COPY</span>
+          </div>
+        </div>
+
+        <!-- 2. Slash Skew Button -->
+        <div class="component-card">
+          <div>
+            <h3 class="comp-title">Slash Parallelogram Skew</h3>
+            <span class="comp-tag">.custom-shape-btn.slash-btn</span>
+            <div class="comp-stage">
+              <a href="javascript:void(0)" class="custom-shape-btn slash-btn demo-btn" style="min-width: 140px;">
+                <span class="btn-text">EXPLORE HUB</span>
+                <span class="btn-jp">リンク集</span>
+              </a>
+            </div>
+          </div>
+          <div class="comp-code" data-copy="<a href='#' class='custom-shape-btn slash-btn'><span class='btn-text'>TEXT</span><span class='btn-jp'>日本語</span></a>">
+            <code>.custom-shape-btn.slash-btn</code>
+            <span>COPY</span>
+          </div>
+        </div>
+
+        <!-- 3. Impact Brutalist Button -->
+        <div class="component-card">
+          <div>
+            <h3 class="comp-title">Impact Brutalist Red</h3>
+            <span class="comp-tag">.custom-shape-btn.impact-btn</span>
+            <div class="comp-stage">
+              <a href="javascript:void(0)" class="custom-shape-btn impact-btn demo-btn" style="min-width: 150px;">
+                <span class="btn-text">CARIEARSA.COM</span>
+                <span class="btn-jp">メインサイト</span>
+              </a>
+            </div>
+          </div>
+          <div class="comp-code" data-copy="<a href='#' class='custom-shape-btn impact-btn'><span class='btn-text'>MAIN</span></a>">
+            <code>.custom-shape-btn.impact-btn</code>
+            <span>COPY</span>
+          </div>
+        </div>
+
+        <!-- 4. Cyber Glow Accent Button -->
+        <div class="component-card">
+          <div>
+            <h3 class="comp-title">Cyber Neon Accent</h3>
+            <span class="comp-tag">.cyber-btn</span>
+            <div class="comp-stage">
+              <button class="cyber-btn demo-btn">⚡ INITIATE SYSTEM</button>
+            </div>
+          </div>
+          <div class="comp-code" data-copy="<button class='cyber-btn'>⚡ BUTTON</button>">
+            <code>&lt;button class="cyber-btn"&gt;...&lt;/button&gt;</code>
+            <span>COPY</span>
+          </div>
+        </div>
+
+        <!-- 5. Play Store 3D Install Button -->
+        <div class="component-card">
+          <div>
+            <h3 class="comp-title">Play Store 3D Install Pill</h3>
+            <span class="comp-tag">.ps-install-btn</span>
+            <div class="comp-stage" style="width: 100%;">
+              <button class="ps-install-btn demo-btn" style="max-width: 200px;">INSTALL NOW</button>
+            </div>
+          </div>
+          <div class="comp-code" data-copy="<button class='ps-install-btn'>INSTALL NOW</button>">
+            <code>&lt;button class="ps-install-btn"&gt;...&lt;/button&gt;</code>
+            <span>COPY</span>
+          </div>
+        </div>
+
+        <!-- 6. Region Filter Badge -->
+        <div class="component-card">
+          <div>
+            <h3 class="comp-title">Map Filter Toggle Chip</h3>
+            <span class="comp-tag">.filter-btn (.active)</span>
+            <div class="comp-stage" style="gap: 8px;">
+              <button class="filter-btn active demo-btn">ALL REGIONS</button>
+              <button class="filter-btn demo-btn">KANTO</button>
+            </div>
+          </div>
+          <div class="comp-code" data-copy="<button class='filter-btn active'>FILTER CHIP</button>">
+            <code>&lt;button class="filter-btn active"&gt;&lt;/button&gt;</code>
+            <span>COPY</span>
+          </div>
+        </div>
+
+        <!-- 7. Brutalist Floating Control -->
+        <div class="component-card">
+          <div>
+            <h3 class="comp-title">Square Camera Control</h3>
+            <span class="comp-tag">.control-btn</span>
+            <div class="comp-stage" style="gap: 12px;">
+              <button class="control-btn demo-btn">+</button>
+              <button class="control-btn demo-btn">-</button>
+              <button class="control-btn demo-btn">⟲</button>
+            </div>
+          </div>
+          <div class="comp-code" data-copy="<button class='control-btn'>+</button>">
+            <code>&lt;button class="control-btn"&gt;+&lt;/button&gt;</code>
+            <span>COPY</span>
+          </div>
+        </div>
+
+        <!-- 8. Gallery Navigation Chevron -->
+        <div class="component-card">
+          <div>
+            <h3 class="comp-title">Gallery Slide Chevron</h3>
+            <span class="comp-tag">.gallery-btn</span>
+            <div class="comp-stage" style="gap: 16px;">
+              <button class="gallery-btn prev demo-btn" style="position: static; transform: none;">◀</button>
+              <button class="gallery-btn next demo-btn" style="position: static; transform: none;">▶</button>
+            </div>
+          </div>
+          <div class="comp-code" data-copy="<button class='gallery-btn prev'>◀</button>">
+            <code>&lt;button class="gallery-btn"&gt;◀&lt;/button&gt;</code>
+            <span>COPY</span>
+          </div>
+        </div>
+
+        <!-- 9. Stamped Japanese Action -->
+        <div class="component-card">
+          <div>
+            <h3 class="comp-title">Stamped Japanese Action</h3>
+            <span class="comp-tag">.stamped-btn</span>
+            <div class="comp-stage">
+              <button class="stamped-btn demo-btn">
+                <span>EXECUTE</span>
+                <span class="stamped-jp">実行</span>
+              </button>
+            </div>
+          </div>
+          <div class="comp-code" data-copy="<button class='stamped-btn'><span>EXECUTE</span><span class='stamped-jp'>実行</span></button>">
+            <code>.stamped-btn</code>
+            <span>COPY</span>
+          </div>
+        </div>
+
+        <!-- 10. Outline Ink Ghost -->
+        <div class="component-card">
+          <div>
+            <h3 class="comp-title">Outline Ink Ghost</h3>
+            <span class="comp-tag">.outline-ink-btn</span>
+            <div class="comp-stage">
+              <button class="outline-ink-btn demo-btn">SYSTEM DOCS →</button>
+            </div>
+          </div>
+          <div class="comp-code" data-copy="<button class='outline-ink-btn'>DOCS →</button>">
+            <code>.outline-ink-btn</code>
+            <span>COPY</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 3: ELEMENT SHAPES -->
+    <section id="elements" class="lib-section">
+      <div class="section-header">
+        <h2>📦 Element Shapes &amp; Cards</h2>
+        <span class="section-tag">STRUCTURAL MODULES</span>
+      </div>
+
+      <div class="component-grid">
+        <!-- Manga Comic Panel -->
+        <div class="component-card" style="grid-column: span 1;">
+          <h3 class="comp-title">Manga Comic Panel</h3>
+          <span class="comp-tag">.panel + .panel-header</span>
+          <div class="panel" style="min-height: 160px; padding: 14px; margin-bottom: 12px;">
+            <div class="panel-header">PANEL HEADER</div>
+            <p style="font-size: 0.85rem; line-height: 1.4; margin: 0;">
+              High-contrast card with 3px ink black solid borders, harsh 4px box shadow, and dark header tag.
+            </p>
+            <div class="sfx" style="font-size: 1.5rem; bottom: 4px; right: 4px;">ドンッ!!</div>
+          </div>
+          <div class="comp-code" data-copy="<div class='panel'><div class='panel-header'>HEADER</div><p>...</p></div>">
+            <code>.panel &gt; .panel-header</code>
+            <span>COPY</span>
+          </div>
+        </div>
+
+        <!-- Play Store App Card -->
+        <div class="component-card">
+          <h3 class="comp-title">Play Store App Card</h3>
+          <span class="comp-tag">.ps-app-card</span>
+          <div class="comp-stage" style="padding: 10px;">
+            <div class="ps-app-card" style="margin: 0 auto;">
+              <img class="ps-app-icon" src="https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?w=200&q=80" alt="App">
+              <div class="ps-app-title">Manga Studio</div>
+              <div class="ps-app-size">4.9 ★ · 45 MB</div>
+            </div>
+          </div>
+          <div class="comp-code" data-copy="<div class='ps-app-card'><img class='ps-app-icon' src='...'><div class='ps-app-title'>Title</div></div>">
+            <code>.ps-app-card</code>
+            <span>COPY</span>
+          </div>
+        </div>
+
+        <!-- SFX Graphic Badges -->
+        <div class="component-card">
+          <h3 class="comp-title">SFX Japanese Onomatopoeia</h3>
+          <span class="comp-tag">.sfx / .sfx-lg</span>
+          <div class="comp-stage" style="flex-direction: column; gap: 8px;">
+            <div style="font-family: var(--font-jp); font-size: 2.2rem; font-weight: 900; color: var(--manga-red); -webkit-text-stroke: 1px var(--ink-true-black); transform: rotate(-5deg);">
+              ゴゴゴゴ (Gogogo)
+            </div>
+            <div style="font-family: var(--font-jp); font-size: 1.8rem; font-weight: 900; color: var(--ink-true-black); -webkit-text-stroke: 1px #fff; transform: rotate(5deg);">
+              ドドドド (Dododo)
+            </div>
+          </div>
+          <div class="comp-code" data-copy="<div class='sfx-lg'>ゴゴゴゴ</div>">
+            <code>.sfx / .sfx-lg</code>
+            <span>COPY</span>
+          </div>
+        </div>
+
+        <!-- Bento Stat Box -->
+        <div class="component-card">
+          <h3 class="comp-title">Bento Stat Divider Box</h3>
+          <span class="comp-tag">.ps-d-stats</span>
+          <div class="comp-stage">
+            <div class="ps-d-stats" style="width: 100%; margin: 0; background: var(--paper-white); border: 2px solid var(--ink-true-black); padding: 10px;">
+              <div class="ps-stat"><strong>4.9 ★</strong><span>12K reviews</span></div>
+              <div class="ps-divider"></div>
+              <div class="ps-stat"><strong>10M+</strong><span>Downloads</span></div>
+              <div class="ps-divider"></div>
+              <div class="ps-stat"><strong>E</strong><span>Everyone</span></div>
+            </div>
+          </div>
+          <div class="comp-code" data-copy="<div class='ps-d-stats'><div class='ps-stat'><strong>4.9 ★</strong><span>Rating</span></div></div>">
+            <code>.ps-d-stats &gt; .ps-stat</code>
+            <span>COPY</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 4: ANIMATIONS & MOTION -->
+    <section id="animations" class="lib-section">
+      <div class="section-header">
+        <h2>⚡ Motion &amp; Animation Engine</h2>
+        <span class="section-tag">INTERACTIVE PLAYGROUND</span>
+      </div>
+
+      <div class="component-grid">
+        <!-- 1. Comic Panel Shake -->
+        <div class="component-card">
+          <h3 class="comp-title">Comic Panel Shake</h3>
+          <span class="comp-tag">@keyframes comic-shake</span>
+          <div class="comp-stage" id="shakeTarget">
+            <div class="panel" style="padding: 12px; border: 3px solid var(--ink-true-black); text-align: center; width: 100%;">
+              <div style="font-weight: 900; font-size: 1.2rem; color: var(--manga-red);">IMPACT SEISMIC SHAKE</div>
+              <p style="margin: 4px 0 0 0; font-size: 0.8rem;">Click button below to trigger!</p>
+            </div>
+          </div>
+          <button class="anim-trigger-btn" id="btnTriggerShake">💥 TRIGGER SHAKE</button>
+        </div>
+
+        <!-- 2. Glitch Screen Burst -->
+        <div class="component-card">
+          <h3 class="comp-title">Glitch Screen Burst</h3>
+          <span class="comp-tag">@keyframes glitch-anim</span>
+          <div class="comp-stage" id="glitchTarget">
+            <div style="font-family: var(--font-display); font-size: 2rem; font-weight: 900; color: var(--ink-true-black); font-style: italic;">
+              CYBER_BURST//
+            </div>
+          </div>
+          <button class="anim-trigger-btn" id="btnTriggerGlitch">⚡ TRIGGER GLITCH</button>
+        </div>
+
+        <!-- 3. Floating Manga SFX Spawner -->
+        <div class="component-card">
+          <h3 class="comp-title">Floating SFX Spawner</h3>
+          <span class="comp-tag">JS Particle Kinetics</span>
+          <div class="comp-stage">
+            <div style="text-align: center;">
+              <span style="font-family: var(--font-jp); font-weight: 900; font-size: 1.5rem; color: var(--manga-red);">バァァァン！</span>
+              <p style="margin: 4px 0 0 0; font-size: 0.8rem;">Spawns dynamic Japanese SFX glyphs</p>
+            </div>
+          </div>
+          <button class="anim-trigger-btn" id="btnSpawnSfx">🎌 SPAWN SFX GLYPH</button>
+        </div>
+
+        <!-- 4. Web Audio Paper Flip Sound -->
+        <div class="component-card">
+          <h3 class="comp-title">Paper Flip Synthesizer</h3>
+          <span class="comp-tag">Web Audio API (Zero Audio Files)</span>
+          <div class="comp-stage" style="flex-direction: column;">
+            <div style="font-size: 0.85rem; font-weight: bold;">Synthesized 40ms noise burst + lowpass filter</div>
+            <canvas id="soundCanvas" width="200" height="40"></canvas>
+          </div>
+          <button class="anim-trigger-btn" id="btnPlaySound">🔊 PLAY SYNTH SOUND</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 5: INTERACTIVE MODULES -->
+    <section id="modules" class="lib-section">
+      <div class="section-header">
+        <h2>📱 Interactive Modules &amp; Showcase</h2>
+        <span class="section-tag">LIVE FUNCTIONAL UNITS</span>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 24px;">
+        <!-- Live Gallery Slideshow -->
+        <div class="panel" style="padding: 20px;">
+          <div class="panel-header">MODULE 01: IMAGE SLIDESHOW GALLERY</div>
+          <p style="font-size: 0.85rem; margin-bottom: 12px;">
+            Hardware-accelerated CSS <code>translateX</code> slide engine with touch &amp; mouse dot pagination.
+          </p>
+
+          <div class="popup-gallery" style="margin: 0 auto; max-width: 400px; height: 180px;">
+            <div class="gallery-track" id="demoGalleryTrack">
+              <img src="https://images.unsplash.com/photo-1503899036084-c55cdd92da26?auto=format&fit=crop&w=500&q=80" alt="Tokyo">
+              <img src="https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=500&q=80" alt="Kyoto">
+              <img src="https://images.unsplash.com/photo-1542640244-7e672d6cb466?auto=format&fit=crop&w=500&q=80" alt="Fuji">
+            </div>
+            <button class="gallery-btn prev" id="demoPrev">◀</button>
+            <button class="gallery-btn next" id="demoNext">▶</button>
+            <div class="gallery-dots" id="demoDots">
+              <div class="dot active"></div>
+              <div class="dot"></div>
+              <div class="dot"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Prefecture Pop-up Card Preview -->
+        <div class="panel" style="padding: 20px;">
+          <div class="panel-header">MODULE 02: PREFECTURE DATA CARD</div>
+          <p style="font-size: 0.85rem; margin-bottom: 12px;">
+            Brutalist prefecture card featuring Japanese kanji headings, regional tag, and dashed list items.
+          </p>
+
+          <div style="background: var(--paper-white); border: 3px solid var(--ink-true-black); box-shadow: 4px 4px 0px var(--manga-red); padding: 16px;">
+            <h3 style="font-family: var(--font-display); font-size: 1.6rem; margin: 0; text-transform: uppercase;">KYOTO PREFECTURE</h3>
+            <div style="font-family: var(--font-jp); font-size: 1.1rem; color: var(--manga-red); font-weight: 900; margin-bottom: 8px;">京都府</div>
+            <span class="popup-region" style="margin-bottom: 10px;">KANSAI REGION</span>
+            <p style="font-size: 0.85rem; line-height: 1.4; margin: 8px 0 12px 0;">
+              The ancient cultural capital of Japan, famed for historic shinto shrines, traditional tea ceremonies, and bamboo forests.
+            </p>
+            <ul class="popup-cities">
+              <li><span>Capital City</span> <span>Kyoto City →</span></li>
+              <li><span>Key Heritage</span> <span>Fushimi Inari, Gion →</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 6: CSS TOKENS EXPORT -->
+    <section id="tokens" class="lib-section">
+      <div class="section-header">
+        <h2>💻 CSS Design Tokens &amp; Export</h2>
+        <span class="section-tag">PRODUCTION READY</span>
+      </div>
+
+      <div class="token-box">
+        <button class="token-copy-btn" id="btnCopyAllTokens">📋 COPY ALL TOKENS</button>
+<pre id="tokenContent">/* ==========================================================================
+   CARIEARSA DESIGN SYSTEM - CSS CUSTOM PROPERTIES &amp; THEME SPEC
+   Compliant with August 2026 Pure Web Standards
+   ========================================================================== */
+
+/* 1. Core Palette Tokens (Original Manga Default) */
+:root, [data-theme="original"] {
+  --ink-black: #111111;
+  --ink-true-black: #000000;
+  --paper-white: #F8F9FA;
+  --bg-gray: #E9ECEF;
+  --manga-red: #FF003C;
+  --manga-accent: #00F0FF;
+  --manga-yellow: #FFEA00;
+  --font-display: 'Oswald', sans-serif;
+  --font-body: 'Oswald', sans-serif;
+  --font-jp: 'Noto Sans JP', sans-serif;
+}
+
+/* 2. Cyberpunk Neon Variant */
+[data-theme="cyberpunk"] {
+  --ink-black: #E0E6ED;
+  --ink-true-black: #020208;
+  --paper-white: #0F1020;
+  --bg-gray: #080914;
+  --manga-red: #FF007F;
+  --manga-accent: #00F0FF;
+  --manga-yellow: #FFE600;
+}
+
+/* 3. Akira Crimson Variant */
+[data-theme="akira"] {
+  --ink-black: #F5E6E8;
+  --ink-true-black: #050001;
+  --paper-white: #1A0508;
+  --bg-gray: #0D0204;
+  --manga-red: #E50914;
+  --manga-accent: #FFB300;
+  --manga-yellow: #FFD700;
+}
+
+/* 4. Vintage Newsprint Variant */
+[data-theme="vintage"] {
+  --ink-black: #2C241E;
+  --ink-true-black: #17130F;
+  --paper-white: #F4ECE1;
+  --bg-gray: #E5DAC6;
+  --manga-red: #D83A1E;
+  --manga-accent: #1D8A99;
+  --manga-yellow: #D9A01C;
+}
+
+/* 5. Pure Monochrome Manga Ink */
+[data-theme="monochrome"] {
+  --ink-black: #1A1A1A;
+  --ink-true-black: #000000;
+  --paper-white: #FFFFFF;
+  --bg-gray: #DFDFDF;
+  --manga-red: #333333;
+  --manga-accent: #777777;
+  --manga-yellow: #555555;
+}</pre>
+      </div>
+    </section>
+  </div>
+
+  <!-- TOAST NOTIFICATION POPUP -->
+  <div class="lib-toast" id="libToast">
+    <span id="toastIcon">✨</span>
+    <span id="toastMessage">Copied to clipboard!</span>
+  </div>
+
+  <script type="module" src="/src/components.js"></script>
+</body>
+</html>

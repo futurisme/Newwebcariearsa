@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="akira">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Watch Anime - ANIWATCH</title>
+  <link rel="stylesheet" href="/src/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700;1,900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Sans+JP:wght@400;700;900&family=JetBrains+Mono:wght@400;700;800&display=swap" rel="stylesheet">
+  <style>
+    /* ANIWATCH WATCH PAGE STYLES */
+    :root {
+      --header-height: 70px;
+    }
+    
+    body {
+      background: var(--ink-true-black);
+      color: var(--paper-white);
+      overflow-x: hidden;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* HEADER */
+    .aw-header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: var(--header-height);
+      background: var(--ink-true-black);
+      border-bottom: 2px solid var(--ink-black);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      z-index: 100;
+    }
+    .aw-brand {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      font-weight: 900;
+      color: var(--manga-red);
+      text-decoration: none;
+      text-transform: uppercase;
+      font-style: italic;
+      letter-spacing: -1px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .aw-actions {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+    }
+    .aw-btn {
+      background: var(--bg-gray);
+      color: var(--ink-true-black);
+      border: 2px solid var(--paper-white);
+      font-family: var(--font-mono);
+      font-weight: 800;
+      padding: 8px 16px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-decoration: none;
+      font-size: 0.85rem;
+      clip-path: polygon(0 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%);
+    }
+    .aw-btn:hover {
+      background: var(--manga-accent);
+    }
+
+    /* PLAYER CONTAINER */
+    .aw-player-wrapper {
+      padding-top: var(--header-height);
+      width: 100%;
+      background: #000;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .aw-player-container {
+      width: 100%;
+      max-width: 1400px;
+      position: relative;
+    }
+    .aw-video-aspect {
+      position: relative;
+      width: 100%;
+      padding-top: 56.25%; /* 16:9 Aspect Ratio */
+    }
+    .aw-video-aspect iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    /* INFO SECTION */
+    .aw-info-section {
+      width: 100%;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 32px 5%;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+    @media (min-width: 992px) {
+      .aw-info-section {
+        flex-direction: row;
+        align-items: flex-start;
+      }
+    }
+    .aw-title-area {
+      flex: 1;
+    }
+    .aw-title {
+      font-family: var(--font-display);
+      font-size: 2.5rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      margin: 0 0 12px 0;
+      line-height: 1.1;
+      text-shadow: 2px 2px 0 var(--manga-red);
+    }
+    .aw-meta {
+      font-family: var(--font-mono);
+      font-size: 0.9rem;
+      color: var(--manga-accent);
+      margin-bottom: 16px;
+      display: flex;
+      gap: 16px;
+      align-items: center;
+    }
+    .aw-badge {
+      background: var(--manga-red);
+      color: var(--paper-white);
+      padding: 4px 8px;
+      font-weight: 800;
+    }
+    .aw-desc {
+      font-family: var(--font-body);
+      font-size: 1.05rem;
+      line-height: 1.6;
+      color: var(--ink-black);
+      border-left: 4px solid var(--paper-white);
+      padding-left: 16px;
+    }
+
+    /* EPISODE LIST (DUMMY) */
+    .aw-sidebar {
+      width: 100%;
+      background: rgba(255,255,255,0.05);
+      border: 2px solid var(--ink-black);
+      padding: 24px;
+      clip-path: polygon(0 0, 100% 0, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0 100%);
+    }
+    @media (min-width: 992px) {
+      .aw-sidebar {
+        width: 350px;
+        flex-shrink: 0;
+      }
+    }
+    .sidebar-title {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      text-transform: uppercase;
+      margin: 0 0 16px 0;
+      border-bottom: 2px dashed var(--manga-red);
+      padding-bottom: 8px;
+    }
+    .ep-item {
+      display: flex;
+      gap: 12px;
+      padding: 12px;
+      border-bottom: 1px solid var(--ink-black);
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .ep-item:hover, .ep-item.active {
+      background: rgba(255,255,255,0.1);
+      border-left: 4px solid var(--manga-accent);
+    }
+    .ep-num {
+      font-family: var(--font-mono);
+      font-weight: 800;
+      color: var(--manga-red);
+      min-width: 40px;
+    }
+    .ep-name {
+      font-family: var(--font-body);
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="aw-header">
+    <a href="/aniwatch/" class="aw-brand">
+      ANIWATCH
+    </a>
+    <div class="aw-actions">
+      <a href="/aniwatch/" class="aw-btn">← BACK TO BROWSE</a>
+    </div>
+  </header>
+
+  <!-- PLAYER -->
+  <div class="aw-player-wrapper">
+    <div class="aw-player-container">
+      <div class="aw-video-aspect" id="video-container">
+        <!-- Iframe injected here -->
+      </div>
+    </div>
+  </div>
+
+  <!-- INFO -->
+  <div class="aw-info-section">
+    <div class="aw-title-area">
+      <h1 class="aw-title" id="anime-title">Loading...</h1>
+      <div class="aw-meta">
+        <span class="aw-badge">HD</span>
+        <span class="aw-badge" style="background: var(--ink-black);">SUB | DUB</span>
+        <span>SEASON 2026</span>
+        <span>24m</span>
+      </div>
+      <p class="aw-desc" id="anime-desc">Retrieving database record... Please wait while the neural-link synchronizes with the main server.</p>
+    </div>
+
+    <!-- SIDEBAR -->
+    <div class="aw-sidebar">
+      <h3 class="sidebar-title">Episodes</h3>
+      <div class="ep-list" id="ep-list">
+        <div class="ep-item active">
+          <div class="ep-num">E01</div>
+          <div class="ep-name">The Beginning</div>
+        </div>
+        <div class="ep-item">
+          <div class="ep-num">E02</div>
+          <div class="ep-name">Awakening</div>
+        </div>
+        <div class="ep-item">
+          <div class="ep-num">E03</div>
+          <div class="ep-name">First Mission</div>
+        </div>
+        <div class="ep-item">
+          <div class="ep-num">E04</div>
+          <div class="ep-name">Encounter</div>
+        </div>
+        <div class="ep-item">
+          <div class="ep-num">E05</div>
+          <div class="ep-name">Clash</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Init theme
+    const savedTheme = localStorage.getItem('cariearsa_theme');
+    if (savedTheme) {
+      document.documentElement.setAttribute('data-theme', savedTheme);
+      document.body.setAttribute('data-theme', savedTheme);
+    }
+
+    // Get URL Params
+    const urlParams = new URLSearchParams(window.location.search);
+    const videoId = urlParams.get('id') || 'v4E5dGgDoxQ'; // Default Frieren
+    const title = urlParams.get('title') || 'Featured Anime';
+
+    // Set Title
+    document.getElementById('anime-title').textContent = title;
+    document.title = `${title} - ANIWATCH`;
+
+    // Descriptions lookup (mock data for the demo)
+    const descMap = {
+      'Solo Leveling': 'In a world where hunters must battle deadly monsters to protect humanity, Jinwoo Sung, known as the weakest hunter of all mankind, finds himself in a continuous struggle for survival. But after a near-fatal encounter, a mysterious system grants him the ability to level up, changing his destiny forever.',
+      'Jujutsu Kaisen': 'Yuji Itadori, a kind-hearted teenager, joins his school\'s Occult Club for fun, but discovers that its members are actual sorcerers who can manipulate the energy between beings for their own use. He hears about a cursed talisman - the finger of Sukuna, a demon - and its being targeted by other cursed beings.',
+      'Demon Slayer': 'A family is attacked by demons and only two members survive - Tanjiro and his sister Nezuko, who is turning into a demon slowly. Tanjiro sets out to become a demon slayer to avenge his family and cure his sister.',
+      'Kaiju No. 8': 'In a world plagued by giant monsters known as Kaiju, Kafka Hibino aspires to enlist in the Japan Defense Force to defeat them. After a small kaiju enters his body via his mouth, Kafka gains the ability to turn into a monster himself, dubbed "Kaiju No. 8" by the Defense Force.',
+      'Bleach: TYBW': 'The peace is suddenly broken when warning sirens blare through the Soul Society. Residents there are disappearing without a trace and nobody knows who\'s behind it. Meanwhile, a dark shadow is also extending itself toward Ichigo and his friends in Karakura Town.',
+      'Chainsaw Man': 'Denji is a teenage boy living with a Chainsaw Devil named Pochita. Due to the debt his father left behind, he has been living a rock-bottom life while repaying his debt by harvesting devil corpses with Pochita. One day, Denji is betrayed and killed. As his consciousness fades, he makes a contract with Pochita and gets revived as "Chainsaw Man".',
+      'Spy x Family': 'World peace is at stake and secret agent Twilight must undergo his most difficult mission yet—pretend to be a family man. Posing as a loving husband and father, he\'ll infiltrate an elite school to get close to a high-profile politician. He has a perfect cover, except his wife\'s a deadly assassin and neither knows each other\'s identity. But someone does, his adopted daughter who\'s a telepath!'
+    };
+
+    if (descMap[title]) {
+      document.getElementById('anime-desc').textContent = descMap[title];
+    } else if (title === "Frieren: Beyond Journey's End") {
+      document.getElementById('anime-desc').textContent = "The mage Frieren has defeated the Demon King alongside the hero Himmel's party after a 10-year quest. As an elf, her life is long, and she embarks on a new journey to understand humanity.";
+    }
+
+    // Embed Video
+    const container = document.getElementById('video-container');
+    container.innerHTML = `<iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&showinfo=0&color=white" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+    
+    // Add some random fake episodes
+    const epList = document.getElementById('ep-list');
+    const items = epList.querySelectorAll('.ep-item');
+    items.forEach(item => {
+      item.addEventListener('click', () => {
+        items.forEach(i => i.classList.remove('active'));
+        item.classList.add('active');
+        // Fake reload
+        container.innerHTML = `<iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+      });
+    });
+  </script>
+</body>
+</html>

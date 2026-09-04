@@ -1,0 +1,284 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    
+    <!-- Hyper-fast Desktop Detection (Redirect to /cloud/ if desktop/laptop) -->
+    <script>
+      (function() {
+        try {
+          var params = new URLSearchParams(window.location.search);
+          if (params.get('view') === 'mobile' || sessionStorage.getItem('cariearsa_cloud_force') === 'mobile') {
+            return;
+          }
+          var isMobileUA = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|Tablet|Silk|Kindle|PlayBook/i.test(navigator.userAgent || '');
+          var isCoarse = window.matchMedia && (window.matchMedia('(pointer: coarse)').matches || window.matchMedia('(hover: none)').matches);
+          var hasTouch = (navigator.maxTouchPoints && navigator.maxTouchPoints > 0) || ('ontouchstart' in window);
+          var isLargeScreen = window.innerWidth > 1024 && (window.screen && Math.min(window.screen.width, window.screen.height) > 768);
+
+          // If on a desktop/laptop without touch screen or mobile user agent
+          if (isLargeScreen && !isMobileUA && !isCoarse && !hasTouch) {
+            var target = '/cloud/' + window.location.search + window.location.hash;
+            window.location.replace(target);
+          }
+        } catch (e) {}
+      })();
+    </script>
+
+    <title>CARIEARSA-CLOUD Mobile</title>
+    <meta name="description" content="CARIEARSA-CLOUD versi mobile & tablet - penyimpanan cloud responsif berkecepatan tinggi dengan antarmuka sentuh cyberpunk." />
+    <meta property="og:title" content="CARIEARSA-CLOUD Mobile" />
+    <meta property="og:description" content="CARIEARSA-CLOUD versi mobile & tablet dengan antarmuka sentuh cyberpunk." />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/src/cloud.css">
+  </head>
+  <body id="cloud-body" class="cyber-cloud-body cyber-scanlines select-none overflow-x-hidden" data-theme="neo-tokyo">
+    <div id="app" class="min-h-[100dvh] w-full flex flex-col relative pb-28">
+      
+      <!-- Top Mobile HUD Header (Fixed) -->
+      <header class="sticky top-0 left-0 right-0 h-14 bg-[var(--c-surface)]/95 backdrop-blur-md border-b-2 border-[var(--c-border)] flex items-center justify-between px-3 z-30 shadow-md transition-colors">
+        <div class="flex items-center gap-2 shrink-0">
+          <a href="/" class="cyber-btn-chamfer cyber-btn-solid-surface px-2 py-1 text-[11px] font-mono font-bold flex items-center gap-1 active:scale-95 transition-all" title="Kembali ke Portofolio">
+            <span class="text-[var(--c-accent)]">←</span> <span>HUB</span>
+          </a>
+          <div class="flex items-baseline tracking-wider pl-2 border-l-2 border-[var(--c-border)]">
+            <span class="text-xs sm:text-sm font-black tracking-widest text-[var(--c-text-main)] uppercase" style="font-family: 'Oswald', sans-serif;">CARIEARSA</span>
+            <span class="text-xs sm:text-sm font-black text-[var(--c-accent)] drop-shadow-[0_0_8px_var(--c-accent-glow)] uppercase ml-0.5" style="font-family: 'Oswald', sans-serif;">CLOUD</span>
+            <span class="text-[8px] font-mono text-[var(--c-accent)] border border-[var(--c-border)] bg-[var(--c-surface-card)] px-1 py-0.2 rounded ml-1.5 font-bold uppercase tracking-wider">MOBILE</span>
+          </div>
+        </div>
+
+        <!-- Top Right Actions -->
+        <div class="flex items-center gap-1.5" id="mobile-header-actions">
+          <button id="mobile-search-toggle" type="button" class="cyber-btn-chamfer p-2 cyber-btn-solid-surface hover:border-[var(--c-accent)] active:scale-95 transition-all" title="Cari berkas">
+            <i data-lucide="search" class="w-4 h-4 text-[var(--c-accent)]"></i>
+          </button>
+          
+          <button id="mobile-view-toggle" type="button" class="cyber-btn-chamfer p-2 cyber-btn-solid-surface hover:border-[var(--c-accent)] active:scale-95 transition-all" title="Ubah Tampilan (Grid / List)">
+            <i data-lucide="layout-grid" id="mobile-view-icon" class="w-4 h-4 text-[var(--c-text-muted)]"></i>
+          </button>
+
+          <button id="mobile-settings-btn" type="button" class="cyber-btn-chamfer p-2 cyber-btn-solid-surface hover:border-[var(--c-accent)] active:scale-95 transition-all" title="Pengaturan Tema & Tampilan">
+            <i data-lucide="settings-2" class="w-4 h-4 text-[var(--c-accent)]"></i>
+          </button>
+        </div>
+      </header>
+
+      <!-- Expandable Mobile Search Drawer -->
+      <div id="mobile-search-drawer" class="fixed top-14 left-0 right-0 z-20 bg-[var(--c-surface)] border-b-2 border-[var(--c-accent)] px-3 py-2.5 shadow-2xl backdrop-blur-md hidden transition-all">
+        <div class="relative flex items-center max-w-lg mx-auto">
+          <i data-lucide="search" class="w-4 h-4 absolute left-3 text-[var(--c-accent)] pointer-events-none"></i>
+          <input type="text" id="mobile-search-input" placeholder="Cari berkas dalam vault..." class="w-full pl-9 pr-16 py-2 bg-[var(--c-bg)] border border-[var(--c-border)] focus:border-[var(--c-accent)] rounded-lg text-xs text-[var(--c-text-main)] placeholder-[var(--c-text-muted)] focus:outline-none font-mono" />
+          <div class="absolute right-2 flex items-center gap-1.5">
+            <button id="mobile-clear-search" type="button" class="text-[var(--c-text-muted)] hover:text-white hidden p-1 rounded transition-colors" title="Hapus"><i data-lucide="x" class="w-3.5 h-3.5"></i></button>
+            <button id="mobile-close-search" type="button" class="px-2 py-0.5 bg-[var(--c-surface-card)] hover:bg-[var(--c-surface-hover)] border border-[var(--c-border)] text-[var(--c-text-muted)] hover:text-white rounded text-xs font-mono font-bold" title="Tutup">✕</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sticky Category Ribbon & Quick HUD -->
+      <div class="sticky top-14 z-10 bg-[var(--c-bg)]/95 backdrop-blur-md border-b border-[var(--c-border)] px-3 py-2 flex flex-col gap-2">
+        <!-- Horizontal Scrolling Category Pills Carousel -->
+        <div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar scroll-smooth py-0.5" id="mobile-category-ribbon">
+          <!-- Populated by JS -->
+        </div>
+
+        <!-- Storage Progress & Quick Sort Row -->
+        <div class="flex items-center justify-between gap-2 pt-1 border-t border-[var(--c-border)]/60 text-[10px] font-mono">
+          <!-- Capacity indicator -->
+          <div class="flex items-center gap-2 flex-1 min-w-0" id="mobile-storage-widget">
+            <!-- Populated by JS -->
+          </div>
+
+          <!-- Sort Button & Selection Toggle -->
+          <div class="flex items-center gap-1.5 shrink-0">
+            <button id="mobile-sort-btn" type="button" class="cyber-btn-chamfer px-2 py-1 cyber-btn-solid-surface text-[10px] font-bold flex items-center gap-1 text-[var(--c-text-main)] active:scale-95 transition-all">
+              <i data-lucide="arrow-down-up" class="w-3 h-3 text-[var(--c-accent)]"></i>
+              <span id="mobile-sort-label">Terbaru</span>
+            </button>
+            <button id="mobile-select-mode-btn" type="button" class="cyber-btn-chamfer px-2 py-1 cyber-btn-solid-surface text-[10px] font-bold flex items-center gap-1 text-[var(--c-text-main)] active:scale-95 transition-all">
+              <i data-lucide="check-square" class="w-3 h-3 text-[var(--c-accent)]"></i>
+              <span>Pilih</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- File Content Container -->
+      <main class="flex-1 p-3">
+        <!-- Grid / List Container -->
+        <div id="mobile-file-container" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2.5 content-start">
+          <!-- Populated by JS -->
+        </div>
+      </main>
+
+      <!-- Floating Bottom Dock (Thumb Zone) -->
+      <div id="mobile-bottom-dock" class="fixed bottom-0 left-0 right-0 z-30 p-3 pb-safe bg-gradient-to-t from-[var(--c-surface)] via-[var(--c-surface)]/95 to-transparent backdrop-blur-md border-t border-[var(--c-border)]/80 flex items-center justify-between gap-3 shadow-[0_-10px_25px_rgba(0,0,0,0.6)]">
+        <!-- Refresh Button -->
+        <button id="mobile-refresh-btn" type="button" class="cyber-btn-chamfer p-3 cyber-btn-solid-surface active:scale-90 transition-all text-[var(--c-text-muted)] hover:text-white" title="Segarkan berkas">
+          <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+        </button>
+
+        <!-- Main Prominent Upload Button (Center FAB) -->
+        <label for="mobile-hidden-file-input" id="mobile-upload-btn-label" class="flex-1 cyber-btn-chamfer cyber-btn-solid-accent py-3 px-4 text-xs font-black flex items-center justify-center gap-2 cursor-pointer active:scale-95 shadow-[0_0_20px_var(--c-accent-glow)] transition-all uppercase tracking-wider font-mono">
+          <i data-lucide="upload-cloud" class="w-4 h-4 stroke-[2.5]"></i>
+          <span>UNGGAH BERKAS</span>
+        </label>
+
+        <!-- Switch to Desktop Button -->
+        <button id="mobile-switch-desktop-btn" type="button" class="cyber-btn-chamfer p-3 cyber-btn-solid-surface active:scale-90 transition-all text-[var(--c-text-muted)] hover:text-white font-mono text-[10px]" title="Buka Versi Desktop">
+          <i data-lucide="monitor" class="w-4 h-4 text-[var(--c-accent)]"></i>
+        </button>
+      </div>
+
+      <!-- Floating Multi-Select Actions Bar (Shows when items are checked) -->
+      <div id="mobile-bulk-bar" class="fixed bottom-20 left-3 right-3 z-35 bg-[var(--c-surface)] border-2 border-[var(--c-accent)] rounded-xl p-2.5 shadow-[0_10px_35px_rgba(0,0,0,0.9),0_0_25px_var(--c-accent-glow)] backdrop-blur-md flex items-center justify-between gap-2 hidden animate-bottom-sheet">
+        <!-- Populated by JS -->
+      </div>
+
+      <!-- Mobile Modals & Bottom Sheets -->
+      <!-- Sort Bottom Sheet -->
+      <div id="mobile-sort-sheet" class="fixed inset-0 z-50 flex flex-col justify-end bg-black/75 backdrop-blur-sm hidden">
+        <div class="bg-[var(--c-surface)] border-t-2 border-[var(--c-accent)] rounded-t-2xl p-4 pb-safe animate-bottom-sheet max-h-[85vh] overflow-y-auto">
+          <div class="w-12 h-1 bg-[var(--c-border)] rounded-full mx-auto mb-3"></div>
+          <div class="flex items-center justify-between pb-2 border-b border-[var(--c-border)] mb-3">
+            <h3 class="text-xs font-black uppercase tracking-wider text-white flex items-center gap-2">
+              <i data-lucide="arrow-down-up" class="w-4 h-4 text-[var(--c-accent)]"></i>
+              <span>URUTKAN BERKAS</span>
+            </h3>
+            <button type="button" id="close-sort-sheet" class="p-1 text-[var(--c-text-muted)] hover:text-white">✕</button>
+          </div>
+          <div class="space-y-1.5" id="sort-options-list">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Rename Bottom Sheet -->
+      <div id="mobile-rename-modal" class="fixed inset-0 z-50 flex flex-col justify-end bg-black/75 backdrop-blur-sm hidden">
+        <div class="bg-[var(--c-surface)] border-t-2 border-[var(--c-accent)] rounded-t-2xl p-4 pb-safe animate-bottom-sheet">
+          <div class="w-12 h-1 bg-[var(--c-border)] rounded-full mx-auto mb-3"></div>
+          <div class="flex items-center justify-between pb-2 border-b border-[var(--c-border)] mb-3">
+            <h3 class="text-xs font-black uppercase tracking-wider text-white flex items-center gap-2">
+              <i data-lucide="edit-3" class="w-4 h-4 text-[var(--c-accent)]"></i>
+              <span>UBAH NAMA BERKAS</span>
+            </h3>
+            <button type="button" id="close-rename-sheet" class="p-1 text-[var(--c-text-muted)] hover:text-white">✕</button>
+          </div>
+          <form id="mobile-rename-form" class="space-y-3">
+            <input type="hidden" id="rename-file-id" value="" />
+            <div>
+              <label class="block text-[10px] uppercase font-bold text-[var(--c-text-muted)] mb-1">Nama Baru</label>
+              <input type="text" id="rename-input-field" class="w-full px-3 py-2.5 bg-[var(--c-bg)] border border-[var(--c-border)] focus:border-[var(--c-accent)] rounded-lg text-sm text-[var(--c-text-main)] font-mono focus:outline-none" required />
+            </div>
+            <div class="flex items-center gap-2 pt-2">
+              <button type="button" id="cancel-rename-btn" class="flex-1 cyber-btn-chamfer cyber-btn-solid-surface py-2.5 text-xs font-bold text-[var(--c-text-muted)]">BATAL</button>
+              <button type="submit" class="flex-1 cyber-btn-chamfer cyber-btn-solid-accent py-2.5 text-xs font-black text-slate-950">SIMPAN</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Delete Confirmation Bottom Sheet -->
+      <div id="mobile-delete-modal" class="fixed inset-0 z-50 flex flex-col justify-end bg-black/75 backdrop-blur-sm hidden">
+        <div class="bg-[var(--c-surface)] border-t-2 border-rose-500 rounded-t-2xl p-4 pb-safe animate-bottom-sheet">
+          <div class="w-12 h-1 bg-[var(--c-border)] rounded-full mx-auto mb-3"></div>
+          <div class="flex items-center gap-3 mb-3">
+            <div class="p-2 rounded-xl bg-rose-500/20 text-rose-400 border border-rose-500/40 shrink-0">
+              <i data-lucide="trash-2" class="w-5 h-5"></i>
+            </div>
+            <div>
+              <h3 class="text-xs font-bold text-white uppercase tracking-wider" id="delete-modal-title">Hapus File?</h3>
+              <p class="text-[11px] text-[var(--c-text-muted)] mt-0.5" id="delete-modal-desc">Berkas ini akan dihapus secara permanen dari server vault.</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-2 pt-2">
+            <button type="button" id="cancel-delete-btn" class="flex-1 cyber-btn-chamfer cyber-btn-solid-surface py-2.5 text-xs font-bold text-[var(--c-text-muted)]">BATAL</button>
+            <button type="button" id="confirm-delete-btn" class="flex-1 cyber-btn-chamfer bg-rose-600 hover:bg-rose-500 text-white py-2.5 text-xs font-bold shadow-[0_0_15px_rgba(244,63,94,0.5)]">HAPUS PERMANEN</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Settings Bottom Sheet -->
+      <div id="mobile-settings-modal" class="fixed inset-0 z-50 flex flex-col justify-end bg-black/75 backdrop-blur-sm hidden">
+        <div class="bg-[var(--c-surface)] border-t-2 border-[var(--c-accent)] rounded-t-2xl p-4 pb-safe animate-bottom-sheet max-h-[90vh] overflow-y-auto">
+          <div class="w-12 h-1 bg-[var(--c-border)] rounded-full mx-auto mb-3"></div>
+          <div class="flex items-center justify-between pb-2 border-b border-[var(--c-border)] mb-3">
+            <div>
+              <h3 class="text-xs font-black uppercase tracking-wider text-white flex items-center gap-2">
+                <i data-lucide="palette" class="w-4 h-4 text-[var(--c-accent)]"></i>
+                <span>TEMA & TAMPILAN</span>
+              </h3>
+              <p class="text-[9px] text-[var(--c-text-muted)] font-mono">CARIEARSA-CLOUD Mobile Cyber HUD</p>
+            </div>
+            <button type="button" id="close-settings-sheet" class="p-1 text-[var(--c-text-muted)] hover:text-white">✕</button>
+          </div>
+          
+          <!-- Theme Selection -->
+          <div class="mb-4">
+            <div class="text-[10px] uppercase tracking-wider text-[var(--c-text-muted)] font-bold mb-2">Varian Tema Cyber</div>
+            <div class="grid grid-cols-2 gap-2" id="mobile-theme-list">
+              <!-- Populated by JS -->
+            </div>
+          </div>
+
+          <!-- Toggles -->
+          <div class="space-y-2 pt-2 border-t border-[var(--c-border)] mb-4">
+            <div class="flex items-center justify-between p-2.5 rounded-xl bg-[var(--c-surface-card)] border border-[var(--c-border)]">
+              <div>
+                <p class="text-xs font-bold text-[var(--c-text-main)]">Garis Pindai CRT (Scanlines)</p>
+                <p class="text-[9px] text-[var(--c-text-muted)]">Efek visual cyber hardware-accelerated</p>
+              </div>
+              <button id="toggle-scanlines-btn" type="button" class="w-11 h-6 rounded-full bg-[var(--c-border)] p-0.5 transition-colors relative">
+                <div id="scanlines-knob" class="w-5 h-5 rounded-full bg-white shadow-md transition-transform"></div>
+              </button>
+            </div>
+
+            <div class="flex items-center justify-between p-2.5 rounded-xl bg-[var(--c-surface-card)] border border-[var(--c-border)]">
+              <div>
+                <p class="text-xs font-bold text-[var(--c-text-main)]">Mode Tampilan Berkas</p>
+                <p class="text-[9px] text-[var(--c-text-muted)]" id="current-view-mode-desc">Tampilan Grid 2-Kolom</p>
+              </div>
+              <button id="toggle-view-mode-btn" type="button" class="cyber-btn-chamfer px-2.5 py-1 cyber-btn-solid-surface text-xs font-mono font-bold text-[var(--c-accent)]">
+                UBAH
+              </button>
+            </div>
+          </div>
+
+          <!-- Desktop link -->
+          <div class="pt-2 border-t border-[var(--c-border)]">
+            <button id="settings-force-desktop" type="button" class="w-full py-2.5 cyber-btn-chamfer cyber-btn-solid-surface text-xs font-bold text-[var(--c-text-main)] flex items-center justify-center gap-2">
+              <i data-lucide="monitor" class="w-4 h-4 text-[var(--c-accent)]"></i>
+              <span>Beralih ke Tampilan Desktop Penuh (/cloud)</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Universal Media Preview Modal (Fullscreen Touch) -->
+      <div id="mobile-preview-modal" class="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/90 backdrop-blur-md hidden">
+        <!-- Populated by JS -->
+      </div>
+
+      <!-- Floating Mobile Audio Player Bar -->
+      <div id="mobile-audio-bar" class="fixed bottom-20 left-3 right-3 z-30 bg-[var(--c-surface)]/95 border border-[var(--c-accent)] rounded-xl p-2.5 shadow-2xl backdrop-blur-md hidden">
+        <!-- Populated by JS -->
+      </div>
+
+      <!-- Mobile Toast -->
+      <div id="mobile-toast" class="fixed top-4 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-mono shadow-2xl backdrop-blur-md border hidden"></div>
+
+    </div>
+
+    <!-- Hidden elements -->
+    <audio id="mobile-audio" class="hidden"></audio>
+    <input type="file" id="mobile-hidden-file-input" multiple class="hidden" />
+
+    <script type="module" src="/src/cloud/mobile/main.ts"></script>
+  </body>
+</html>

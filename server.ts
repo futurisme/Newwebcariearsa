@@ -1,0 +1,80 @@
+import express from 'express';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import { createClient } from '@supabase/supabase-js';
+import { cloudRouter } from './src/server/cloudApi.ts';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+try {
+  if (typeof (process as any).loadEnvFile === 'function') {
+    (process as any).loadEnvFile();
+  }
+} catch (_) {
+  // Ignored if .env file is not present
+}
+
+const app = express();
+const PORT = 3000;
+
+const supabaseUrl = process.env.SUPABASE_URL || 'https://gnhkhnmvggltqszbhfev.supabase.co';
+const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || 'sb_secret_E7C1i2kfhrHHBdbrCbIfZA_5I12RT6C';
+const supabase = createClient(supabaseUrl, supabaseKey);
+const BUCKET_NAME = 'vault_files';
+
+async function initBucket() {
+  try {
+    const { data, error } = await supabase.storage.getBucket(BUCKET_NAME);
+    if (error && error.message.includes('not found')) {
+      const { error: createError } = await supabase.storage.createBucket(BUCKET_NAME, {
+        public: true,
+        fileSizeLimit: 52428800, // 50MB
+      });
+      if (!createError) {
+        console.log(`Successfully created public bucket: ${BUCKET_NAME}`);
+      }
+    } else if (!error) {
+      console.log(`Bucket verified: ${BUCKET_NAME}`);
+      await supabase.storage.updateBucket(BUCKET_NAME, { public: true });
+    }
+  } catch (err) {
+    console.error('Bucket check skipped or failed:', err);
+  }
+}
+
+async function startServer() {
+  await initBucket();
+
+  app.use(express.json());
+
+  // Mount Cloud Storage API routes
+  app.use('/api', cloudRouter);
+
+  // Health check
+  app.get('/api/health', (req, res) => {
+    res.json({ status: 'ok', time: new Date().toISOString() });
+  });
+
+  // Vite Middleware for Dev / Static Files for Prod
+  if (process.env.NODE_ENV !== 'production') {
+    const { createServer: createViteServer } = await import('vite');
+    const vite = await createViteServer({
+      server: { middlewareMode: true },
+      appType: 'spa',
+    });
+    app.use(vite.middlewares);
+  } else {
+    const distPath = path.join(__dirname, 'dist');
+    app.use(express.static(distPath));
+    app.get('*', (req, res) => {
+      res.sendFile(path.join(distPath, 'index.html'));
+    });
+  }
+
+  app.listen(PORT, '0.0.0.0', () => {
+    console.log(`CARIEARSA server running on http://0.0.0.0:${PORT}`);
+  });
+}
+
+startServer();
