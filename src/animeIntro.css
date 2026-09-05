@@ -1,0 +1,1833 @@
+/* =========================================================
+   CARIEARSA 12-SECOND ANIME CYBER CINEMATIC 3D ENGINE (2026)
+   - 12.0s Unskippable Masterpiece Choreography
+   - Hero Point-of-View: THE ACTUAL WEBPAGE (Page Asli)
+   - Dynamic 3-Axis Camera Flight with VISIBLE HEAD-TURNS:
+     * Menoleh ke Kanan (Camera Pans Right, Page Sweeps Left)
+     * Menoleh ke Kiri  (Camera Pans Left, Page Sweeps Right)
+     * Menoleh ke Atas  (Camera Tilts Up, Page Drops Down)
+     * Menoleh ke Bawah (Camera Tilts Down, Page Rises Up)
+     * 360° Aerial Barrel Roll Slingshot
+   - DYNAMIC ANIME CYBER SKYLINE & NEBULA BACKDROP (Zero Black Void)
+     * 100% Vector/SVG + CSS, Instant 0ms Load, Zero Network Latency
+     * Real-time Multi-Axis Parallax Tracking
+   - Luminous Multi-Layer Neon Border Aura (Cyan/Crimson/Purple/Gold)
+   - Extra Deep Pure-Black Occlusion Drop Shadow for Extreme Contrast
+   - Multi-Tiered Dense Radiant Neon Speedlines & Laser Sweeps
+   - Crystal-Clear Central Viewport (Zero Fog / Zero Hazy Washout)
+   - 100% GPU Hardware Accelerated, Ultra-Smooth, Zero Post-Intro Overhead
+   ========================================================= */
+
+:root {
+  --anime-cyan: #00F0FF;
+  --anime-crimson: #FF003C;
+  --anime-gold: #FFE600;
+  --anime-violet: #B026FF;
+  --anime-neon-green: #00FF88;
+  --anime-void: #030407;
+  --anime-white: #FFFFFF;
+}
+
+/* Base Viewport and 3D Camera Rig */
+.anime-camera-viewport {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.anime-camera-rig {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Active State on Body */
+body.splash-active {
+  overflow: hidden !important;
+  user-select: none !important;
+  -webkit-user-select: none !important;
+  touch-action: none !important;
+}
+
+body.splash-active .anime-camera-viewport {
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  overflow: hidden !important;
+  perspective: 1100px !important;
+  perspective-origin: 50% 50% !important;
+  z-index: 20 !important;
+  background: #050711 !important;
+}
+
+/* =========================================================
+   DYNAMIC ANIME CYBER CITYSCAPE & NEBULA BACKDROP
+   - Replaces flat solid black with vibrant anime night aesthetic
+   - Multi-Layered Parallax: Responds directly to camera head-turns
+   - Ultra lightweight, 0ms instant render, 120 FPS GPU smooth
+   ========================================================= */
+.anime-dynamic-backdrop {
+  position: absolute;
+  inset: -15%;
+  width: 130%;
+  height: 130%;
+  pointer-events: none;
+  z-index: 1;
+  overflow: hidden;
+  background: radial-gradient(circle at 50% 30%, #150d2a 0%, #080a18 50%, #030408 100%);
+  will-change: transform;
+}
+
+body.splash-active .anime-dynamic-backdrop {
+  animation: animeBackdropParallax 12s cubic-bezier(0.2, 0.86, 0.22, 1) forwards;
+}
+
+/* =========================================================
+   16:9 LANDSCAPE ANIME GIRL POV BACKDROP
+   - Revealed when zooming out from phone screen & looking up
+   - Camera tilts up to eye-line (Horizon Lock 0.00°):
+     Camera is perfectly parallel and eye-to-eye staring into the anime girl's face
+   - Camera quickly glances down at phone & zooms back into phone screen
+   ========================================================= */
+.anime-backdrop-girl-container {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 15;
+  opacity: 0;
+  pointer-events: none;
+  overflow: hidden;
+  will-change: opacity, transform, filter;
+  transform-origin: center center;
+}
+
+body.splash-active .anime-backdrop-girl-container {
+  animation: animeBackdropGirlCinematic 12s cubic-bezier(0.2, 0.86, 0.22, 1) forwards;
+}
+
+.anime-girl-frame {
+  position: relative;
+  width: 100vw;
+  height: 56.25vw; /* 16:9 Aspect Ratio */
+  min-height: 100vh;
+  min-width: 177.78vh; /* Full viewport coverage maintaining 16:9 ratio */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.anime-girl-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 36%; /* Perfectly aligns her face and eyes with horizon center */
+  filter: contrast(1.08) brightness(1.04) saturate(1.12);
+  transform: scale(1.02);
+  will-change: transform;
+}
+
+.anime-girl-atmosphere {
+  position: absolute;
+  inset: 0;
+  background: 
+    radial-gradient(circle at 50% 36%, rgba(0, 240, 255, 0.08) 0%, transparent 45%),
+    radial-gradient(circle at 20% 70%, rgba(255, 0, 60, 0.06) 0%, transparent 50%),
+    radial-gradient(circle at 80% 60%, rgba(176, 38, 255, 0.07) 0%, transparent 50%);
+  mix-blend-mode: screen;
+  pointer-events: none;
+}
+
+.anime-girl-vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 40%, transparent 45%, rgba(3, 5, 12, 0.65) 95%);
+  pointer-events: none;
+}
+
+.anime-girl-eyeglow {
+  position: absolute;
+  top: 36%;
+  left: 50%;
+  width: 200px;
+  height: 60px;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(ellipse at center, rgba(0, 240, 255, 0.16) 0%, transparent 70%);
+  mix-blend-mode: screen;
+  pointer-events: none;
+  animation: animeGirlEyePulse 3s ease-in-out infinite alternate;
+}
+
+@keyframes animeGirlEyePulse {
+  0% { opacity: 0.2; transform: translate(-50%, -50%) scale(0.95); }
+  100% { opacity: 0.6; transform: translate(-50%, -50%) scale(1.05); }
+}
+
+@keyframes animeBackdropGirlCinematic {
+  /* 0.0s - 4.80s: Hidden while camera performs accelerated 3D flight inside page */
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 80px, 0) scale(1.06);
+    filter: blur(8px);
+    visibility: hidden;
+  }
+  39.5% {
+    opacity: 0;
+    transform: translate3d(0, 80px, 0) scale(1.06);
+    filter: blur(8px);
+    visibility: hidden;
+  }
+
+  /* 4.80s - 5.10s: Zoom out from screen begins; anime girl background emerges gently */
+  41.0% {
+    opacity: 0.5;
+    visibility: visible;
+    transform: translate3d(0, 60px, 0) scale(1.04);
+    filter: blur(3px);
+  }
+  42.5% {
+    /* 5.10s: Zoomed out, looking down at phone held in hands */
+    opacity: 0.85;
+    visibility: visible;
+    transform: translate3d(0, 36px, 0) scale(1.025);
+    filter: blur(0px);
+  }
+
+  /* 5.10s - 7.10s: Extended phase looking down at phone held in hands */
+  52.5% {
+    opacity: 0.9;
+    transform: translate3d(0, 30px, 0) scale(1.02);
+    filter: blur(0px);
+  }
+  59.17% {
+    opacity: 0.95;
+    transform: translate3d(0, 24px, 0) scale(1.015);
+    filter: blur(0px);
+  }
+
+  /* 7.10s - 7.62s: Phone begins tilting downward; character face emerges crystal clear */
+  63.5% {
+    opacity: 1;
+    transform: translate3d(0, 16px, 0) scale(1.01);
+    filter: contrast(1.06) brightness(1.02);
+  }
+
+  /* 7.62s - 9.42s: BERTAHAN LEBIH LAMA SAAT PONSEL DIMIRINGKAN KEBAWAH (WAJAH KARAKTER & PONSEL SAMA-SAMA JELAS) */
+  71.0% {
+    opacity: 1;
+    transform: translate3d(0, 14px, 0) scale(1.008);
+    filter: contrast(1.06) brightness(1.02);
+  }
+  78.5% {
+    opacity: 1;
+    transform: translate3d(0, 12px, 0) scale(1.006);
+    filter: contrast(1.06) brightness(1.02);
+  }
+
+  /* 9.42s - 9.78s: Phone descends out of screen, camera glides to dead-center eye level */
+  81.5% {
+    /* SEJAJAR EYE-TO-EYE: Level horizon lock looking cleanly into her face! */
+    opacity: 1;
+    transform: translate3d(0, 0px, 0) scale(1);
+    filter: contrast(1.08) brightness(1.03);
+  }
+
+  /* 9.78s - 10.44s: HORIZON LOCK EYE-LINE (Menatap bersih wajah karakter, dipercepat sedikit: ~0.66s durasi) */
+  87.0% {
+    opacity: 1;
+    transform: translate3d(0, 0px, 0) scale(1);
+    filter: contrast(1.08) brightness(1.03);
+  }
+
+  /* 10.44s - 10.55s: Cepat kembali nengok ke bawah (ke HP) */
+  87.9% {
+    opacity: 0.95;
+    transform: translate3d(0, 36px, 0) scale(1.02);
+    filter: blur(0px);
+  }
+
+  /* 10.55s - 11.55s: Zooming masuk kembali kedalam layar HP */
+  92.0% {
+    opacity: 0.7;
+    transform: translate3d(0, 80px, 0) scale(1.12);
+    filter: blur(3px);
+  }
+  96.25% {
+    /* Plunge into screen complete */
+    opacity: 0;
+    transform: translate3d(0, 120px, 0) scale(1.25);
+    filter: blur(6px);
+    visibility: hidden;
+  }
+
+  /* 11.55s - 12.0s: Normal screen restored */
+  100% {
+    opacity: 0;
+    transform: translate3d(0, 0, 0) scale(1);
+    filter: none;
+    visibility: hidden;
+  }
+}
+
+/* 1. Deep Space Cyber Nebula & Stars */
+.anime-backdrop-nebula {
+  position: absolute;
+  inset: 0;
+  background-image: 
+    radial-gradient(circle at 20% 25%, rgba(0, 240, 255, 0.22) 0%, transparent 45%),
+    radial-gradient(circle at 80% 35%, rgba(255, 0, 60, 0.2) 0%, transparent 50%),
+    radial-gradient(circle at 50% 70%, rgba(176, 38, 255, 0.25) 0%, transparent 55%),
+    radial-gradient(2px 2px at 15% 15%, #ffffff 100%, transparent),
+    radial-gradient(1.5px 1.5px at 35% 45%, #00F0FF 100%, transparent),
+    radial-gradient(2px 2px at 65% 20%, #FFE600 100%, transparent),
+    radial-gradient(1.5px 1.5px at 85% 60%, #FF003C 100%, transparent),
+    radial-gradient(2px 2px at 45% 85%, #B026FF 100%, transparent);
+  background-size: 100% 100%, 100% 100%, 100% 100%, 250px 250px, 320px 320px, 280px 280px, 350px 350px, 300px 300px;
+  opacity: 0.9;
+}
+
+/* 2. Cyber Celestial Neon Moon with Orbital Rings */
+.anime-backdrop-moon {
+  position: absolute;
+  top: 12%;
+  right: 18%;
+  width: 160px;
+  height: 160px;
+  pointer-events: none;
+}
+
+.moon-core {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #FFFFFF 0%, #00F0FF 45%, #0d1e3d 90%);
+  box-shadow: 
+    0 0 30px 10px rgba(0, 240, 255, 0.8),
+    0 0 80px 25px rgba(0, 240, 255, 0.4);
+}
+
+.moon-ring {
+  position: absolute;
+  top: 50%;
+  left: -20%;
+  width: 140%;
+  height: 36px;
+  border-radius: 50%;
+  border: 3px solid rgba(255, 230, 0, 0.8);
+  box-shadow: 0 0 15px rgba(255, 230, 0, 0.9);
+  transform: translateY(-50%) rotate(-25deg);
+}
+
+/* 3. Tokyo Anime Cyber City Skyline Silhouette */
+.anime-backdrop-cityscape {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 48%;
+  pointer-events: none;
+  display: flex;
+  align-items: flex-end;
+}
+
+.cityscape-svg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: drop-shadow(0 0 18px rgba(0, 240, 255, 0.45));
+}
+
+/* 4. Sweeping Anime Searchlights */
+.anime-backdrop-searchlights {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.searchlight {
+  position: absolute;
+  bottom: 0;
+  width: 160px;
+  height: 120%;
+  background: linear-gradient(0deg, rgba(0, 240, 255, 0.22) 0%, rgba(0, 240, 255, 0.04) 60%, transparent 100%);
+  clip-path: polygon(45% 100%, 55% 100%, 100% 0%, 0% 0%);
+  transform-origin: bottom center;
+  mix-blend-mode: screen;
+  will-change: transform, opacity;
+}
+
+.light-left {
+  left: 15%;
+  animation: animeSearchlightLeft 6s ease-in-out infinite alternate;
+}
+
+.light-right {
+  right: 20%;
+  background: linear-gradient(0deg, rgba(255, 0, 60, 0.18) 0%, rgba(255, 0, 60, 0.03) 60%, transparent 100%);
+  animation: animeSearchlightRight 7s ease-in-out infinite alternate;
+}
+
+@keyframes animeSearchlightLeft {
+  0% { transform: rotate(-35deg); opacity: 0.2; }
+  100% { transform: rotate(15deg); opacity: 0.45; }
+}
+
+@keyframes animeSearchlightRight {
+  0% { transform: rotate(25deg); opacity: 0.35; }
+  100% { transform: rotate(-25deg); opacity: 0.18; }
+}
+
+/* 5. Cyber Perspective Grid Ground Horizon */
+.anime-backdrop-grid {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 28%;
+  background: 
+    linear-gradient(rgba(0, 240, 255, 0.3) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 0, 60, 0.25) 1px, transparent 1px);
+  background-size: 40px 40px;
+  transform: perspective(300px) rotateX(65deg);
+  transform-origin: bottom center;
+  mask-image: linear-gradient(to top, black 20%, transparent 95%);
+  -webkit-mask-image: linear-gradient(to top, black 20%, transparent 95%);
+  opacity: 0.7;
+}
+
+/* 
+  DYNAMIC PARALLAX RESPONSE ON THE BACKDROP:
+  Counter-moves to foreground camera angles creating massive 3D depth!
+*/
+@keyframes animeBackdropParallax {
+  0% {
+    /* Camera turns right -> Backdrop counter-pans right */
+    transform: translate3d(6vw, -2vh, 0) scale(1.08);
+  }
+  7% {
+    /* Camera swings to look left -> Backdrop counter-pans left */
+    transform: translate3d(-7vw, 2vh, 0) scale(1.08);
+  }
+  13% {
+    /* Camera centers */
+    transform: translate3d(0vw, 0vh, 0) scale(1.04);
+  }
+  16.25% {
+    /* First touchdown shake (1.95s) */
+    transform: translate3d(-15px, 10px, 0) scale(1.05);
+  }
+  20.0% {
+    transform: translate3d(0, 0, 0) scale(1.02);
+  }
+  24.5% {
+    /* Camera tilts up into sky -> Backdrop pans down, revealing celestial moon & towers */
+    transform: translate3d(3vw, 8vh, 0) scale(1.12);
+  }
+  32.5% {
+    /* Inverted roll apex */
+    transform: translate3d(-5vw, -4vh, 0) scale(1.15) rotate(8deg);
+  }
+  39.0% {
+    /* Roll re-level */
+    transform: translate3d(4vw, 3vh, 0) scale(1.1) rotate(0deg);
+  }
+  42.5% {
+    /* 5.1s: Zoomed out, looking down at phone */
+    transform: translate3d(0vw, 0vh, 0) scale(1.04);
+  }
+  59.17% {
+    /* 7.1s: End of looking down at phone */
+    transform: translate3d(0vw, 0vh, 0) scale(1.04);
+  }
+  63.5% {
+    /* 7.62s: Reaches tilted downward pose */
+    transform: translate3d(0vw, 0vh, 0) scale(1.02);
+  }
+  78.5% {
+    /* 9.42s: Still holding tilted downward pose */
+    transform: translate3d(0vw, 0vh, 0) scale(1.02);
+  }
+  81.5% {
+    /* 9.78s: Level eye-line to anime girl face */
+    transform: translate3d(0vw, 0vh, 0) scale(1.0);
+  }
+  87.0% {
+    /* 10.44s: End horizon lock */
+    transform: translate3d(0vw, 0vh, 0) scale(1.0);
+  }
+  87.9% {
+    /* Glance down */
+    transform: translate3d(0vw, 1vh, 0) scale(1.02);
+  }
+  96.25% {
+    /* 11.55s: Climax impact tremor */
+    transform: translate3d(18px, -12px, 0) scale(1.07);
+  }
+  98.5% {
+    transform: translate3d(-4px, 2px, 0) scale(1.01);
+  }
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+/* =========================================================
+   THE HERO POINT-OF-VIEW: THE ACTUAL WEBPAGE (PAGE ASLI)
+   ========================================================= */
+/* =========================================================
+   THE HERO POINT-OF-VIEW: THE ACTUAL WEBPAGE (PAGE ASLI)
+   ========================================================= */
+
+/* Master 3D POV Camera Rig */
+.anime-pov-camera {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform-style: preserve-3d;
+  z-index: 10;
+  will-change: transform;
+}
+
+body.splash-active .anime-pov-camera.animating {
+  animation: animeMasterPovCamera 12s cubic-bezier(0.2, 0.86, 0.22, 1) forwards !important;
+}
+
+/* Two-Handed Landscape Smartphone Assembly */
+.anime-handheld-unit {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: min(92vw, 860px);
+  height: min(84vh, 440px);
+  transform-style: preserve-3d;
+  will-change: transform;
+  z-index: 20;
+}
+
+body.splash-active .anime-handheld-unit.animating {
+  animation: animeMasterHandheld 12s cubic-bezier(0.2, 0.86, 0.22, 1) forwards !important;
+}
+
+/* Physical Phone Chassis & Hands (reveals when camera zooms out) */
+.anime-phone-frame {
+  position: absolute;
+  inset: -14px -14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform-style: preserve-3d;
+  pointer-events: none;
+  z-index: 30;
+  opacity: 0;
+  visibility: hidden;
+  will-change: transform, opacity;
+}
+
+body.splash-active .anime-phone-frame.animating {
+  animation: animeMasterPhoneFrame 12s cubic-bezier(0.2, 0.86, 0.22, 1) forwards !important;
+}
+
+/* Left & Right Tactical Cyber Hands */
+.anime-hand {
+  position: absolute;
+  top: 50%;
+  width: 140px;
+  height: 250px;
+  pointer-events: none;
+  z-index: 40;
+  transform-style: preserve-3d;
+  filter: drop-shadow(0 15px 25px rgba(0, 0, 0, 0.95)) drop-shadow(0 0 15px rgba(0, 240, 255, 0.4));
+}
+
+.anime-hand-left {
+  left: -88px;
+  transform: translateY(-50%) translateZ(28px) rotateY(16deg) rotateX(4deg);
+}
+
+.anime-hand-right {
+  right: -88px;
+  transform: translateY(-50%) translateZ(28px) rotateY(-16deg) rotateX(4deg);
+}
+
+.anime-hand-svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+/* Physical Phone Hardware in Landscape */
+.anime-phone-device {
+  position: absolute;
+  inset: 0;
+  box-sizing: border-box;
+  background: transparent !important;
+  border: 14px solid #0c101a;
+  border-radius: 42px;
+  box-shadow: 
+    0 0 0 2.5px #2b354b,
+    0 0 0 5.5px #111520,
+    0 24px 60px rgba(0, 0, 0, 0.95),
+    0 0 45px rgba(0, 240, 255, 0.3),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform-style: preserve-3d;
+  pointer-events: none;
+}
+
+/* Hardware Buttons */
+.anime-phone-button {
+  position: absolute;
+  background: #2b3348;
+  border-radius: 2px;
+  box-shadow: inset 0 0 2px rgba(255, 255, 255, 0.3);
+}
+
+.anime-phone-button.btn-vol-up {
+  top: -18px;
+  left: 140px;
+  width: 48px;
+  height: 5px;
+}
+
+.anime-phone-button.btn-vol-down {
+  top: -18px;
+  left: 200px;
+  width: 48px;
+  height: 5px;
+}
+
+.anime-phone-button.btn-power {
+  bottom: -18px;
+  right: 180px;
+  width: 60px;
+  height: 5px;
+}
+
+/* Phone Bezel & Screen Frame */
+.anime-phone-bezel {
+  position: absolute;
+  inset: 0;
+  background: transparent !important;
+  border-radius: 28px;
+  overflow: hidden;
+  box-shadow: inset 0 0 0 1px rgba(0, 240, 255, 0.35);
+  pointer-events: none;
+}
+
+/* Landscape Phone Status Bar */
+.anime-screen-statusbar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  color: #FFFFFF;
+  z-index: 50;
+  pointer-events: none;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.65) 0%, transparent 100%);
+}
+
+.anime-sb-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.anime-sb-time {
+  letter-spacing: 0.5px;
+}
+
+.anime-sb-carrier {
+  font-size: 9px;
+  color: #00F0FF;
+  letter-spacing: 1px;
+  font-weight: 700;
+}
+
+.anime-sb-notch {
+  width: 72px;
+  height: 16px;
+  background: #0a0d14;
+  border-radius: 0 0 10px 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+}
+
+.anime-notch-lens {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #0b1e36 0%, #02050c 100%);
+  border: 1px solid #1c2b44;
+}
+
+.anime-notch-sensor {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: #101726;
+}
+
+.anime-sb-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.anime-sb-wifi {
+  color: #00F0FF;
+}
+
+.anime-sb-battery {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.anime-sb-pct {
+  font-size: 10px;
+  font-weight: 700;
+  color: #00FF88;
+}
+
+.anime-battery-shell {
+  width: 18px;
+  height: 10px;
+  border: 1.5px solid rgba(255, 255, 255, 0.8);
+  border-radius: 2.5px;
+  padding: 1px;
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.anime-battery-shell::after {
+  content: '';
+  position: absolute;
+  right: -3px;
+  top: 2px;
+  width: 1.5px;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 0 1px 1px 0;
+}
+
+.anime-battery-level {
+  width: 94%;
+  height: 100%;
+  background: #00FF88;
+  border-radius: 1px;
+  box-shadow: 0 0 6px #00FF88;
+}
+
+/* Glass Screen Glare Reflection */
+.anime-screen-glare {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(125deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 28%, transparent 50%, rgba(0, 240, 255, 0.03) 100%);
+  pointer-events: none;
+  z-index: 45;
+}
+
+/* Landscape Home Indicator Bar */
+.anime-screen-homebar {
+  position: absolute;
+  bottom: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 110px;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.65);
+  border-radius: 2px;
+  z-index: 50;
+  pointer-events: none;
+  box-shadow: 0 0 8px rgba(0, 240, 255, 0.5);
+}
+
+/* Forward-Facing Alignment Telemetry HUD (visible when straight sejajar) */
+.anime-align-hud {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.9);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  pointer-events: none;
+  z-index: 25;
+  opacity: 0;
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.anime-align-hud.visible {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.anime-hud-reticle {
+  width: 72px;
+  height: 72px;
+  border: 1.5px solid rgba(0, 240, 255, 0.85);
+  border-radius: 50%;
+  position: relative;
+  box-shadow: 0 0 22px rgba(0, 240, 255, 0.55);
+}
+
+.anime-hud-reticle::before,
+.anime-hud-reticle::after {
+  content: '';
+  position: absolute;
+  background: #00F0FF;
+}
+
+.anime-hud-reticle::before {
+  top: 50%;
+  left: -16px;
+  right: -16px;
+  height: 1.5px;
+  transform: translateY(-50%);
+}
+
+.anime-hud-reticle::after {
+  left: 50%;
+  top: -16px;
+  bottom: -16px;
+  width: 1.5px;
+  transform: translateX(-50%);
+}
+
+.anime-hud-status {
+  font-family: 'Space Grotesk', monospace, sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: #00F0FF;
+  background: rgba(0, 10, 25, 0.78);
+  padding: 6px 16px;
+  border-radius: 4px;
+  border: 1px solid rgba(0, 240, 255, 0.45);
+  text-shadow: 0 0 10px rgba(0, 240, 255, 0.85);
+}
+
+body.splash-active .anime-camera-rig {
+  width: 100% !important;
+  height: 100% !important;
+  position: relative !important;
+  z-index: 10 !important;
+  transform-style: preserve-3d !important;
+  transform-origin: 50% 50% -120px !important;
+  backface-visibility: hidden !important;
+  background: var(--bg-gray, #E9ECEF) !important;
+  color: var(--ink-black, #111111) !important;
+  border-radius: 28px !important;
+  overflow: hidden !important;
+  display: flex !important;
+  flex-direction: column !important;
+  box-sizing: border-box !important;
+  
+  /* 
+    LUMINOUS MULTI-LAYER NEON RIM OUTLINE & RADIANT AURA 
+    + EXTRA DEEP PURE-BLACK DROP SHADOW FOR EXTREME CONTRAST 
+  */
+  box-shadow:
+    /* Layer 1: Razor-thin crystal white inner rim */
+    inset 0 0 0 1px rgba(255, 255, 255, 0.4),
+    /* Layer 2: Vivid Cyber Cyan laser outline */
+    0 0 0 3px #00F0FF,
+    /* Layer 3: Secondary hot crimson accent outline */
+    0 0 0 6px rgba(255, 0, 60, 0.9),
+    /* Layer 4: Intense luminous cyan bloom aura */
+    0 0 30px 10px rgba(0, 240, 255, 0.95),
+    /* Layer 5: Crimson/magenta radiant corona */
+    0 0 70px 24px rgba(255, 0, 60, 0.85),
+    /* Layer 6: Cyber violet deep ambient flare */
+    0 0 120px 42px rgba(176, 38, 255, 0.75),
+    /* Layer 7: Electric gold outer cosmic halo */
+    0 0 185px 65px rgba(255, 230, 0, 0.4),
+    /* Layer 8 & 9: Extra deep volumetric pitch-black shadows for extreme visual punch */
+    0 40px 110px 55px rgba(0, 0, 0, 0.99),
+    0 0 280px 120px rgba(0, 0, 0, 0.98) !important;
+  
+  /* Outline definition */
+  outline: 1.5px solid rgba(255, 255, 255, 0.9) !important;
+}
+
+/* Authentic Website Page Framing inside Smartphone Screen */
+body.splash-active #manga-wrapper,
+body.splash-active .manga-wrapper {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  padding-top: 24px !important; /* Elegant clearance under phone status bar */
+  padding-bottom: 8px !important;
+  background: var(--bg-gray, #E9ECEF) !important;
+  color: var(--ink-black, #111111) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  flex: 1 !important;
+  min-height: 0 !important;
+  overflow: hidden !important;
+  box-sizing: border-box !important;
+}
+
+body.splash-active #manga-wrapper .marquee,
+body.splash-active .manga-wrapper .marquee {
+  flex-shrink: 0 !important;
+  height: 22px !important;
+  line-height: 22px !important;
+  font-size: 0.72rem !important;
+  border-top: 1.5px solid var(--ink-true-black, #000) !important;
+  border-bottom: 2px solid var(--ink-true-black, #000) !important;
+}
+
+body.splash-active #manga-wrapper .manga-nav,
+body.splash-active .manga-wrapper .manga-nav {
+  flex-shrink: 0 !important;
+  padding: 4px 14px 6px 14px !important;
+}
+
+body.splash-active #manga-wrapper .logo h1,
+body.splash-active .manga-wrapper .logo h1 {
+  font-size: 1.6rem !important;
+  line-height: 1 !important;
+}
+
+body.splash-active #manga-wrapper .manga-grid,
+body.splash-active .manga-wrapper .manga-grid {
+  display: grid !important;
+  grid-template-columns: repeat(12, 1fr) !important;
+  grid-template-rows: repeat(8, minmax(0, 1fr)) !important;
+  gap: 6px !important;
+  padding: 0 12px 6px 12px !important;
+  flex: 1 !important;
+  min-height: 0 !important;
+  box-sizing: border-box !important;
+}
+
+/* 12-Second Master Anime Cinematic 3D Camera Rig Animation */
+body.splash-active .anime-camera-rig.camera-flying {
+  will-change: transform, filter !important;
+  animation: animeMaster12sCameraFlight 12s cubic-bezier(0.2, 0.86, 0.22, 1) forwards !important;
+}
+
+/* Settle State: Absolute Zero CPU/GPU Overhead */
+body.splash-completed #anime-camera-viewport,
+body.splash-completed #anime-pov-camera,
+body.splash-completed #anime-handheld-unit,
+body.splash-completed #anime-camera-rig {
+  display: contents !important;
+  transform: none !important;
+  animation: none !important;
+  box-shadow: none !important;
+  outline: none !important;
+  border-radius: 0 !important;
+  will-change: auto !important;
+  filter: none !important;
+}
+
+body.splash-completed #anime-phone-frame,
+body.splash-completed #anime-align-hud,
+body.splash-completed .anime-dynamic-backdrop,
+body.splash-completed .anime-splash-overlay {
+  display: none !important;
+}
+
+/* 
+  =============================================================================
+  12-SECOND MASTER CHOREOGRAPHY KEYFRAMES
+  - Genuine Cinematic Camera Head-Turns:
+      * MENOLEH KE KANAN: Camera angle pans right -> Page shifts boldly to the LEFT (-28vw)
+        with steep right-facing 3D perspective (rotateY: -42deg).
+      * MENOLEH KE KIRI: Camera angle pans left -> Page sweeps boldly to the RIGHT (+28vw)
+        with steep left-facing 3D perspective (rotateY: +42deg).
+      * MENOLEH KE ATAS: Camera tilts up into sky -> Page drops to the lower screen (+22vh)
+        with steep low-angle upward perspective (rotateX: +32deg).
+      * MENOLEH KE BAWAH: Camera tilts down -> Page rises to upper screen (-18vh)
+        with steep overhead perspective (rotateX: -26deg).
+      * 360° SLINGSHOT BARREL ROLL: Springs back, 360° roll, shrink and orbital dive.
+      * ALWAYS PROMINENT PAGE ASLI (Scale stays 0.54 - 1.11, Zero Micro-Dot Shrinking).
+  =============================================================================
+*/
+@keyframes animeMaster12sCameraFlight {
+  /* ================= ACT I: DRAMATIC ACCELERATED HEAD-TURNS (MENOLEH KANAN & KIRI) ================= */
+  0% {
+    /* 
+      MENOLEH KE KANAN: Camera enters turning its head to the RIGHT.
+      The page is dynamically framed on the LEFT third of the screen (-28vw),
+      angled towards the viewer in sharp 3D perspective.
+    */
+    transform: translate3d(-28vw, 6vh, -620px) scale(0.66) rotateX(15deg) rotateY(-42deg) rotateZ(-12deg);
+    opacity: 0.3;
+    filter: brightness(0.9) contrast(1.2);
+  }
+  4% {
+    opacity: 1;
+    /* Camera tracks and holds the rightward look while accelerating forward */
+    transform: translate3d(-24vw, 4vh, -500px) scale(0.72) rotateX(12deg) rotateY(-38deg) rotateZ(-10deg);
+    filter: brightness(1.1) contrast(1.15);
+  }
+  9% {
+    /* 
+      WHIP-PAN SWEEP KE KIRI: Camera rapidly whips its head from RIGHT to LEFT!
+      The page sweeps across the camera view and lands dynamically on the RIGHT side (+28vw)!
+      The left side of the page is now angled sharply towards the camera lens.
+    */
+    transform: translate3d(28vw, -8vh, -420px) scale(0.78) rotateX(-14deg) rotateY(42deg) rotateZ(14deg);
+    filter: brightness(1.2) contrast(1.1);
+  }
+  14% {
+    /* Camera holds the leftward glance, banking slightly upward */
+    transform: translate3d(22vw, -5vh, -320px) scale(0.84) rotateX(-10deg) rotateY(34deg) rotateZ(10deg);
+    filter: brightness(1.25);
+  }
+  18% {
+    /* Camera snaps back towards center axis in rapid acceleration */
+    transform: translate3d(-6vw, 2vh, -160px) scale(0.92) rotateX(4deg) rotateY(-12deg) rotateZ(-4deg);
+    filter: brightness(1.35);
+  }
+  20.5% {
+    /* Pre-impact velocity vector */
+    transform: translate3d(0, 0, -30px) scale(0.98) rotateX(0deg) rotateY(0deg) rotateZ(0deg);
+    filter: brightness(1.4);
+  }
+
+  /* ================= ACT II: FIRST TOUCHDOWN & CRYSTAL-CLEAR VIEW (2.60s = 21.67%) ================= */
+  21.67% {
+    /* FIRST TOUCHDOWN SLAM: Seismic shutter hit (2.60s) */
+    transform: translate3d(-28px, 18px, 0) scale(1.08) rotateZ(3.2deg);
+    filter: brightness(1.5) contrast(1.2);
+  }
+  23.0% {
+    /* Shockwave recoil 1 */
+    transform: translate3d(24px, -15px, 0) scale(1.05) rotateZ(-2.4deg);
+    filter: brightness(1.3);
+  }
+  24.5% {
+    /* Shockwave recoil 2 */
+    transform: translate3d(-14px, 9px, 0) scale(1.03) rotateZ(1.2deg);
+    filter: brightness(1.15);
+  }
+  26.0% {
+    /* Micro settle */
+    transform: translate3d(6px, -4px, 0) scale(1.01) rotateZ(-0.5deg);
+    filter: brightness(1.05);
+  }
+  27.0% {
+    /* BRIEF FULL NORMAL & CLEAR VIEW MOMENT (TAMPILAN JELAS 1:1) */
+    transform: translate3d(0, 0, 0) scale(1) rotateX(0deg) rotateY(0deg) rotateZ(0deg);
+    filter: blur(0px) brightness(1) contrast(1);
+    opacity: 1;
+  }
+
+  /* ================= ACT III: SLINGSHOT CATAPULT, MENOLEH KE ATAS, & 360° ROLL (3.40s = 28.33%) ================= */
+  28.33% {
+    /* OVERLOAD CATAPULT (3.40s): Springs backward with whip-recoil */
+    transform: translate3d(-40px, 30px, -140px) scale(0.92) rotateX(12deg) rotateY(-18deg) rotateZ(-16deg);
+    filter: brightness(1.35) contrast(1.15);
+  }
+  32.0% {
+    /* 
+      MENOLEH KE ATAS: Camera tilts steep up into the sky!
+      The page drops down to the lower portion of the screen (+22vh) in dramatic low-angle perspective!
+    */
+    transform: translate3d(-8vw, 22vh, -520px) scale(0.66) rotateX(32deg) rotateY(-22deg) rotateZ(-28deg);
+    filter: brightness(1.25);
+  }
+  36.0% {
+    /* 
+      360° BARREL ROLL PHASE 1 (90° Roll, MENOLEH KE BAWAH): 
+      Camera banks high above the page, tilting its head down to track the rolling page!
+    */
+    transform: translate3d(20vw, -16vh, -620px) scale(0.56) rotateX(-26deg) rotateY(36deg) rotateZ(90deg);
+    filter: brightness(1.25) contrast(1.25);
+  }
+  40.0% {
+    /* 
+      360° BARREL ROLL PHASE 2 (180° Inverted Flight): 
+      Inverted orbital swoop across the apex!
+    */
+    transform: translate3d(-18vw, 12vh, -680px) scale(0.52) rotateX(28deg) rotateY(-38deg) rotateZ(180deg);
+    filter: brightness(1.2);
+  }
+  44.0% {
+    /* 
+      360° BARREL ROLL PHASE 3 (270° Roll): 
+      Sweeping past the opposite flank!
+    */
+    transform: translate3d(18vw, -10vh, -580px) scale(0.6) rotateX(-20deg) rotateY(32deg) rotateZ(270deg);
+    filter: brightness(1.25);
+  }
+  47.5% {
+    /* 
+      360° BARREL ROLL COMPLETION (360°): 
+      Camera re-levels its roll horizon while tracking from upper-left!
+    */
+    transform: translate3d(-10vw, 3vh, -380px) scale(0.75) rotateX(8deg) rotateY(-14deg) rotateZ(360deg);
+    filter: brightness(1.2);
+  }
+
+  /* ================= ACT IV: CENTERING & SEAMLESS SMARTPHONE SCREEN DOCK (6.00s = 50.0%) ================= */
+  49.0% {
+    /* Clean seamless docking into the smartphone screen */
+    transform: translate3d(0, 0, 0) scale(1) rotateX(0deg) rotateY(0deg) rotateZ(360deg);
+    filter: brightness(1.1);
+  }
+  50.0% {
+    /* DOCKED: Page is held securely inside phone screen as camera zooms out in 3D */
+    transform: translate3d(0, 0, 0) scale(1) rotateX(0deg) rotateY(0deg) rotateZ(360deg);
+    filter: brightness(1.0);
+  }
+  /* 50.0% - 59.17% (6.00s - 7.10s): Page stays locked inside phone screen while viewer looks down at phone */
+  59.17% {
+    transform: translate3d(0, 0, 0) scale(1) rotateX(0deg) rotateY(0deg) rotateZ(360deg);
+    filter: brightness(1.0);
+  }
+  /* 59.17% - 75.0% (7.10s - 9.00s): Page stays locked inside phone screen while phone lowers slowly and camera tilts up */
+  75.0% {
+    transform: translate3d(0, 0, 0) scale(1) rotateX(0deg) rotateY(0deg) rotateZ(360deg);
+    filter: brightness(1.0);
+  }
+  /* 75.0% - 85.0% (9.00s - 10.20s): Page stays locked inside phone screen during horizon lock gaze */
+  85.0% {
+    transform: translate3d(0, 0, 0) scale(1) rotateX(0deg) rotateY(0deg) rotateZ(360deg);
+    filter: brightness(1.0);
+  }
+  87.9% {
+    /* Rapid glance back down to phone (10.55s) */
+    transform: translate3d(0, 0, 0) scale(1) rotateX(0deg) rotateY(0deg) rotateZ(360deg);
+    filter: brightness(1.06);
+  }
+  92.5% {
+    /* Hypersonic dive back into the screen */
+    transform: translate3d(0, 0, 0) scale(1) rotateX(0deg) rotateY(0deg) rotateZ(360deg);
+    filter: brightness(1.15);
+  }
+
+  /* ================= ACT V: TOUCHDOWN IMPACT & 1:1 SETTLE (11.55s = 96.25%) ================= */
+  96.25% {
+    /* FINAL TOUCHDOWN SLAM: Re-entry shockwave into live full-screen page! */
+    transform: translate3d(-14px, 10px, 0) scale(1.025) rotateZ(361.5deg);
+    filter: brightness(1.35) contrast(1.15);
+  }
+  98.2% {
+    /* Micro recoil rebound */
+    transform: translate3d(4px, -3px, 0) scale(1.006) rotateZ(359.6deg);
+    filter: brightness(1.08);
+  }
+  99.2% {
+    /* Micro stabilization */
+    transform: translate3d(-1px, 1px, 0) scale(1.001) rotateZ(360deg);
+    filter: brightness(1.02);
+  }
+  100% {
+    /* EXACT 1:1 PRISTINE PRECISION DOCKED STATE */
+    transform: translate3d(0, 0, 0) scale(1) rotateX(0deg) rotateY(0deg) rotateZ(360deg);
+    filter: blur(0px) brightness(1) contrast(1);
+    box-shadow: none !important;
+    outline: none !important;
+    opacity: 1;
+  }
+}
+
+/* =========================================================
+   MASTER 3D POV CAMERA CHOREOGRAPHY (12.0 SECONDS)
+   - 0.0s - 6.00s: Inside the screen during accelerated 3D anime flight
+   - 6.00s - 6.30s: Out dari Ponsel (Zoom out revealing 2 hands in landscape)
+   - 6.30s - 7.60s: BERTAHAN PAS NENGOK KE HP SAAT MENGGENGGAM PONSEL (1.3s - 1.6s)
+   - 7.60s - 8.80s: Hendak dimiringkan kebawah, HP lowered, camera tilts UP sejajar ke wajah karakter
+   - 8.80s - 10.40s: Horizon lock level straight view sejajar (0.00° pitch)
+   - 10.40s - 10.70s: Cepat kembali nengok kebawah (ke HP)
+   - 10.70s - 11.55s: Zooming masuk kembali kedalam layar HP
+   - 11.55s - 12.00s: Touchdown & Layar jadi normal
+   ========================================================= */
+@keyframes animeMasterPovCamera {
+  /* 0.0s - 5.80s: Camera aligned with the screen plane */
+  0% {
+    transform: translate3d(0, 0, 0) rotateX(0deg) rotateY(0deg) rotateZ(0deg);
+  }
+  48.0% {
+    transform: translate3d(0, 0, 0) rotateX(0deg) rotateY(0deg) rotateZ(0deg);
+  }
+
+  /* 5.80s - 6.25s: OUT DARI PONSELNYA (Zoom out revealing landscape phone held in 2 hands) */
+  49.5% {
+    transform: translate3d(0, 0, -60px) rotateX(6deg) rotateY(0deg) rotateZ(0deg);
+  }
+  52.0% {
+    /* 6.24s: Fully zoomed out, looking down at phone held in hands */
+    transform: translate3d(0, 0, -380px) rotateX(36deg) rotateY(0deg) rotateZ(0deg);
+  }
+
+  /* 52.0% - 59.17% (6.24s - 7.10s): BERTAHAN PAS NENGOK KE HPNYA SAAT MENGGENGGAM PONSEL */
+  56.0% {
+    /* Gentle organic handheld breathing float while gazing down at phone */
+    transform: translate3d(0, -4px, -374px) rotateX(35.5deg) rotateY(0deg) rotateZ(0deg);
+  }
+  59.17% {
+    /* Still looking down at phone right before hand lowering begins */
+    transform: translate3d(0, 0, -380px) rotateX(36deg) rotateY(0deg) rotateZ(0deg);
+  }
+
+  /* 59.17% - 75.0% (7.10s - 9.00s): KETIKA HENDAK DIMIRINGKAN KEBAWAH, HP DITURUNKAN PERLAHAN & KAMERA NENGOK KEATAS SEJAJAR (DILAMBATKAN & DIHALUSKAN, DURASI 1.9s) */
+  64.5% {
+    transform: translate3d(0, -6px, -270px) rotateX(25deg) rotateY(0deg) rotateZ(0deg);
+  }
+  70.0% {
+    transform: translate3d(0, -9px, -110px) rotateX(11deg) rotateY(0deg) rotateZ(0deg);
+  }
+  75.0% {
+    /* 9.00s: Camera reaches straight level eye-line parallel to character face (Pitch 0.00°) */
+    transform: translate3d(0, 0, 160px) rotateX(0deg) rotateY(0deg) rotateZ(0deg);
+  }
+
+  /* 75.0% - 85.0% (9.00s - 10.20s): SELESAI MENGHADAP/TENGOK LURUS SEJAJAR KE WAJAH (HORIZON LOCK - DIPERCEPAT SEDIKIT: DURASI 1.2s) */
+  85.0% {
+    transform: translate3d(0, 0, 160px) rotateX(0deg) rotateY(0deg) rotateZ(0deg);
+  }
+
+  /* 85.0% - 87.9% (10.20s - 10.55s): DI AKHIR SECARA CEPAT KEMBALI NENGOK KEBAWAH (KE HP) */
+  87.9% {
+    transform: translate3d(0, 0, -220px) rotateX(36deg) rotateY(0deg) rotateZ(0deg);
+  }
+
+  /* 87.9% - 96.25% (10.55s - 11.55s): LANGSUNG ZOOMING MASUK KEMBALI KEDALAM LAYAR HPNYA */
+  91.5% {
+    transform: translate3d(0, 0, 360px) rotateX(10deg) rotateY(0deg) rotateZ(0deg);
+  }
+  96.25% {
+    /* Deep zoom dive right through the screen glass */
+    transform: translate3d(0, 0, 840px) rotateX(0deg) rotateY(0deg) rotateZ(0deg);
+  }
+
+  /* 11.55s - 12.0s: Touchdown & Layar jadi normal */
+  100% {
+    transform: translate3d(0, 0, 0) rotateX(0deg) rotateY(0deg) rotateZ(0deg);
+  }
+}
+
+/* =========================================================
+   TWO-HANDED LANDSCAPE SMARTPHONE DYNAMICS
+   - Lowers & tilts downward when camera tilts up
+   - Raises back up when camera snaps down
+   ========================================================= */
+@keyframes animeMasterHandheld {
+  /* 0.0s - 5.80s: Centered */
+  0% {
+    transform: translate3d(0, 0, 0) rotateX(0deg) scale(1);
+  }
+  48.0% {
+    transform: translate3d(0, 0, 0) rotateX(0deg) scale(1);
+  }
+
+  /* 5.80s - 6.25s: Zoom out reveals steady in hands */
+  49.5% {
+    transform: translate3d(0, 12px, 0) rotateX(-2deg) scale(1);
+  }
+  52.0% {
+    /* 6.24s: Steady in hands looking down at phone */
+    transform: translate3d(0, 30px, 0) rotateX(-6deg) scale(1);
+  }
+
+  /* 52.0% - 59.17% (6.24s - 7.10s): BERTAHAN SAAT MENGGENGGAM PONSEL & NENGOK KE HP */
+  56.0% {
+    transform: translate3d(0, 34px, 0) rotateX(-5.5deg) scale(1);
+  }
+  59.17% {
+    /* Still held comfortably in two hands looking down */
+    transform: translate3d(0, 30px, 0) rotateX(-6deg) scale(1);
+  }
+
+  /* 59.17% - 75.0% (7.10s - 9.00s): KETIKA HENDAK DIMIRINGKAN KEBAWAH, HP DIKEBAWAHIN & MIRINGIN KEBAWAH (DILAMBATKAN & DIHALUSKAN, DURASI 1.9s) */
+  64.5% {
+    transform: translate3d(0, 180px, -50px) rotateX(22deg) scale(0.96);
+  }
+  70.0% {
+    transform: translate3d(0, 390px, -120px) rotateX(48deg) scale(0.90);
+  }
+  75.0% {
+    /* 9.00s: Phone lowered near bottom of view and tilted flat away */
+    transform: translate3d(0, 560px, -180px) rotateX(68deg) scale(0.85);
+  }
+
+  /* 75.0% - 85.0% (9.00s - 10.20s): Held lowered while looking forward at anime girl face */
+  85.0% {
+    transform: translate3d(0, 560px, -180px) rotateX(68deg) scale(0.85);
+  }
+
+  /* 85.0% - 87.9% (10.20s - 10.55s): Hands swiftly raise phone back up into central view */
+  87.9% {
+    transform: translate3d(0, 30px, 0) rotateX(-6deg) scale(1);
+  }
+
+  /* 87.9% - 96.25%: Centered as camera dives into screen */
+  92.5% {
+    transform: translate3d(0, 0, 0) rotateX(0deg) scale(1);
+  }
+  97.0% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+/* =========================================================
+   PHONE FRAME & TACTICAL CYBER GLOVE OPACITY FADE
+   - Invisible during initial 3D flight (0.0s - 5.80s)
+   - Emerges at zoom out (5.80s - 6.25s)
+   - Extended presence while holding phone (6.25s - 7.60s)
+   - Dissolves when camera dives back into the screen (11.0s)
+   ========================================================= */
+@keyframes animeMasterPhoneFrame {
+  0% {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+  48.0% {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+  49.5% {
+    opacity: 0.7;
+    visibility: visible;
+  }
+  52.0% {
+    opacity: 1;
+    visibility: visible;
+  }
+  85.0% {
+    opacity: 1;
+    visibility: visible;
+  }
+  87.9% {
+    opacity: 0.95;
+    visibility: visible;
+  }
+  91.5% {
+    opacity: 0.8;
+    visibility: visible;
+  }
+  94.5% {
+    /* Bezels rush past camera and dissolve */
+    opacity: 0.25;
+  }
+  96.25% {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+  100% {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+}
+
+/* =========================================================
+   ANIME SPLASH OVERLAY & HIGH-CONTRAST NEON SPEEDLINES
+   - Central Viewport is 100% CLEAR (Zero foggy haze)
+   - Dozens of radiant multi-colored neon rays
+   ========================================================= */
+
+.anime-splash-overlay {
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  z-index: 100000 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  pointer-events: none !important;
+  overflow: hidden !important;
+  background: transparent !important;
+  transition: opacity 0.5s cubic-bezier(0.25, 1, 0.5, 1), visibility 0.5s !important;
+}
+
+.anime-splash-overlay.fade-out {
+  opacity: 0 !important;
+  visibility: hidden !important;
+}
+
+/* 
+  1. PRIMARY ULTRA-BRIGHT MULTI-COLORED NEON SPEEDLINES
+  - Radiant Conic rays: Cyan, Crimson, Gold, Violet, Green, White
+  - Center is transparent so the page remains 100% visible!
+*/
+.anime-speedlines {
+  position: absolute;
+  top: -65%;
+  left: -65%;
+  width: 230%;
+  height: 230%;
+  pointer-events: none;
+  background: repeating-conic-gradient(
+    from 0deg at 50% 50%,
+    transparent 0deg 1.2deg,
+    rgba(0, 240, 255, 0.95) 1.6deg,
+    #FFFFFF 1.8deg,
+    rgba(0, 240, 255, 0.95) 2.0deg,
+    transparent 2.4deg 4.2deg,
+    rgba(255, 0, 60, 0.95) 4.6deg,
+    #FFFFFF 4.8deg,
+    rgba(255, 0, 60, 0.95) 5.0deg,
+    transparent 5.4deg 7.8deg,
+    rgba(255, 230, 0, 0.9) 8.2deg,
+    transparent 8.6deg 10.8deg,
+    rgba(176, 38, 255, 0.95) 11.2deg,
+    transparent 11.6deg 14.0deg,
+    rgba(0, 255, 136, 0.9) 14.4deg,
+    transparent 14.8deg 17.5deg
+  );
+  mask-image: radial-gradient(circle at 50% 50%, transparent 26%, rgba(0,0,0,0.5) 42%, black 68%);
+  -webkit-mask-image: radial-gradient(circle at 50% 50%, transparent 26%, rgba(0,0,0,0.5) 42%, black 68%);
+  animation: animeSpeedlinesTurboSpin 0.3s linear infinite;
+  mix-blend-mode: screen;
+  opacity: 0.95;
+  filter: drop-shadow(0 0 16px rgba(0, 240, 255, 0.85));
+}
+
+@keyframes animeSpeedlinesTurboSpin {
+  0% { transform: rotate(0deg) scale(1); }
+  50% { transform: rotate(180deg) scale(1.05); }
+  100% { transform: rotate(360deg) scale(1); }
+}
+
+/* 2. SECONDARY COUNTER-ROTATING LASER BEAM SPEEDLINES */
+.anime-speedlines-counter {
+  position: absolute;
+  top: -65%;
+  left: -65%;
+  width: 230%;
+  height: 230%;
+  pointer-events: none;
+  background: repeating-conic-gradient(
+    from 180deg at 50% 50%,
+    transparent 0deg 2.2deg,
+    rgba(255, 0, 60, 0.8) 2.6deg,
+    transparent 3.0deg 6.4deg,
+    rgba(0, 240, 255, 0.85) 6.8deg,
+    transparent 7.2deg 11.5deg,
+    rgba(255, 230, 0, 0.8) 12.0deg,
+    transparent 12.5deg 16.0deg
+  );
+  mask-image: radial-gradient(circle at 50% 50%, transparent 32%, black 72%);
+  -webkit-mask-image: radial-gradient(circle at 50% 50%, transparent 32%, black 72%);
+  animation: animeSpeedlinesCounterSpin 0.45s linear infinite reverse;
+  mix-blend-mode: screen;
+  opacity: 0.75;
+}
+
+@keyframes animeSpeedlinesCounterSpin {
+  0% { transform: rotate(360deg) scale(1.02); }
+  100% { transform: rotate(0deg) scale(1.02); }
+}
+
+/* 3. CYBER HOLOGRAPHIC AMBIENT GRID */
+.anime-cyber-grid {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: 
+    linear-gradient(rgba(0, 240, 255, 0.12) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 240, 255, 0.12) 1px, transparent 1px);
+  background-size: 56px 56px;
+  background-position: center center;
+  mask-image: radial-gradient(circle at 50% 50%, transparent 28%, black 75%);
+  -webkit-mask-image: radial-gradient(circle at 50% 50%, transparent 28%, black 75%);
+  opacity: 0.6;
+}
+
+/* 4. ANAMORPHIC PRISMATIC LASER BEAM SWEEPS */
+.anime-flare-system {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.anime-beam-streak {
+  position: absolute;
+  width: 220vw;
+  height: 3px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(0, 240, 255, 0.3) 15%,
+    #00F0FF 40%,
+    #FFFFFF 50%,
+    #FF003C 60%,
+    rgba(255, 0, 60, 0.3) 85%,
+    transparent 100%
+  );
+  box-shadow: 
+    0 0 25px 5px rgba(0, 240, 255, 0.95),
+    0 0 50px 15px rgba(255, 0, 60, 0.85);
+  mix-blend-mode: screen;
+}
+
+.horizontal-streak {
+  transform: rotate(-8deg);
+  animation: animeStreakSweepClean 12s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.diagonal-streak {
+  transform: rotate(36deg);
+  opacity: 0.7;
+  animation: animeStreakDiagonalPulse 2.8s ease-in-out infinite alternate;
+}
+
+@keyframes animeStreakSweepClean {
+  0% { transform: translateY(-45vh) rotate(-16deg) scaleX(0.2); opacity: 0; }
+  15% { opacity: 0.85; transform: translateY(-12vh) rotate(-10deg) scaleX(1); }
+  28% { opacity: 1; transform: translateY(0vh) rotate(0deg) scaleX(1.4); }
+  34% { opacity: 0.3; transform: translateY(14vh) rotate(6deg) scaleX(0.7); }
+  45% { opacity: 0.9; transform: translateY(-10vh) rotate(-14deg) scaleX(1.2); }
+  60% { opacity: 0.4; transform: translateY(12vh) rotate(14deg) scaleX(0.8); }
+  85% { opacity: 1; transform: translateY(0vh) rotate(0deg) scaleX(1.6); }
+  94% { opacity: 0.4; transform: translateY(15vh) rotate(6deg) scaleX(0.9); }
+  100% { opacity: 0; transform: translateY(35vh) scaleX(0.2); }
+}
+
+@keyframes animeStreakDiagonalPulse {
+  0% { transform: rotate(32deg) scaleX(0.6); opacity: 0.3; }
+  100% { transform: rotate(40deg) scaleX(1.3); opacity: 0.85; }
+}
+
+/* 5. CYBER HOLOGRAPHIC CORNER HUD & TELEMETRY */
+.anime-hud-matrix {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 100001;
+}
+
+.anime-hud-bracket {
+  position: absolute;
+  width: 36px;
+  height: 36px;
+  border-color: #00F0FF;
+  border-style: solid;
+  border-width: 0;
+  pointer-events: none;
+  filter: drop-shadow(0 0 10px #00F0FF);
+}
+
+.bracket-tl { top: 28px; left: 28px; border-top-width: 3px; border-left-width: 3px; }
+.bracket-tr { top: 28px; right: 28px; border-top-width: 3px; border-right-width: 3px; }
+.bracket-bl { bottom: 28px; left: 28px; border-bottom-width: 3px; border-left-width: 3px; }
+.bracket-br { bottom: 28px; right: 28px; border-bottom-width: 3px; border-right-width: 3px; }
+
+.anime-hud-telemetry {
+  position: absolute;
+  bottom: 28px;
+  left: 36px;
+  font-family: 'Oswald', monospace, sans-serif;
+  font-size: 0.8rem;
+  letter-spacing: 2px;
+  color: #00F0FF;
+  text-shadow: 0 0 10px rgba(0, 240, 255, 0.9);
+  font-weight: 700;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.anime-hud-telemetry-right {
+  position: absolute;
+  bottom: 28px;
+  right: 36px;
+  text-align: right;
+  font-family: 'Oswald', monospace, sans-serif;
+  font-size: 0.8rem;
+  letter-spacing: 2px;
+  color: #FFE600;
+  text-shadow: 0 0 10px rgba(255, 230, 0, 0.8);
+  font-weight: 700;
+}
+
+/* 6. FLOATING 3D JAPANESE MANGA/CYBER SFX PARTICLES */
+.anime-sfx-particles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.anime-float-sfx {
+  position: absolute;
+  left: calc(50% + var(--x, 0px));
+  top: calc(50% + var(--y, 0px));
+  font-family: 'Noto Sans JP', 'Bangers', sans-serif;
+  font-size: 2.2rem;
+  font-weight: 900;
+  font-style: italic;
+  letter-spacing: 3px;
+  color: #FFFFFF;
+  text-shadow: 
+    3px 3px 0 #FF003C,
+    -2px -2px 0 #00F0FF,
+    0 0 22px rgba(255, 255, 255, 0.95);
+  animation: animeSfxFloatFlank 11.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation-delay: var(--d, 0s);
+  opacity: 0;
+  pointer-events: none;
+}
+
+@keyframes animeSfxFloatFlank {
+  0% {
+    transform: translate3d(0, 0, -600px) scale(0.3) rotate(-16deg);
+    opacity: 0;
+  }
+  12% {
+    opacity: 0.95;
+    transform: translate3d(0, 0, -200px) scale(0.9) rotate(-8deg);
+  }
+  28% {
+    opacity: 1;
+    transform: translate3d(calc(var(--x) * 0.3), calc(var(--y) * 0.3), 100px) scale(1.3) rotate(8deg);
+  }
+  42% {
+    opacity: 0.3;
+    transform: translate3d(var(--x), var(--y), 350px) scale(2.0);
+  }
+  50% {
+    opacity: 0.15;
+    transform: translate3d(calc(var(--x) * 1.3), calc(var(--y) * 1.3), 120px) scale(1.0) rotate(-6deg);
+  }
+  86% {
+    opacity: 0.15;
+    transform: translate3d(calc(var(--x) * 1.3), calc(var(--y) * 1.3), 120px) scale(1.0) rotate(8deg);
+  }
+  94% {
+    opacity: 0.1;
+    transform: translate3d(calc(var(--x) * 1.5), calc(var(--y) * 1.5), 350px) scale(2.2);
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(calc(var(--x) * 2), calc(var(--y) * 2), 650px) scale(3.5);
+  }
+}
+
+/* 7. TOP-DOCKED HOLOGRAPHIC CREST BANNER (Leaves center 100% open) */
+.anime-warp-crest {
+  position: absolute !important;
+  top: 24px !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  z-index: 100002 !important;
+  text-align: center !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  pointer-events: none !important;
+  animation: animeCrestTopFade 12s cubic-bezier(0.2, 0.85, 0.25, 1) forwards !important;
+}
+
+@keyframes animeCrestTopFade {
+  0% { transform: translateX(-50%) translateY(-50px) scale(0.85); opacity: 0; }
+  8% { transform: translateX(-50%) translateY(0) scale(1); opacity: 1; }
+  33% { transform: translateX(-50%) translateY(0) scale(1); opacity: 0.85; }
+  36% { transform: translateX(-50%) translateY(-20px) scale(0.9); opacity: 0.3; }
+  46% { transform: translateX(-50%) translateY(0) scale(1); opacity: 0.9; }
+  84% { transform: translateX(-50%) translateY(0) scale(1.05); opacity: 1; }
+  92% { transform: translateX(-50%) translateY(-30px) scale(0.9); opacity: 0.4; }
+  100% { transform: translateX(-50%) translateY(-60px) scale(0.7); opacity: 0; }
+}
+
+.crest-tag {
+  font-family: 'Oswald', sans-serif;
+  font-size: 0.82rem;
+  letter-spacing: 3px;
+  color: #00F0FF;
+  text-shadow: 0 0 10px #00F0FF;
+  margin-bottom: 4px;
+  font-weight: 700;
+}
+
+.crest-title-box {
+  background: rgba(0, 0, 0, 0.88);
+  border: 2px solid #FFFFFF;
+  box-shadow: 4px 4px 0px #FF003C, 0 0 25px rgba(255, 0, 60, 0.7);
+  padding: 8px 24px;
+  transform: skew(-6deg);
+}
+
+.crest-title {
+  font-family: 'Bangers', 'Oswald', sans-serif;
+  font-size: 2.4rem;
+  line-height: 0.95;
+  color: #FFFFFF;
+  margin: 0;
+  letter-spacing: 2px;
+  font-style: italic;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.crest-jp {
+  display: block;
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 0.78rem;
+  color: #FFE600;
+  letter-spacing: 2px;
+  margin-top: 3px;
+  font-weight: 700;
+}
+
+.crest-progress-rail {
+  width: 200px;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.25);
+  border: 1px solid #FFFFFF;
+  margin-top: 8px;
+  overflow: hidden;
+  box-shadow: 0 0 12px rgba(0, 240, 255, 0.8);
+}
+
+.crest-progress-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #00F0FF, #FFE600, #FF003C);
+  animation: animeProgressFillClean 11s cubic-bezier(0.2, 0.8, 0.25, 1) forwards;
+}
+
+@keyframes animeProgressFillClean {
+  0% { width: 0%; }
+  30% { width: 45%; }
+  60% { width: 75%; }
+  100% { width: 100%; }
+}
+
+/* 8. RAPID CAMERA LENS SHUTTER FLASHES */
+.anime-impact-flash {
+  position: absolute;
+  inset: 0;
+  background: #FFFFFF;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 100003;
+  mix-blend-mode: screen;
+}
+
+body.splash-active .anime-impact-flash {
+  animation: animeCleanImpactFlash 12s linear forwards;
+}
+
+@keyframes animeCleanImpactFlash {
+  0%, 28.3% { opacity: 0; }
+  /* Touchdown 1: Sharp 0.08s camera shutter flash */
+  28.5% { opacity: 0.95; }
+  29.3% { opacity: 0.2; }
+  29.8% { opacity: 0; }
+
+  /* Slingshot recoil snap */
+  36.5% { opacity: 0.6; }
+  37.1% { opacity: 0; }
+
+  /* 360° meridian pulse */
+  51.0% { opacity: 0.4; }
+  51.5% { opacity: 0; }
+
+  /* Act IV re-entry pulse */
+  74.0% { opacity: 0.45; }
+  74.5% { opacity: 0; }
+
+  /* Final Climax Slam: Sharp 0.12s burst */
+  86.7% { opacity: 0; }
+  87.0% { opacity: 1; }
+  87.8% { opacity: 0.4; }
+  88.5% { opacity: 0.08; }
+  89.2% { opacity: 0; }
+  100% { opacity: 0; }
+}
+
+/* 9. FAST CHROMATIC ABERRATION SHUTTER GLITCH */
+.anime-chromatic-shutter {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 100004;
+  opacity: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0, 240, 255, 0.15) 0px,
+    rgba(0, 240, 255, 0.15) 2px,
+    transparent 2px,
+    transparent 5px
+  );
+  mix-blend-mode: color-dodge;
+  animation: animeChromaticRapidGlitch 12s steps(2, start) forwards;
+}
+
+@keyframes animeChromaticRapidGlitch {
+  0%, 28% { opacity: 0; }
+  28.4%, 29.5% { opacity: 0.85; transform: translate3d(5px, -3px, 0); }
+  29.7%, 36.2% { opacity: 0; }
+  36.5%, 37.5% { opacity: 0.7; transform: translate3d(-6px, 2px, 0); }
+  37.8%, 50.8% { opacity: 0; }
+  51.0%, 51.8% { opacity: 0.6; transform: translate3d(4px, 3px, 0); }
+  52.0%, 86.4% { opacity: 0; }
+  86.7%, 88.0% { opacity: 0.95; transform: translate3d(-7px, 3px, 0); }
+  88.3%, 89.6% { opacity: 0.35; transform: translate3d(3px, -2px, 0); }
+  89.8%, 100% { opacity: 0; }
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .crest-title {
+    font-size: 1.8rem;
+  }
+  .crest-title-box {
+    padding: 6px 16px;
+  }
+  .anime-float-sfx {
+    font-size: 1.5rem;
+  }
+}
+
+/* Accessibility: Respect user settings */
+@media (prefers-reduced-motion: reduce) {
+  .anime-splash-overlay,
+  .anime-dynamic-backdrop {
+    display: none !important;
+  }
+  .anime-camera-rig {
+    transform: none !important;
+    animation: none !important;
+    box-shadow: none !important;
+  }
+  .anime-camera-viewport {
+    display: contents !important;
+  }
+}

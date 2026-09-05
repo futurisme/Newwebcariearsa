@@ -12,6 +12,20 @@ import {
   getFileTypeBadge 
 } from '../utils/fileHelpers';
 import { THEME_VARIANTS } from '../ui-settings';
+import { renderCategoryDropdown } from '../ui-layout-1';
+
+// Device capability detection (Strict: ONLY desktop/laptop+, never mobile or tablet)
+export function isDesktopOrLaptopDevice(): boolean {
+  try {
+    const isMobileUA = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|Tablet|Silk|Kindle|PlayBook/i.test(navigator.userAgent || '');
+    const isCoarse = window.matchMedia && (window.matchMedia('(pointer: coarse)').matches || window.matchMedia('(hover: none)').matches);
+    const hasTouch = (navigator.maxTouchPoints && navigator.maxTouchPoints > 0) || ('ontouchstart' in window);
+    const isSmallOrTablet = window.innerWidth <= 1024 || (window.screen && Math.min(window.screen.width, window.screen.height) <= 1024);
+    return !isMobileUA && !isCoarse && !hasTouch && !isSmallOrTablet;
+  } catch (_) {
+    return false;
+  }
+}
 
 function applyTheme(themeId: string) {
   document.documentElement.dataset.theme = themeId;
@@ -68,6 +82,7 @@ const state = {
   uploadProgress: null as { current: number; total: number } | null,
   currentSort: 'date_desc' as SortField,
   selectedCategory: 'all' as FileCategory,
+  isCategoryMenuOpen: false,
   searchQuery: '',
   selectedFileIds: new Set<string>(),
   isSelectionMode: false,
@@ -190,38 +205,86 @@ function formatMobileDate(dateStr: string): string {
   return `${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
 }
 
-// Render: Category Ribbon
-function renderCategoryRibbon() {
-  const container = document.getElementById('mobile-category-ribbon');
+// Render: 1 Single Category Dropdown Button (layaknya persis versi /cloud biasa)
+function renderCategoryDropdownButton() {
+  const container = document.getElementById('mobile-category-container');
   if (!container) return;
 
   const counts = getCategoryCounts();
-  const categories: { id: FileCategory; label: string; icon: string; count: number }[] = [
-    { id: 'all', label: 'Semua', icon: 'folder', count: counts.all },
-    { id: 'image', label: 'Foto', icon: 'image', count: counts.image },
-    { id: 'audio', label: 'Audio', icon: 'music', count: counts.audio },
-    { id: 'video', label: 'Video', icon: 'video', count: counts.video },
-    { id: 'document', label: 'Dokumen', icon: 'file-text', count: counts.document },
-  ];
+  container.innerHTML = renderCategoryDropdown(state.selectedCategory, counts, state.isCategoryMenuOpen);
+}
 
-  container.innerHTML = categories.map(cat => {
-    const isActive = state.selectedCategory === cat.id;
-    return `
-      <button 
-        type="button" 
-        data-category="${cat.id}"
-        class="category-pill-btn shrink-0 px-3 py-1.5 rounded-lg text-xs font-mono font-bold flex items-center gap-1.5 transition-all active:scale-95 ${
-          isActive 
-            ? 'bg-[var(--c-accent)] text-slate-950 shadow-[0_0_12px_var(--c-accent-glow)] font-black' 
-            : 'bg-[var(--c-surface)] text-[var(--c-text-muted)] border border-[var(--c-border)] hover:text-white'
-        }"
-      >
-        <i data-lucide="${cat.icon}" class="w-3.5 h-3.5 ${isActive ? 'text-slate-950 stroke-[2.5]' : 'text-[var(--c-accent)]'}"></i>
-        <span>${cat.label}</span>
-        <span class="text-[10px] px-1.5 py-0.2 rounded ${isActive ? 'bg-slate-950/20 text-slate-950' : 'bg-[var(--c-surface-card)] text-[var(--c-text-muted)]'}">${cat.count}</span>
-      </button>
-    `;
-  }).join('');
+// Synchronize Category Dropdown without full-page DOM recreation
+function syncCategoryDropdown() {
+  const catMenu = document.getElementById('category-dropdown-menu');
+  const catBtn = document.getElementById('category-menu-button');
+  if (catMenu && catBtn) {
+    if (state.isCategoryMenuOpen) {
+      catMenu.classList.remove('hidden');
+      catMenu.classList.add('block');
+      catBtn.classList.add('cyber-btn-solid-accent', 'ring-2', 'ring-white/40');
+      catBtn.classList.remove('cyber-btn-solid-surface');
+      const chev = catBtn.querySelector('.category-btn-chevron, [data-lucide="chevron-down"], svg.lucide-chevron-down');
+      if (chev) {
+        chev.classList.add('rotate-180', 'text-slate-950');
+        chev.classList.remove('text-[var(--c-text-muted)]');
+      }
+      const icon = catBtn.querySelector('.category-btn-icon, [data-lucide="filter"], svg.lucide-filter');
+      if (icon) {
+        icon.classList.add('text-slate-950');
+        icon.classList.remove('text-[var(--c-accent)]');
+      }
+      const label = catBtn.querySelector('.category-btn-label');
+      if (label) {
+        label.classList.add('text-slate-950', 'font-black');
+        label.classList.remove('text-[var(--c-text-main)]');
+      }
+    } else {
+      catMenu.classList.add('hidden');
+      catMenu.classList.remove('block');
+      catBtn.classList.remove('cyber-btn-solid-accent', 'ring-2', 'ring-white/40');
+      if (state.selectedCategory === 'all') {
+        catBtn.classList.add('cyber-btn-solid-surface');
+      }
+      const chev = catBtn.querySelector('.category-btn-chevron, [data-lucide="chevron-down"], svg.lucide-chevron-down');
+      if (chev) {
+        chev.classList.remove('rotate-180', 'text-slate-950');
+        chev.classList.add('text-[var(--c-text-muted)]');
+      }
+      const icon = catBtn.querySelector('.category-btn-icon, [data-lucide="filter"], svg.lucide-filter');
+      if (icon) {
+        icon.classList.remove('text-slate-950');
+        icon.classList.add('text-[var(--c-accent)]');
+      }
+      const label = catBtn.querySelector('.category-btn-label');
+      if (label) {
+        label.classList.remove('text-slate-950', 'font-black');
+        label.classList.add('text-[var(--c-text-main)]');
+      }
+    }
+  }
+}
+
+// Update Desktop button visibility (hidden on mobile/tablet devices)
+function updateDesktopSwitchVisibility() {
+  const isDesktop = isDesktopOrLaptopDevice();
+  const dockDesktopBtn = document.getElementById('mobile-switch-desktop-btn');
+  if (dockDesktopBtn) {
+    if (isDesktop) {
+      dockDesktopBtn.classList.remove('hidden');
+    } else {
+      dockDesktopBtn.classList.add('hidden');
+    }
+  }
+
+  const settingsDesktop = document.getElementById('settings-desktop-section');
+  if (settingsDesktop) {
+    if (isDesktop) {
+      settingsDesktop.classList.remove('hidden');
+    } else {
+      settingsDesktop.classList.add('hidden');
+    }
+  }
 }
 
 // Render: Storage Capacity Indicator
@@ -539,11 +602,12 @@ function renderAudioBar() {
 
 // Master DOM Update Function
 function updateDOM() {
-  renderCategoryRibbon();
+  renderCategoryDropdownButton();
   renderStorageWidget();
   renderFileContainer();
   renderBulkBar();
   renderAudioBar();
+  updateDesktopSwitchVisibility();
 
   // Update Sort Label
   const sortOption = SORT_OPTIONS.find(o => o.id === state.currentSort);
@@ -578,8 +642,8 @@ async function fetchFiles(showLoader = true) {
   }
 
   try {
-    const res = await fetch('/api/cloud/files');
-    if (res.ok) {
+    const res = await fetch('/api/files').catch(() => fetch('/api/cloud/files'));
+    if (res && res.ok) {
       const data = await res.json();
       state.files = data.files || [];
       try {
@@ -589,42 +653,43 @@ async function fetchFiles(showLoader = true) {
       updateDOM();
       return;
     }
-  } catch (_) {
-    console.warn('API route failed, trying direct Supabase client...');
+  } catch (_) {}
+
+  // Fallback to Supabase only if valid JWT token is provided
+  if (typeof SUPABASE_KEY === 'string' && SUPABASE_KEY.startsWith('eyJ')) {
+    try {
+      const { data, error } = await supabaseClient.storage.from(BUCKET_NAME).list('', {
+        limit: 100,
+        sortBy: { column: 'updated_at', order: 'desc' },
+      });
+      if (!error && data) {
+        state.files = data.map((f: any) => {
+          const { data: urlData } = supabaseClient.storage.from(BUCKET_NAME).getPublicUrl(f.name);
+          return {
+            name: f.name,
+            id: f.id || f.name,
+            updated_at: f.updated_at || new Date().toISOString(),
+            created_at: f.created_at || f.updated_at || new Date().toISOString(),
+            last_accessed_at: f.last_accessed_at || '',
+            metadata: f.metadata || { size: 0 },
+            publicUrl: urlData.publicUrl,
+          };
+        });
+        try {
+          localStorage.setItem(CACHE_KEY, JSON.stringify(state.files));
+        } catch (_) {}
+      } else if (state.files.length === 0) {
+        showToast('Gagal memuat berkas', 'error');
+      }
+    } catch (err) {
+      if (state.files.length === 0) {
+        showToast('Koneksi storage terputus', 'error');
+      }
+    }
   }
 
-  // Fallback to Supabase
-  try {
-    const { data, error } = await supabaseClient.storage.from(BUCKET_NAME).list('', {
-      limit: 100,
-      sortBy: { column: 'updated_at', order: 'desc' },
-    });
-    if (!error && data) {
-      state.files = data.map((f: any) => {
-        const { data: urlData } = supabaseClient.storage.from(BUCKET_NAME).getPublicUrl(f.name);
-        return {
-          name: f.name,
-          id: f.id || f.name,
-          updated_at: f.updated_at || new Date().toISOString(),
-          created_at: f.created_at || f.updated_at || new Date().toISOString(),
-          last_accessed_at: f.last_accessed_at || '',
-          metadata: f.metadata || { size: 0 },
-          publicUrl: urlData.publicUrl,
-        };
-      });
-      try {
-        localStorage.setItem(CACHE_KEY, JSON.stringify(state.files));
-      } catch (_) {}
-    } else {
-      showToast('Gagal memuat berkas', 'error');
-    }
-  } catch (err) {
-    console.error('Supabase direct list failed:', err);
-    showToast('Koneksi storage terputus', 'error');
-  } finally {
-    state.loading = false;
-    updateDOM();
-  }
+  state.loading = false;
+  updateDOM();
 }
 
 // Upload Files
@@ -641,28 +706,28 @@ async function handleFilesUpload(fileList: FileList) {
     try {
       const formData = new FormData();
       formData.append('file', file);
-      const res = await fetch('/api/cloud/upload', {
+      const res = await fetch('/api/upload', {
         method: 'POST',
         body: formData,
-      });
-      if (res.ok) {
+      }).catch(() => fetch('/api/cloud/upload', {
+        method: 'POST',
+        body: formData,
+      }));
+      if (res && res.ok) {
         successCount++;
-      } else {
-        // Fallback directly to Supabase storage
+        continue;
+      }
+    } catch (_) {}
+
+    // Fallback to Supabase if valid JWT
+    if (typeof SUPABASE_KEY === 'string' && SUPABASE_KEY.startsWith('eyJ')) {
+      try {
         const timestamp = Date.now();
         const safeName = `${timestamp}_${file.name.replace(/[^a-zA-Z0-9.-]/g, '_')}`;
         const { error } = await supabaseClient.storage.from(BUCKET_NAME).upload(safeName, file, {
           cacheControl: '3600',
           upsert: true,
         });
-        if (!error) successCount++;
-      }
-    } catch (_) {
-      // Direct Supabase fallback
-      try {
-        const timestamp = Date.now();
-        const safeName = `${timestamp}_${file.name.replace(/[^a-zA-Z0-9.-]/g, '_')}`;
-        const { error } = await supabaseClient.storage.from(BUCKET_NAME).upload(safeName, file);
         if (!error) successCount++;
       } catch (e) {
         console.error('Upload failed:', e);
@@ -869,16 +934,37 @@ function openSettingsSheet() {
 
 // Setup Event Listeners
 function setupEvents() {
-  // Category switching
+  // 1 Tombol Kategori Dropdown (persis versi /cloud biasa)
   document.addEventListener('click', (e) => {
     const target = e.target as HTMLElement;
-    const catBtn = target.closest('.category-pill-btn') as HTMLElement;
+
+    // Toggle Category Menu Button
+    if (target.closest('#category-menu-button')) {
+      e.preventDefault();
+      e.stopPropagation();
+      state.isCategoryMenuOpen = !state.isCategoryMenuOpen;
+      syncCategoryDropdown();
+      return;
+    }
+
+    // Close Category Dropdown when clicking outside
+    if (state.isCategoryMenuOpen && !target.closest('#category-dropdown-container')) {
+      state.isCategoryMenuOpen = false;
+      syncCategoryDropdown();
+    }
+
+    // Category option selected inside dropdown
+    const catBtn = target.closest('.category-option-btn') as HTMLElement;
     if (catBtn) {
+      e.preventDefault();
+      e.stopPropagation();
       const cat = catBtn.dataset.category as FileCategory;
       if (cat) {
         state.selectedCategory = cat;
+        state.isCategoryMenuOpen = false;
         updateDOM();
       }
+      return;
     }
   });
 
@@ -925,14 +1011,20 @@ function setupEvents() {
     }
   }
 
-  // View Mode Toggle (Grid vs List)
+  // View Mode Toggle (Grid vs List) - top button, settings button, and bottom dock button
+  const handleToggleViewMode = () => {
+    state.viewMode = state.viewMode === 'grid' ? 'list' : 'grid';
+    localStorage.setItem(VIEW_MODE_KEY, state.viewMode);
+    updateDOM();
+  };
+
   const viewToggle = document.getElementById('mobile-view-toggle');
   if (viewToggle) {
-    viewToggle.onclick = () => {
-      state.viewMode = state.viewMode === 'grid' ? 'list' : 'grid';
-      localStorage.setItem(VIEW_MODE_KEY, state.viewMode);
-      updateDOM();
-    };
+    viewToggle.onclick = handleToggleViewMode;
+  }
+  const dockViewToggle = document.getElementById('mobile-dock-view-toggle');
+  if (dockViewToggle) {
+    dockViewToggle.onclick = handleToggleViewMode;
   }
 
   // Settings Button
@@ -990,8 +1082,9 @@ function setupEvents() {
     };
   }
 
-  // Switch to Desktop Button in Settings & Dock
+  // Switch to Desktop Button in Settings & Dock (strictly disabled & hidden on mobile/tablet)
   const switchDesktopHandler = () => {
+    if (!isDesktopOrLaptopDevice()) return;
     sessionStorage.setItem('cariearsa_cloud_force', 'desktop');
     window.location.replace('/cloud/?view=desktop');
   };
@@ -1001,6 +1094,9 @@ function setupEvents() {
 
   const dockDesktopBtn = document.getElementById('mobile-switch-desktop-btn');
   if (dockDesktopBtn) dockDesktopBtn.onclick = switchDesktopHandler;
+
+  // Initialize desktop switch buttons visibility
+  updateDesktopSwitchVisibility();
 
   // Sort Button & Sheet
   const sortBtn = document.getElementById('mobile-sort-btn');
@@ -1192,30 +1288,34 @@ function setupEvents() {
       document.getElementById('mobile-rename-modal')?.classList.add('hidden');
 
       try {
-        const res = await fetch('/api/cloud/rename', {
+        const res = await fetch('/api/files/rename', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ oldName, newName: newFullName }),
-        });
-        if (res.ok) {
+        }).catch(() => fetch('/api/cloud/rename', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ oldName, newName: newFullName }),
+        }));
+        if (res && res.ok) {
           showToast('Nama berkas berhasil diubah', 'success');
           fetchFiles(false);
           return;
         }
       } catch (_) {}
 
-      // Supabase direct fallback
-      try {
-        const { error } = await supabaseClient.storage.from(BUCKET_NAME).move(oldName, newFullName);
-        if (!error) {
-          showToast('Nama berkas berhasil diubah', 'success');
-          fetchFiles(false);
-        } else {
-          showToast('Gagal mengubah nama berkas', 'error');
-        }
-      } catch (err) {
-        showToast('Gagal mengubah nama berkas', 'error');
+      // Supabase direct fallback if valid JWT
+      if (typeof SUPABASE_KEY === 'string' && SUPABASE_KEY.startsWith('eyJ')) {
+        try {
+          const { error } = await supabaseClient.storage.from(BUCKET_NAME).move(oldName, newFullName);
+          if (!error) {
+            showToast('Nama berkas berhasil diubah', 'success');
+            fetchFiles(false);
+            return;
+          }
+        } catch (_) {}
       }
+      showToast('Gagal mengubah nama berkas', 'error');
     };
   }
 
@@ -1273,12 +1373,16 @@ function setupEvents() {
       showToast(`Menghapus ${names.length} berkas...`, 'info');
 
       try {
-        const res = await fetch('/api/cloud/delete', {
+        const res = await fetch('/api/files/delete', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ names }),
-        });
-        if (res.ok) {
+        }).catch(() => fetch('/api/cloud/delete', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ names }),
+        }));
+        if (res && res.ok) {
           names.forEach(n => state.selectedFileIds.delete(n));
           showToast(`${names.length} berkas dihapus`, 'success');
           fetchFiles(false);
@@ -1286,19 +1390,19 @@ function setupEvents() {
         }
       } catch (_) {}
 
-      // Supabase direct fallback
-      try {
-        const { error } = await supabaseClient.storage.from(BUCKET_NAME).remove(names);
-        if (!error) {
-          names.forEach(n => state.selectedFileIds.delete(n));
-          showToast(`${names.length} berkas dihapus`, 'success');
-          fetchFiles(false);
-        } else {
-          showToast('Gagal menghapus berkas', 'error');
-        }
-      } catch (err) {
-        showToast('Gagal menghapus berkas', 'error');
+      // Supabase direct fallback if valid JWT
+      if (typeof SUPABASE_KEY === 'string' && SUPABASE_KEY.startsWith('eyJ')) {
+        try {
+          const { error } = await supabaseClient.storage.from(BUCKET_NAME).remove(names);
+          if (!error) {
+            names.forEach(n => state.selectedFileIds.delete(n));
+            showToast(`${names.length} berkas dihapus`, 'success');
+            fetchFiles(false);
+            return;
+          }
+        } catch (_) {}
       }
+      showToast('Gagal menghapus berkas', 'error');
     };
   }
 
@@ -1381,15 +1485,15 @@ function setupEvents() {
     });
   }
 
-  // Viewport resize redirection (if resized to desktop)
+  // Viewport resize handling (update desktop button visibility and only redirect if desktop/laptop)
   let resizeTimer: any = null;
   window.addEventListener('resize', () => {
     clearTimeout(resizeTimer);
     resizeTimer = setTimeout(() => {
       try {
+        updateDesktopSwitchVisibility();
         if (sessionStorage.getItem('cariearsa_cloud_force') === 'mobile') return;
-        var isLarge = window.innerWidth > 1024 && (!navigator.maxTouchPoints || navigator.maxTouchPoints === 0);
-        if (isLarge) {
+        if (isDesktopOrLaptopDevice()) {
           window.location.replace('/cloud/' + window.location.search + window.location.hash);
         }
       } catch (_) {}

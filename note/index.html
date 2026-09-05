@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1" />
+  <meta name="theme-color" content="#14151a" />
+  <meta name="color-scheme" content="light dark" />
+  <meta name="description" content="A fast, minimal online note app for fadhil.dev with automatic cloud saving and cross-device sync." />
+  <link rel="canonical" href="/note" />
+  <link rel="preload" href="/note/styles.css" as="style" />
+  <link rel="stylesheet" href="/note/styles.css" />
+  <title>Note | Fadhil.dev</title>
+</head>
+<body>
+  <main class="note-app" aria-label="Online note">
+    <header class="note-bar">
+      <a class="brand" href="/" aria-label="Back to Home">fadhil.dev</a>
+      <label class="doc-field">
+        <span>Doc</span>
+        <input id="doc-key" name="doc" type="text" inputmode="latin" autocomplete="off" spellcheck="false" maxlength="32" value="main" aria-label="Document key" />
+      </label>
+      <output id="save-status" class="status" aria-live="polite">Ready</output>
+    </header>
+    <section class="editor-shell" aria-label="Note editor">
+      <input id="note-title" class="title-input" type="text" maxlength="120" autocomplete="off" spellcheck="true" placeholder="Title" aria-label="Note title" />
+      <textarea id="note-body" class="body-input" autocomplete="off" spellcheck="true" placeholder="Write your note…" aria-label="Note body"></textarea>
+    </section>
+  </main>
+  <script type="module" src="/src/animeIntro.js"></script>
+  <script src="/note/app.js" defer></script>
+</body>
+</html>

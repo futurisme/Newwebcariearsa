@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 :root, [data-theme="original"] {
-=======
-:root {
->>>>>>> origin/main
   --ink-black: #111111;
   --ink-true-black: #000000;
   --paper-white: #F8F9FA;
@@ -10,17 +6,13 @@
   --manga-red: #FF003C;
   --manga-accent: #00F0FF;
   --manga-yellow: #FFEA00;
-<<<<<<< HEAD
   --theme-name: "Original Manga";
-=======
->>>>>>> origin/main
   
   --font-display: 'Oswald', sans-serif;
   --font-body: 'Oswald', sans-serif;
   --font-jp: 'Noto Sans JP', sans-serif;
 }
 
-<<<<<<< HEAD
 [data-theme="cyberpunk"] {
   --ink-black: #A0AAB5;
   --ink-true-black: #E0E6ED;
@@ -76,8 +68,6 @@
   --theme-name: "Midnight Violet";
 }
 
-=======
->>>>>>> origin/main
 * { box-sizing: border-box; }
 html { 
   font-size: 13px;
@@ -168,21 +158,17 @@ body::before {
   flex-shrink: 0;
 }
 
-<<<<<<< HEAD
 .logo-wrapper {
   display: flex;
   align-items: center;
   gap: 12px;
 }
 
-=======
->>>>>>> origin/main
 .logo {
   border-left: 6px solid var(--ink-true-black);
   padding-left: 12px;
 }
 
-<<<<<<< HEAD
 .components-nav-btn {
   background: var(--manga-accent);
   color: var(--ink-true-black);
@@ -202,8 +188,6 @@ body::before {
   transform: skew(-6deg) translate(-2px, -2px);
 }
 
-=======
->>>>>>> origin/main
 .logo h1 {
   font-family: var(--font-display);
   font-size: 2.5rem;
@@ -665,3 +649,6 @@ body::before {
     border: none;
   }
 }
+
+@import "./animeIntro.css";
+

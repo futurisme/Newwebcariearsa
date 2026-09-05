@@ -1,0 +1,162 @@
+:root {
+  --bg: #f6f1e8;
+  --paper: #fffaf1;
+  --ink: #1d1f25;
+  --muted: #656b74;
+  --line: #d6cfc3;
+  --red: #8f1d2c;
+  --red-deep: #5d111d;
+  --green: #536250;
+  --shadow: rgba(31, 24, 28, 0.08);
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #14151a;
+    --paper: #1c1e24;
+    --ink: #f4efe7;
+    --muted: #a9adb4;
+    --line: #343842;
+    --red: #b33a48;
+    --red-deep: #d9a4aa;
+    --green: #9aaa91;
+    --shadow: rgba(0, 0, 0, 0.22);
+    color-scheme: dark;
+  }
+}
+
+* { box-sizing: border-box; }
+
+html {
+  min-width: 320px;
+  min-height: 100%;
+  background: var(--bg);
+}
+
+body {
+  min-height: 100dvh;
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: Arial, Helvetica, "Segoe UI", sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+button, input, textarea {
+  font: inherit;
+}
+
+.note-app {
+  width: min(100%, 76rem);
+  min-height: 100dvh;
+  margin: 0 auto;
+  padding: clamp(0.55rem, 1.3vw, 1rem);
+  display: grid;
+  grid-template-rows: auto 1fr;
+  gap: clamp(0.55rem, 1vw, 0.8rem);
+}
+
+.note-bar {
+  display: grid;
+  grid-template-columns: auto minmax(8rem, 18rem) minmax(5rem, auto);
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 2.5rem;
+}
+
+.brand {
+  color: var(--red);
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  text-decoration: none;
+}
+
+.doc-field {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 0.42rem;
+  color: var(--muted);
+  font-size: 0.875rem;
+}
+
+.doc-field input,
+.title-input,
+.body-input {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 0.55rem;
+  background: var(--paper);
+  color: var(--ink);
+  outline: none;
+  box-shadow: 0 1px 2px var(--shadow);
+}
+
+.doc-field input {
+  min-height: 2.25rem;
+  padding: 0.35rem 0.55rem;
+}
+
+.status {
+  justify-self: end;
+  color: var(--green);
+  font-size: 0.875rem;
+  white-space: nowrap;
+}
+
+.editor-shell {
+  min-height: 0;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  gap: clamp(0.45rem, 0.8vw, 0.65rem);
+}
+
+.title-input {
+  min-height: clamp(2.7rem, 5vw, 3.25rem);
+  padding: 0.55rem clamp(0.75rem, 1.35vw, 1rem);
+  border-left: 4px solid var(--red);
+  font-size: clamp(1.15rem, 1.6vw, 1.45rem);
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.body-input {
+  min-height: 62dvh;
+  resize: none;
+  padding: clamp(0.78rem, 1.4vw, 1.05rem);
+  font-size: clamp(0.96rem, 0.45vw + 0.86rem, 1.08rem);
+  font-weight: 400;
+  line-height: 1.62;
+  tab-size: 2;
+}
+
+:where(.doc-field input, .title-input, .body-input):focus {
+  border-color: var(--red);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--red) 18%, transparent);
+}
+
+::placeholder {
+  color: color-mix(in srgb, var(--muted) 78%, transparent);
+}
+
+@media (max-width: 620px) {
+  .note-app { padding: 0.5rem; gap: 0.5rem; }
+  .note-bar { grid-template-columns: 1fr auto; }
+  .doc-field { grid-column: 1 / -1; grid-row: 2; }
+  .status { grid-column: 2; grid-row: 1; font-size: 0.78rem; }
+  .body-input { min-height: 68dvh; }
+}
+
+.status[data-tone="warn"] {
+  color: #9a6414;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    scroll-behavior: auto !important;
+  }
+}

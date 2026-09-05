@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CARIEARSA | IntroLab 360° Hyper-Chamber</title>
+  <meta name="description" content="Laboratorium animasi 3D 360 derajat hiper-kinetik CARIEARSA: Floating YouTube 8D Theater, Cam-Facing 3D Billboards, manuver kamera agresif tanpa detik kosong, dan perputaran darat ke langit serong ke atas.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bangers&family=JetBrains+Mono:wght@400;600;700;800&family=Noto+Sans+JP:wght@400;700;900&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">
+  <!-- Dedicated IntroLab 360° Stylesheet (100% Isolated) -->
+  <link rel="stylesheet" href="/src/introlabIntro.css">
+  <!-- YouTube Iframe API for Instant Load & Audio Integration -->
+  <script src="https://www.youtube.com/iframe_api"></script>
+</head>
+<body class="introlab-body">
+  <!-- LAYER 0: FULL BACKGROUND YOUTUBE 8D THEATER (URUTAN PALING BAWAH / BACKGROUND PENUH) -->
+  <div class="introlab-full-bg-video" id="introlab-full-bg-video" aria-hidden="true">
+    <div id="introlab-yt-player" class="introlab-bg-yt-iframe"></div>
+    <div class="introlab-bg-video-overlay"></div>
+  </div>
+
+  <!-- LAYER 1: MAIN 3D VIEWPORT MATRIX (TRANSPARENT CONTAINER ON TOP OF BACKGROUND) -->
+  <div class="introlab-viewport" id="introlab-viewport">
+    
+    <!-- Lightweight Procedural Atmosphere & Horizon Shader -->
+    <div class="introlab-shader-horizon" aria-hidden="true"></div>
+    
+    <!-- Cyber Ground Grid (Darat) -->
+    <div class="introlab-space-grid" aria-hidden="true"></div>
+    
+    <!-- Cyber Sky Grid (Langit) -->
+    <div class="introlab-sky-grid" aria-hidden="true"></div>
+    
+    <!-- Cyber Orbital Ring -->
+    <div class="introlab-orbital-ring" aria-hidden="true"></div>
+    
+    <!-- Kinetic Speed Vectors -->
+    <div class="introlab-speed-vectors" aria-hidden="true"></div>
+
+    <!-- LAYER 2: 3D World Scene Container (Monoliths, Satellites & Live Page Canvas) -->
+    <div class="introlab-world" id="introlab-world">
+      <!-- 3D Camera Rig Space (Dynamically transformed by GPU matrix in JS engine) -->
+      <div class="introlab-camera-space" id="introlab-camera-space">
+
+        <!-- 1. The Core Live Website Page Canvas (Adaptive Gyroscope Banking) -->
+        <main class="introlab-page-canvas" id="introlab-page-canvas" aria-label="IntroLab Live Page Canvas">
+          <!-- Page Header -->
+          <header class="introlab-page-header">
+            <div class="introlab-page-brand">
+              <span class="introlab-page-badge">INTROLAB</span>
+              <div class="introlab-page-title">CARIEARSA 360° LAB</div>
+              <span class="introlab-page-jp">極限空間実験室</span>
+            </div>
+            <div style="display: flex; gap: 8px; align-items: center;">
+              <span style="font-family: var(--intro-font-mono); font-size: 0.72rem; color: var(--intro-lime); letter-spacing: 1px;">● 360° CONTINUOUS ENGINE</span>
+            </div>
+          </header>
+
+          <!-- Ticker -->
+          <div class="introlab-page-ticker">
+            <span>KINETICS: 360° CONSISTENT ORBIT • GROUND-TO-SKY ELEVATION</span>
+            <span>FULL BACKGROUND 8D AUDIO • ZERO BLANK SPACE</span>
+          </div>
+
+          <!-- Page Body & Diagnostics -->
+          <div class="introlab-page-body">
+            <!-- Left: Radar & Spatial Diagnostics -->
+            <div class="introlab-page-radar-panel">
+              <div class="introlab-radar-title">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 0 1 10 10M12 12l7-7"/></svg>
+                <span>360° MULTI-TIER RADAR</span>
+              </div>
+              <div class="introlab-radar-viz">
+                <div class="introlab-radar-sweep"></div>
+                <div class="introlab-radar-core"></div>
+                <div class="introlab-radar-nodes">
+                  <div class="introlab-radar-dot" style="top: 10px; left: 55px;" title="Manga /"></div>
+                  <div class="introlab-radar-dot" style="top: 25px; right: 20px;" title="/hub/"></div>
+                  <div class="introlab-radar-dot" style="top: 60px; right: 10px;" title="/japan/"></div>
+                  <div class="introlab-radar-dot" style="bottom: 20px; right: 25px;" title="/aniwatch/"></div>
+                  <div class="introlab-radar-dot" style="bottom: 10px; left: 40px;" title="/cloud/"></div>
+                  <div class="introlab-radar-dot" style="bottom: 35px; left: 10px;" title="/note/"></div>
+                  <div class="introlab-radar-dot" style="top: 30px; left: 15px;" title="/components/"></div>
+                  <!-- Satellite nodes -->
+                  <div class="introlab-radar-dot" style="top: 45px; left: 2px; background: var(--intro-yellow); width: 5px; height: 5px;" title="Sat West"></div>
+                  <div class="introlab-radar-dot" style="top: 45px; right: 2px; background: var(--intro-yellow); width: 5px; height: 5px;" title="Sat East"></div>
+                </div>
+              </div>
+              <div class="introlab-radar-stats">
+                <span>FORMATION: 14 NODES</span>
+                <span>HARMONIC ORBIT</span>
+              </div>
+            </div>
+
+            <!-- Right: Dynamic Telemetry Metrics -->
+            <div class="introlab-page-telemetry-panel">
+              <div class="introlab-telemetry-box">
+                <h4>
+                  <span>8D AUDIO SYSTEM</span>
+                  <span id="introlab-audio-indicator" style="color: var(--intro-lime);">PLAYING</span>
+                </h4>
+                <div class="introlab-telemetry-val" id="introlab-audio-title">8D TUNES PLAYLIST</div>
+                <div style="font-size: 0.72rem; color: rgba(255,255,255,0.68); margin-top: 4px;">Full background video theater & 360° audio.</div>
+              </div>
+
+              <div class="introlab-telemetry-box" style="border-color: rgba(0, 240, 255, 0.35);">
+                <h4 style="color: var(--intro-cyan);">
+                  <span>ORBIT SPECIFICATION</span>
+                  <span id="introlab-zoom-stat">ORBIT: 360° CONSTANT</span>
+                </h4>
+                <div class="introlab-sub-chips">
+                  <span class="introlab-chip">STEADY 360° YAW</span>
+                  <span class="introlab-chip">BANKING ROLL ±6°</span>
+                  <span class="introlab-chip">GROUND & SKY ELEVATION</span>
+                  <span class="introlab-chip">FULL BG VIDEO</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </main>
+
+        <!-- 2. The 360° Surrounding Ring of Cam-Facing 3D Monoliths & Flank Satellites -->
+        <div class="introlab-orbit-cluster" id="introlab-orbit-cluster" aria-label="360 Cam-Facing Monoliths & Satellites">
+          <!-- Populated and dynamically rotated to face camera every frame by introlabIntro.js -->
+        </div>
+
+        <!-- 3. Distant Cosmic Kanji & Sound Effect Particles -->
+        <div class="introlab-sfx-cluster" id="introlab-sfx-cluster" aria-hidden="true">
+          <div class="introlab-sfx-particle" data-x="-740" data-y="-280" data-z="-500">次元旋回</div>
+          <div class="introlab-sfx-particle" data-x="780" data-y="-260" data-z="-520" style="color: var(--intro-cyan);">360° 観測</div>
+          <div class="introlab-sfx-particle" data-x="-700" data-y="320" data-z="-480" style="color: var(--intro-yellow);">神速跳躍</div>
+          <div class="introlab-sfx-particle" data-x="720" data-y="340" data-z="-460" style="color: var(--intro-lime);">無限回廊</div>
+          <div class="introlab-sfx-particle" data-x="0" data-y="-440" data-z="-650" style="color: var(--intro-magenta);">電脳同期</div>
+        </div>
+
+      </div><!-- /.introlab-camera-space -->
+    </div><!-- /.introlab-world -->
+
+    <!-- LAYER 3: Kinetic Speedlines & Scanlines Overlay (Above 3D World) -->
+    <div class="introlab-speedlines-overlay" id="introlab-speedlines-overlay" aria-hidden="true"></div>
+    <div class="introlab-scanlines" aria-hidden="true"></div>
+  </div><!-- /.introlab-viewport -->
+
+  <!-- Minimalist Cinematic HUD (Clean Showcase • Zero Buttons • Zero Clutter) -->
+  <aside class="introlab-cinematic-hud" aria-label="IntroLab Cinematic HUD">
+    <!-- Top Header Ribbon -->
+    <div class="introlab-cinematic-top">
+      <div class="introlab-brand-mark">
+        <a href="/" class="introlab-back-link" title="Kembali ke Portofolio CARIEARSA">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+          <span>PORTFOLIO</span>
+        </a>
+        <div>
+          <div class="introlab-brand-title">
+            <span>INTROLAB 360°</span>
+            <span class="introlab-brand-badge">FULL BG THEATER</span>
+          </div>
+          <div class="introlab-brand-sub">CARIEARSA // CONTINUOUS 360° ENGINE</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Flight Tracker: Indikator Koordinat Sederhana XYZ -->
+    <div class="introlab-cinematic-bottom">
+      <div class="introlab-flight-tracker" id="introlab-flight-tracker">
+        <span class="introlab-coord-label">XYZ</span>
+        <strong id="introlab-val-coord">0, 0, 800</strong>
+        <span class="introlab-coord-dot">•</span>
+        <span class="introlab-coord-yaw" id="introlab-val-yaw">0°</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Dedicated IntroLab Script (100% Isolated) -->
+  <script type="module" src="/src/introlabIntro.js"></script>
+</body>
+</html>

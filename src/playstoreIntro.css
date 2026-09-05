@@ -1,0 +1,905 @@
+/* =========================================================
+   CARIEARSA PLAY STORE DEDICATED 3D CINEMATIC INTRO (2026)
+   - Specific to Play Store (/hub)
+   - Phase 1 (0.0s - 5.8s): Inside Landscape Phone with Touch Swiping Photos
+   - Phase 2 (5.8s - 6.8s): Detik ke-6 Zooming Out to Reveal 2-Handed Landscape Phone Grip
+   - Phase 3 (6.8s - 8.8s): Phone Rapidly Dips & Tilts Downward; Camera Tilts UP to Level Eye-line
+   - Phase 4 (8.8s - 12.0s): Pristine Straight Horizon Lock on Play Store Portal
+   - 100% Vector/SVG + CSS, Hyper-Lightweight, Zero Network Delay
+   ========================================================= */
+
+/* Body states during Play Store Intro */
+body.ps-intro-active {
+  overflow: hidden !important;
+  user-select: none !important;
+  -webkit-user-select: none !important;
+  touch-action: none !important;
+}
+
+/* Fullscreen 3D Stage Container */
+.ps-intro-stage {
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  z-index: 999999 !important;
+  overflow: hidden !important;
+  background: #060810;
+  perspective: 1200px;
+  perspective-origin: 50% 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 1;
+  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: all;
+}
+
+.ps-intro-stage.fade-out {
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+/* Ambient Cyber Store Atrium Backdrop */
+.ps-intro-backdrop {
+  position: absolute;
+  inset: -20%;
+  width: 140%;
+  height: 140%;
+  pointer-events: none;
+  z-index: 1;
+  background: 
+    radial-gradient(circle at 50% 25%, rgba(0, 240, 255, 0.16) 0%, transparent 60%),
+    radial-gradient(circle at 20% 80%, rgba(255, 0, 60, 0.14) 0%, transparent 50%),
+    radial-gradient(circle at 80% 85%, rgba(255, 230, 0, 0.12) 0%, transparent 50%),
+    linear-gradient(180deg, #090c18 0%, #04050a 60%, #010204 100%);
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+/* Cyber Atrium Light Pillars */
+.ps-backdrop-pillars {
+  position: absolute;
+  inset: 0;
+  background-image: 
+    repeating-linear-gradient(90deg, transparent, transparent 180px, rgba(0, 240, 255, 0.04) 180px, rgba(0, 240, 255, 0.04) 182px),
+    linear-gradient(0deg, rgba(0, 240, 255, 0.08) 1px, transparent 1px);
+  background-size: 100% 100%, 60px 60px;
+  opacity: 0.85;
+}
+
+/* 16:9 Landscape Anime Girl Looking Directly At Camera */
+.ps-backdrop-girl-container {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 5;
+  opacity: 0;
+  pointer-events: none;
+  overflow: hidden;
+  will-change: opacity, transform;
+  animation: psAnimeBackdropGirl 12s cubic-bezier(0.2, 0.86, 0.22, 1) forwards;
+}
+
+.ps-girl-frame {
+  position: relative;
+  width: 100vw;
+  height: 56.25vw;
+  min-height: 100vh;
+  min-width: 177.78vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.ps-girl-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 36%;
+  filter: contrast(1.08) brightness(1.04) saturate(1.12);
+}
+
+.ps-girl-atmosphere {
+  position: absolute;
+  inset: 0;
+  background: 
+    radial-gradient(circle at 50% 36%, rgba(0, 240, 255, 0.16) 0%, transparent 45%),
+    radial-gradient(circle at 20% 70%, rgba(255, 0, 60, 0.12) 0%, transparent 50%),
+    radial-gradient(circle at 80% 60%, rgba(176, 38, 255, 0.15) 0%, transparent 50%);
+  mix-blend-mode: screen;
+  pointer-events: none;
+}
+
+.ps-girl-vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 40%, transparent 35%, rgba(3, 5, 12, 0.82) 95%);
+  pointer-events: none;
+}
+
+.ps-girl-eyeglow {
+  position: absolute;
+  top: 36%;
+  left: 50%;
+  width: 240px;
+  height: 80px;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(ellipse at center, rgba(0, 240, 255, 0.28) 0%, transparent 70%);
+  mix-blend-mode: screen;
+  pointer-events: none;
+  animation: psGirlEyePulse 3s ease-in-out infinite alternate;
+}
+
+@keyframes psGirlEyePulse {
+  0% { opacity: 0.4; transform: translate(-50%, -50%) scale(0.95); }
+  100% { opacity: 0.95; transform: translate(-50%, -50%) scale(1.08); }
+}
+
+@keyframes psAnimeBackdropGirl {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 70px, 0) scale(1.05);
+    filter: blur(8px);
+    visibility: hidden;
+  }
+  48% {
+    opacity: 0;
+    transform: translate3d(0, 70px, 0) scale(1.05);
+    filter: blur(8px);
+    visibility: hidden;
+  }
+  56% {
+    opacity: 1;
+    visibility: visible;
+    transform: translate3d(0, 40px, 0) scale(1.02);
+    filter: blur(0px);
+  }
+  75% {
+    opacity: 1;
+    transform: translate3d(0, 0px, 0) scale(1);
+    filter: contrast(1.1) brightness(1.05) blur(0px);
+  }
+  85% {
+    opacity: 1;
+    transform: translate3d(0, 0px, 0) scale(1);
+    filter: contrast(1.1) brightness(1.05) blur(0px);
+  }
+  87.9% {
+    opacity: 0.95;
+    transform: translate3d(0, 45px, 0) scale(1.03);
+    filter: blur(2px);
+  }
+  96.5% {
+    opacity: 0;
+    transform: translate3d(0, 140px, 0) scale(1.35);
+    filter: blur(14px);
+    visibility: hidden;
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(0, 0, 0) scale(1);
+    visibility: hidden;
+  }
+}
+
+/* Main 3D Camera Rig: Handles the POV from looking down at phone to tilting UP straight ahead */
+.ps-pov-camera {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform-style: preserve-3d;
+  z-index: 10;
+  will-change: transform;
+}
+
+/* Master Camera Choreography Keyframes */
+@keyframes psCameraChoreography {
+  /* 0.0s - 5.5s: Inside Phone Screen (Full-Screen Landscape Zoom) */
+  0% {
+    transform: translate3d(0, 0, 820px) rotateX(14deg) rotateY(0deg) rotateZ(0deg);
+  }
+  35% {
+    transform: translate3d(0, 0, 820px) rotateX(14.5deg) rotateY(-0.5deg) rotateZ(0deg);
+  }
+  46% {
+    /* Slight handheld float right before zoom out */
+    transform: translate3d(0, 0, 810px) rotateX(15deg) rotateY(0.4deg) rotateZ(0deg);
+  }
+
+  /* 48% (5.8s): Detik ke-6 Zoom-out breach begins */
+  48% {
+    transform: translate3d(0, 0, 780px) rotateX(16deg) rotateY(0deg) rotateZ(0deg);
+  }
+
+  /* 56% (6.7s): Zoom-out complete! Looking DOWN at phone held in 2 hands */
+  56% {
+    transform: translate3d(0, 0, 40px) rotateX(38deg) rotateY(0deg) rotateZ(0deg);
+  }
+
+  /* 58% - 73% (7.0s - 8.8s): CAMERA TILTS UP & SEJAJAR (Looks straight forward) */
+  65% {
+    transform: translate3d(0, -20px, 120px) rotateX(18deg) rotateY(0deg) rotateZ(0deg);
+  }
+  75% {
+    /* Camera reaches straight level eye-line (Pitch 0.00°, Yaw 0.00°, Roll 0.00°) */
+    transform: translate3d(0, 0, 200px) rotateX(0deg) rotateY(0deg) rotateZ(0deg);
+  }
+
+  /* 75% - 85% (9.0s - 10.2s): Locked forward, straight view (Horizon Lock - dipercepat sedikit) */
+  75% {
+    /* Camera reaches straight level eye-line (Pitch 0.00°, Yaw 0.00°, Roll 0.00°) */
+    transform: translate3d(0, 0, 200px) rotateX(0deg) rotateY(0deg) rotateZ(0deg);
+  }
+  85% {
+    transform: translate3d(0, 0, 200px) rotateX(0deg) rotateY(0deg) rotateZ(0deg);
+  }
+
+  /* 87.9% (10.55s): DI AKHIR SECARA CEPAT KEMBALI NENGOK KEBAWAH (KE HP) */
+  87.9% {
+    transform: translate3d(0, 0, 40px) rotateX(38deg) rotateY(0deg) rotateZ(0deg);
+  }
+
+  /* 91.5% - 96.5%: LANGSUNG ZOOMING MASUK KEMBALI KEDALAM LAYAR HPNYA */
+  91.5% {
+    transform: translate3d(0, 0, 480px) rotateX(18deg) rotateY(0deg) rotateZ(0deg);
+  }
+  96.5% {
+    transform: translate3d(0, 0, 820px) rotateX(14deg) rotateY(0deg) rotateZ(0deg);
+  }
+
+  /* 100% (12.0s): Layar jadi normal */
+  100% {
+    transform: translate3d(0, 0, 820px) rotateX(14deg) rotateY(0deg) rotateZ(0deg);
+  }
+}
+
+.ps-pov-camera.animating {
+  animation: psCameraChoreography 12s cubic-bezier(0.18, 0.88, 0.22, 1) forwards;
+}
+
+/* =========================================================
+   TWO-HANDED LANDSCAPE SMARTPHONE ASSEMBLY
+   - Left & Right Hands gripping the landscape phone
+   - Tilts & lowers downward as camera tilts up
+   ========================================================= */
+.ps-phone-assembly {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform-style: preserve-3d;
+  will-change: transform, opacity;
+  z-index: 25;
+}
+
+/* Phone lowering and tilting keyframes */
+@keyframes psPhoneAssemblyMovement {
+  /* 0.0s - 5.6s: Steady in front of eyes */
+  0% {
+    transform: translate3d(0, 0, 0) rotateX(0deg) rotateY(0deg) rotateZ(0deg) scale(1);
+    opacity: 1;
+  }
+  48% {
+    transform: translate3d(0, 0, 0) rotateX(0deg) rotateY(0deg) rotateZ(0deg) scale(1);
+    opacity: 1;
+  }
+  /* 5.8s - 6.6s: Visible in 2 hands looking down */
+  56% {
+    transform: translate3d(0, 40px, 0) rotateX(-8deg) rotateY(0deg) rotateZ(0deg) scale(1);
+    opacity: 1;
+  }
+  /* 6.8s - 8.6s: HP DENGAN CEPAT DIKEBAWAHIN & MIRINGIN KEBAWAH */
+  66% {
+    transform: translate3d(0, 280px, -80px) rotateX(42deg) rotateY(0deg) rotateZ(0deg) scale(0.95);
+    opacity: 1;
+  }
+  /* 8.6s - 10.2s: Phone tilted flat/downward and lowered deep to bottom */
+  75% {
+    transform: translate3d(0, 580px, -180px) rotateX(68deg) rotateY(0deg) rotateZ(0deg) scale(0.85);
+    opacity: 0.9;
+  }
+  85% {
+    transform: translate3d(0, 580px, -180px) rotateX(68deg) rotateY(0deg) rotateZ(0deg) scale(0.85);
+    opacity: 0.9;
+  }
+  /* 87.9% (10.55s): Hands swiftly raise phone back up to align with downward look */
+  87.9% {
+    transform: translate3d(0, 40px, 0) rotateX(-8deg) rotateY(0deg) rotateZ(0deg) scale(1);
+    opacity: 1;
+  }
+  /* 91.5% - 96.5%: Screen centered as camera zooms into screen */
+  93% {
+    transform: translate3d(0, 0, 0) rotateX(0deg) rotateY(0deg) rotateZ(0deg) scale(1);
+    opacity: 1;
+  }
+  96.5% {
+    transform: translate3d(0, 0, 0) rotateX(0deg) rotateY(0deg) rotateZ(0deg) scale(1);
+    opacity: 0.3;
+  }
+  100% {
+    transform: translate3d(0, 0, 0) rotateX(0deg) rotateY(0deg) rotateZ(0deg) scale(1);
+    opacity: 0;
+  }
+}
+
+.ps-phone-assembly.animating {
+  animation: psPhoneAssemblyMovement 12s cubic-bezier(0.2, 0.86, 0.25, 1) forwards;
+}
+
+/* =========================================================
+   PHYSICAL SMARTPHONE CHASSIS (Landscape 19.5 : 9)
+   ========================================================= */
+.ps-phone-device {
+  position: relative;
+  width: min(88vw, 780px);
+  aspect-ratio: 19.5 / 9;
+  max-height: 380px;
+  background: #111420;
+  border-radius: 40px;
+  box-shadow: 
+    0 0 0 3.5px #3a445e,
+    0 0 0 6px #1b2130,
+    0 24px 60px rgba(0, 0, 0, 0.95),
+    0 0 50px rgba(0, 240, 255, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 14px;
+  transform-style: preserve-3d;
+  box-sizing: border-box;
+}
+
+/* Subtle Titanium Edge Chamfer Highlight */
+.ps-phone-device::before {
+  content: '';
+  position: absolute;
+  inset: 1px;
+  border-radius: 38px;
+  border: 1.5px solid rgba(255, 255, 255, 0.25);
+  pointer-events: none;
+}
+
+/* Hardware Buttons on Top Edge */
+.ps-phone-button {
+  position: absolute;
+  background: #333d54;
+  border-radius: 3px;
+}
+.btn-vol-up {
+  top: -6px;
+  left: 140px;
+  width: 55px;
+  height: 5px;
+}
+.btn-vol-down {
+  top: -6px;
+  left: 210px;
+  width: 55px;
+  height: 5px;
+}
+.btn-power {
+  top: -6px;
+  right: 140px;
+  width: 70px;
+  height: 5px;
+}
+
+/* Phone Bezel */
+.ps-phone-bezel {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: #070910;
+  border-radius: 30px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.9);
+}
+
+/* Screen Glass Surface */
+.ps-phone-screen {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: #0c0f1d;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Diagonal Screen Reflection Glare */
+.ps-screen-glare {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(115deg, transparent 40%, rgba(255, 255, 255, 0.08) 48%, rgba(255, 255, 255, 0.14) 50%, rgba(255, 255, 255, 0.04) 54%, transparent 65%);
+  pointer-events: none;
+  z-index: 50;
+}
+
+/* Landscape Home Pill Bar at Bottom */
+.ps-screen-homebar {
+  position: absolute;
+  bottom: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 140px;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 2px;
+  z-index: 40;
+  box-shadow: 0 0 8px rgba(0, 240, 255, 0.5);
+}
+
+/* =========================================================
+   LANDSCAPE SMARTPHONE STATUS BAR
+   ========================================================= */
+.ps-screen-statusbar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 28px;
+  z-index: 45;
+  color: #ffffff;
+  font-family: 'Oswald', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.75) 0%, transparent 100%);
+  pointer-events: none;
+}
+
+.ps-sb-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.ps-sb-time {
+  font-size: 14px;
+  letter-spacing: 0.5px;
+  color: #00F0FF;
+}
+.ps-sb-carrier {
+  font-size: 11px;
+  color: #a0aec0;
+  letter-spacing: 1px;
+}
+
+/* Dynamic Pill Camera Notch on Landscape Top Center */
+.ps-sb-notch {
+  width: 90px;
+  height: 20px;
+  background: #000000;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.8), inset 0 0 4px #1a202c;
+}
+.ps-notch-lens {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #0b1220;
+  border: 1.5px solid #1a2a44;
+  box-shadow: inset 0 0 3px #00F0FF;
+}
+.ps-notch-sensor {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #141a29;
+}
+
+.ps-sb-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.ps-sb-wifi {
+  color: #ffffff;
+}
+.ps-sb-battery {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.ps-sb-pct {
+  font-size: 12px;
+  color: #00FF88;
+}
+.ps-battery-shell {
+  width: 22px;
+  height: 11px;
+  border: 1.5px solid #ffffff;
+  border-radius: 3px;
+  padding: 1px;
+  position: relative;
+}
+.ps-battery-shell::after {
+  content: '';
+  position: absolute;
+  right: -3px;
+  top: 3px;
+  width: 2px;
+  height: 5px;
+  background: #ffffff;
+  border-radius: 0 1px 1px 0;
+}
+.ps-battery-level {
+  width: 96%;
+  height: 100%;
+  background: #00FF88;
+  border-radius: 1.5px;
+}
+
+/* =========================================================
+   THE SWIPING PHOTOS SHOWCASE SLIDER (0.0s - 5.8s)
+   - Real-time horizontal swipe transitions between 4 images
+   ========================================================= */
+.ps-showcase-slider {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #050711;
+}
+
+.ps-slide {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transform: translateX(100%);
+  transition: transform 0.46s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+  will-change: transform, opacity;
+}
+
+.ps-slide.active {
+  opacity: 1;
+  transform: translateX(0%);
+  z-index: 10;
+}
+
+.ps-slide.slide-out-left {
+  opacity: 0;
+  transform: translateX(-100%);
+  z-index: 9;
+}
+
+.ps-slide-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Slide Info Card & Badge */
+.ps-slide-overlay {
+  position: absolute;
+  bottom: 24px;
+  left: 28px;
+  right: 28px;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.9);
+  pointer-events: none;
+}
+
+.ps-slide-badge {
+  background: #FF003C;
+  color: #ffffff;
+  font-family: 'Oswald', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  padding: 4px 12px;
+  border-radius: 4px;
+  margin-bottom: 6px;
+  box-shadow: 0 0 10px rgba(255, 0, 60, 0.6);
+}
+
+.ps-slide-title {
+  color: #ffffff;
+  font-family: 'Oswald', sans-serif;
+  font-size: 26px;
+  font-weight: 900;
+  letter-spacing: 1px;
+  margin: 0 0 4px 0;
+  text-transform: uppercase;
+}
+
+.ps-slide-desc {
+  color: #e2e8f0;
+  font-family: 'Oswald', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  margin: 0;
+}
+
+/* Gallery Footer Indicators */
+.ps-gallery-footer {
+  position: absolute;
+  bottom: 12px;
+  right: 28px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  z-index: 30;
+}
+
+.ps-indicator-dots {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.ps-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.35);
+  transition: all 0.3s ease;
+}
+
+.ps-dot.active {
+  width: 22px;
+  background: #00F0FF;
+  box-shadow: 0 0 8px #00F0FF;
+}
+
+.ps-indicator-counter {
+  font-family: 'Oswald', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  color: #00F0FF;
+  background: rgba(0, 0, 0, 0.75);
+  padding: 2px 8px;
+  border-radius: 4px;
+  border: 1px solid rgba(0, 240, 255, 0.4);
+}
+
+/* =========================================================
+   TOUCH SWIPING GESTURE VISUAL FX
+   - Luminous finger trails simulating rapid thumb swipes
+   ========================================================= */
+.ps-swipe-gesture-fx {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 35;
+}
+
+.ps-touch-streak {
+  position: absolute;
+  top: 55%;
+  right: 18%;
+  width: 0;
+  height: 4px;
+  background: linear-gradient(90deg, transparent, #00F0FF 50%, #ffffff 100%);
+  border-radius: 4px;
+  box-shadow: 0 0 14px #00F0FF;
+  opacity: 0;
+}
+
+.ps-touch-streak.swiping {
+  animation: psSwipeTrail 0.42s ease-out forwards;
+}
+
+@keyframes psSwipeTrail {
+  0% {
+    width: 10px;
+    right: 20%;
+    opacity: 0.95;
+    transform: scaleY(2.5);
+  }
+  60% {
+    width: 240px;
+    right: 48%;
+    opacity: 0.8;
+    transform: scaleY(1);
+  }
+  100% {
+    width: 40px;
+    right: 78%;
+    opacity: 0;
+    transform: scaleY(0.5);
+  }
+}
+
+/* =========================================================
+   TWO REALISTIC HANDS HOLDING THE PHONE IN LANDSCAPE
+   - Left & Right Cyber Tactical Gloves gripping sides
+   ========================================================= */
+.ps-hand {
+  position: absolute;
+  pointer-events: none;
+  z-index: 35;
+  filter: drop-shadow(0 14px 28px rgba(0, 0, 0, 0.95));
+}
+
+.ps-hand-svg {
+  width: 155px;
+  height: 270px;
+  display: block;
+}
+
+/* Left Hand: Positioned on Left Bezel */
+.ps-hand-left {
+  left: -85px;
+  top: 50%;
+  transform: translateY(-42%);
+}
+
+/* Right Hand: Positioned on Right Bezel */
+.ps-hand-right {
+  right: -85px;
+  top: 50%;
+  transform: translateY(-42%);
+}
+
+/* =========================================================
+   STRAIGHT HORIZON RETICLE & PLAY STORE REVEAL PORTAL
+   ========================================================= */
+.ps-portal-target {
+  position: absolute;
+  width: min(92vw, 1100px);
+  max-width: 1200px;
+  height: min(85vh, 760px);
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform-style: preserve-3d;
+  pointer-events: none;
+  z-index: 20;
+  opacity: 0;
+  will-change: transform, opacity;
+}
+
+@keyframes psPortalReveal {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 180px, -400px) scale(0.7) rotateX(-20deg);
+  }
+  58% {
+    /* Begins emerging as camera tilts up */
+    opacity: 0.2;
+    transform: translate3d(0, 80px, -200px) scale(0.85) rotateX(-10deg);
+  }
+  75% {
+    /* Snaps to eye level straight and level */
+    opacity: 0.95;
+    transform: translate3d(0, 0, 0) scale(1) rotateX(0deg) rotateY(0deg) rotateZ(0deg);
+  }
+  88% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1) rotateX(0deg);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1) rotateX(0deg);
+  }
+}
+
+.ps-portal-target.animating {
+  animation: psPortalReveal 12s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.ps-portal-aura {
+  position: absolute;
+  inset: -15px;
+  border-radius: 28px;
+  border: 2px solid #00F0FF;
+  box-shadow: 
+    0 0 40px rgba(0, 240, 255, 0.4),
+    inset 0 0 40px rgba(0, 240, 255, 0.2);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.ps-portal-target.aligned .ps-portal-aura {
+  opacity: 1;
+}
+
+/* Precision Horizon Leveling HUD */
+.ps-align-hud {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  z-index: 50;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.ps-align-hud.visible {
+  opacity: 1;
+}
+
+.ps-hud-reticle {
+  width: 140px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #00F0FF 30%, #ffffff 50%, #00F0FF 70%, transparent);
+  position: relative;
+  box-shadow: 0 0 10px #00F0FF;
+}
+
+.ps-hud-reticle::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: -8px;
+  transform: translateX(-50%);
+  width: 2px;
+  height: 18px;
+  background: #00F0FF;
+}
+
+.ps-hud-status {
+  font-family: 'Oswald', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: #00F0FF;
+  background: rgba(4, 8, 18, 0.85);
+  padding: 4px 14px;
+  border-radius: 4px;
+  border: 1px solid rgba(0, 240, 255, 0.4);
+  box-shadow: 0 0 15px rgba(0, 240, 255, 0.3);
+}
+
+/* Replay button in Play Store header */
+.ps-replay-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #0a0e1a;
+  border: 1.5px solid #00F0FF;
+  color: #00F0FF;
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-family: 'Oswald', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 0 10px rgba(0, 240, 255, 0.25);
+  white-space: nowrap;
+}
+
+.ps-replay-pill:hover {
+  background: #00F0FF;
+  color: #000000;
+  box-shadow: 0 0 18px rgba(0, 240, 255, 0.7);
+  transform: translateY(-1px);
+}
+
+.ps-replay-pill:active {
+  transform: translateY(1px);
+}

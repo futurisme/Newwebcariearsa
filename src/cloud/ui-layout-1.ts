@@ -75,7 +75,7 @@ export function renderCategoryDropdown(selectedCategory: string, categoryCounts:
 
       <div 
         id="category-dropdown-menu" 
-        class="absolute left-0 sm:left-auto sm:right-0 top-full mt-2 w-60 rounded-xl bg-[var(--c-surface)] border-2 border-[var(--c-accent)] shadow-[0_16px_40px_rgba(0,0,0,0.95),0_0_25px_var(--c-accent-glow)] backdrop-blur-xl p-2 z-50 transition-all ${
+        class="absolute right-0 top-full mt-2 w-56 sm:w-60 max-w-[calc(100vw-24px)] rounded-xl bg-[var(--c-surface)] border-2 border-[var(--c-accent)] shadow-[0_16px_40px_rgba(0,0,0,0.95),0_0_25px_var(--c-accent-glow)] backdrop-blur-xl p-2 z-50 transition-all ${
           isOpen ? 'block' : 'hidden'
         }"
       >

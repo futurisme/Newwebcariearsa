@@ -3,6 +3,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { createClient } from '@supabase/supabase-js';
 import { cloudRouter } from './src/server/cloudApi.ts';
+import { noteRouter } from './src/server/noteApi.ts';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -47,9 +48,11 @@ async function startServer() {
   await initBucket();
 
   app.use(express.json());
+  app.use('/public', express.static(path.join(__dirname, 'public')));
 
   // Mount Cloud Storage API routes
   app.use('/api', cloudRouter);
+  app.use('/api/note', noteRouter);
 
   // Health check
   app.get('/api/health', (req, res) => {
@@ -67,6 +70,27 @@ async function startServer() {
   } else {
     const distPath = path.join(__dirname, 'dist');
     app.use(express.static(distPath));
+    app.get(['/introlab', '/introlab/'], (req, res) => {
+      res.sendFile(path.join(distPath, 'introlab/index.html'));
+    });
+    app.get(['/hub', '/hub/'], (req, res) => {
+      res.sendFile(path.join(distPath, 'hub/index.html'));
+    });
+    app.get(['/japan', '/japan/'], (req, res) => {
+      res.sendFile(path.join(distPath, 'japan/index.html'));
+    });
+    app.get(['/aniwatch', '/aniwatch/'], (req, res) => {
+      res.sendFile(path.join(distPath, 'aniwatch/index.html'));
+    });
+    app.get(['/cloud', '/cloud/'], (req, res) => {
+      res.sendFile(path.join(distPath, 'cloud/index.html'));
+    });
+    app.get(['/note', '/note/'], (req, res) => {
+      res.sendFile(path.join(distPath, 'note/index.html'));
+    });
+    app.get(['/components', '/components/'], (req, res) => {
+      res.sendFile(path.join(distPath, 'components/index.html'));
+    });
     app.get('*', (req, res) => {
       res.sendFile(path.join(distPath, 'index.html'));
     });

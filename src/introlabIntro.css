@@ -1,0 +1,938 @@
+/* ==========================================================================
+   CARIEARSA INTROLAB // 360° HYPER-DIMENSIONAL CINEMATIC ENGINE
+   Subdirectory: /introlab/
+   Dedicated stylesheet - 100% isolated from all other subdirectories.
+   Cam-Facing 3D Billboards • Zero Blank Space • Floating YouTube 8D Theater
+   Aggressive Zooming & Cinematic Roll • 100% Render Guarantee
+   ========================================================================== */
+
+:root {
+  --intro-bg: #020408;
+  --intro-card-bg: rgba(8, 12, 22, 0.94);
+  --intro-cyan: #00f0ff;
+  --intro-magenta: #ff0055;
+  --intro-yellow: #ffb800;
+  --intro-lime: #00ff88;
+  --intro-purple: #9d4edd;
+  --intro-white: #f8fafc;
+  --intro-border: rgba(0, 240, 255, 0.38);
+  --intro-font-display: 'Oswald', 'Noto Sans JP', sans-serif;
+  --intro-font-title: 'Bangers', cursive, sans-serif;
+  --intro-font-mono: 'JetBrains Mono', monospace;
+  --intro-orbit-radius: 760px;
+}
+
+/* Base Viewport & Reset */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html, body.introlab-body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: var(--intro-bg);
+  color: var(--intro-white);
+  font-family: var(--intro-font-display);
+  user-select: none;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* 3D Viewport Matrix with Dynamic Perspective Depth */
+.introlab-viewport {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  perspective: clamp(720px, 85vw, 1100px);
+  perspective-origin: 50% 50%;
+  background: transparent; /* Transparent so background video on Layer 0 shines through */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  pointer-events: none;
+}
+
+/* ==========================================================================
+   PROCEDURAL SHADERS & ATMOSPHERIC PARTICLES (LAYER 1 - IN VIEWPORT)
+   ========================================================================== */
+
+/* 1. Cyber Horizon Glow Shader */
+.introlab-shader-horizon {
+  position: absolute;
+  left: -35%;
+  right: -35%;
+  top: 50%;
+  height: 520px;
+  margin-top: -260px;
+  background: radial-gradient(ellipse 65% 45% at 50% 50%, rgba(0, 240, 255, 0.28) 0%, rgba(255, 0, 85, 0.2) 40%, transparent 75%);
+  filter: blur(55px);
+  pointer-events: none;
+  transform: translateZ(-950px);
+  animation: introlabHorizonPulse 6s ease-in-out infinite alternate;
+  z-index: 2;
+}
+
+@keyframes introlabHorizonPulse {
+  0% { opacity: 0.8; transform: translateZ(-950px) scale(0.95); }
+  100% { opacity: 1; transform: translateZ(-900px) scale(1.15); }
+}
+
+/* 2. Cyber Ground Grid (Darat) */
+.introlab-space-grid {
+  position: absolute;
+  inset: -140%;
+  background-image: 
+    linear-gradient(rgba(0, 240, 255, 0.2) 1.5px, transparent 1.5px),
+    linear-gradient(90deg, rgba(0, 240, 255, 0.2) 1.5px, transparent 1.5px);
+  background-size: 75px 75px;
+  transform: rotateX(86deg) translateZ(-460px);
+  pointer-events: none;
+  animation: introlabGridGlide 10s linear infinite;
+  mask-image: radial-gradient(ellipse 85% 65% at 50% 60%, black 25%, transparent 85%);
+  -webkit-mask-image: radial-gradient(ellipse 85% 65% at 50% 60%, black 25%, transparent 85%);
+  z-index: 3;
+}
+
+@keyframes introlabGridGlide {
+  0% { transform: rotateX(86deg) translateZ(-460px) translateY(0); }
+  100% { transform: rotateX(86deg) translateZ(-460px) translateY(75px); }
+}
+
+/* 3. Cyber Sky Grid & Orbital Rings (Langit) */
+.introlab-sky-grid {
+  position: absolute;
+  inset: -140%;
+  background-image: 
+    linear-gradient(rgba(255, 0, 85, 0.16) 1.5px, transparent 1.5px),
+    linear-gradient(90deg, rgba(255, 0, 85, 0.16) 1.5px, transparent 1.5px);
+  background-size: 100px 100px;
+  transform: rotateX(-86deg) translateZ(-580px);
+  pointer-events: none;
+  mask-image: radial-gradient(ellipse 85% 65% at 50% 40%, black 20%, transparent 85%);
+  -webkit-mask-image: radial-gradient(ellipse 85% 65% at 50% 40%, black 20%, transparent 85%);
+  animation: introlabSkyGlide 16s linear infinite reverse;
+  z-index: 3;
+}
+
+@keyframes introlabSkyGlide {
+  0% { transform: rotateX(-86deg) translateZ(-580px) translateY(0); }
+  100% { transform: rotateX(-86deg) translateZ(-580px) translateY(100px); }
+}
+
+.introlab-orbital-ring {
+  position: absolute;
+  width: 2600px;
+  height: 2600px;
+  border-radius: 50%;
+  border: 2px dashed rgba(0, 240, 255, 0.38);
+  box-shadow: 0 0 85px rgba(0, 240, 255, 0.22), inset 0 0 85px rgba(255, 0, 85, 0.16);
+  transform: rotateX(90deg) translateZ(-180px);
+  pointer-events: none;
+  animation: introlabRingSpin 40s linear infinite;
+  z-index: 4;
+}
+
+@keyframes introlabRingSpin {
+  0% { transform: rotateX(90deg) translateZ(-180px) rotate(0deg); }
+  100% { transform: rotateX(90deg) translateZ(-180px) rotate(360deg); }
+}
+
+/* Speedlines & Kinetic Particles */
+.introlab-speed-vectors {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-conic-gradient(
+    from 0deg at 50% 50%,
+    transparent 0deg,
+    transparent 8deg,
+    rgba(0, 240, 255, 0.08) 8.5deg,
+    transparent 9deg,
+    transparent 18deg,
+    rgba(255, 0, 85, 0.07) 18.5deg,
+    transparent 19deg
+  );
+  opacity: 0.85;
+  mix-blend-mode: screen;
+  animation: introlabSpeedVectorsSpin 22s linear infinite;
+  z-index: 5;
+}
+
+@keyframes introlabSpeedVectorsSpin {
+  0% { transform: scale(1) rotate(0deg); }
+  50% { transform: scale(1.15) rotate(180deg); }
+  100% { transform: scale(1) rotate(360deg); }
+}
+
+.introlab-speedlines-overlay {
+  position: absolute;
+  inset: 0;
+  background: repeating-radial-gradient(
+    circle at center,
+    transparent 0,
+    transparent 10px,
+    rgba(0, 240, 255, 0.22) 11px,
+    transparent 15px
+  );
+  opacity: 0.25;
+  pointer-events: none;
+  mix-blend-mode: screen;
+  transition: opacity 0.1s ease-out;
+  z-index: 50;
+}
+
+.introlab-scanlines {
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.2) 3px,
+    rgba(0, 0, 0, 0.2) 4px
+  );
+  pointer-events: none;
+  opacity: 0.6;
+  z-index: 60;
+}
+
+/* ==========================================================================
+   LAYER 2: 3D WORLD STAGE & CAMERA RIG ARCHITECTURE
+   ========================================================================== */
+.introlab-world {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 20;
+}
+
+/* Master Camera Space: Updated at 60/120 FPS via JS Engine */
+.introlab-camera-space {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  will-change: transform;
+  pointer-events: none;
+}
+
+/* ==========================================================================
+   LAYER 0: FULL BACKGROUND YOUTUBE 8D THEATER (PALING BAWAH)
+   Video YouTube playlist memenuhi 100% layar background penuh
+   dengan visual siber imersif, audio surround jernih, dan overlay kontras
+   ========================================================================== */
+.introlab-full-bg-video {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0; /* Urutan render PALING BAWAH */
+  background: #02040a;
+}
+
+.introlab-bg-yt-iframe {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 120vw;
+  height: 120vh;
+  min-width: 177.78vh; /* Preserves 16:9 widescreen ratio without black bars */
+  min-height: 56.25vw;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  border: none;
+  filter: brightness(0.62) contrast(1.18) saturate(1.25);
+  transition: opacity 0.6s ease;
+}
+
+.introlab-bg-video-overlay {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at 50% 50%,
+    rgba(2, 6, 16, 0.42) 0%,
+    rgba(2, 4, 10, 0.72) 65%,
+    rgba(1, 2, 6, 0.92) 100%
+  );
+  pointer-events: none;
+  box-shadow: inset 0 0 100px rgba(0, 0, 0, 0.9);
+}
+
+/* ==========================================================================
+   FEATURE 2: LIVE PAGE CANVAS (ADAPTIVE GYROSCOPE BANKING)
+   ========================================================================== */
+.introlab-page-canvas {
+  position: absolute;
+  width: min(780px, 78vw);
+  height: min(480px, 62vh);
+  background: var(--intro-card-bg);
+  backdrop-filter: blur(18px);
+  border: 2px solid var(--intro-cyan);
+  border-radius: 22px;
+  box-shadow: 
+    0 0 0 1px rgba(255, 255, 255, 0.25),
+    0 0 45px rgba(0, 240, 255, 0.45),
+    0 35px 90px rgba(0, 0, 0, 0.95);
+  transform-style: preserve-3d;
+  backface-visibility: visible;
+  will-change: transform;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  z-index: 25;
+  pointer-events: auto;
+}
+
+.introlab-page-header {
+  height: 48px;
+  background: linear-gradient(90deg, rgba(0, 240, 255, 0.22), rgba(255, 0, 85, 0.22));
+  border-bottom: 2px solid var(--intro-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 18px;
+  flex-shrink: 0;
+}
+
+.introlab-page-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.introlab-page-badge {
+  background: var(--intro-magenta);
+  color: #fff;
+  font-family: var(--intro-font-title);
+  font-size: 0.9rem;
+  padding: 2px 8px;
+  letter-spacing: 1px;
+  transform: skew(-10deg);
+  border: 1px solid #fff;
+}
+
+.introlab-page-title {
+  font-family: var(--intro-font-display);
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: var(--intro-white);
+  text-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
+}
+
+.introlab-page-jp {
+  font-size: 0.75rem;
+  color: var(--intro-cyan);
+  font-family: 'Noto Sans JP', sans-serif;
+}
+
+.introlab-page-ticker {
+  background: rgba(0, 0, 0, 0.55);
+  border-bottom: 1px solid rgba(0, 240, 255, 0.22);
+  padding: 6px 16px;
+  font-family: var(--intro-font-mono);
+  font-size: 0.72rem;
+  color: var(--intro-lime);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  letter-spacing: 0.5px;
+}
+
+.introlab-page-body {
+  flex: 1;
+  padding: 16px 20px;
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 16px;
+  overflow: hidden;
+}
+
+.introlab-page-radar-panel {
+  background: rgba(6, 10, 18, 0.85);
+  border: 1px solid rgba(0, 240, 255, 0.3);
+  border-radius: 12px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  overflow: hidden;
+}
+
+.introlab-radar-title {
+  font-size: 0.85rem;
+  letter-spacing: 1.5px;
+  color: var(--intro-cyan);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+}
+
+.introlab-radar-viz {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  margin: 4px auto;
+  border-radius: 50%;
+  border: 1.5px solid rgba(0, 240, 255, 0.4);
+  box-shadow: inset 0 0 20px rgba(0, 240, 255, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.introlab-radar-sweep {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: conic-gradient(from 0deg, rgba(0, 240, 255, 0.45) 0deg, transparent 65deg, transparent 360deg);
+  animation: introlabRadarSweep 2.2s linear infinite;
+}
+
+@keyframes introlabRadarSweep {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.introlab-radar-core {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--intro-magenta);
+  box-shadow: 0 0 15px var(--intro-magenta);
+}
+
+.introlab-radar-nodes {
+  position: absolute;
+  inset: 0;
+}
+
+.introlab-radar-dot {
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--intro-cyan);
+  box-shadow: 0 0 8px var(--intro-cyan);
+}
+
+.introlab-radar-stats {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--intro-font-mono);
+  font-size: 0.72rem;
+  color: rgba(255, 255, 255, 0.7);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 8px;
+}
+
+.introlab-page-telemetry-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.introlab-telemetry-box {
+  background: rgba(6, 10, 18, 0.85);
+  border: 1px solid rgba(255, 0, 85, 0.35);
+  border-radius: 12px;
+  padding: 10px 14px;
+}
+
+.introlab-telemetry-box h4 {
+  margin: 0 0 4px 0;
+  font-size: 0.78rem;
+  letter-spacing: 1px;
+  color: var(--intro-magenta);
+  display: flex;
+  justify-content: space-between;
+}
+
+.introlab-telemetry-val {
+  font-family: var(--intro-font-mono);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.introlab-sub-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.introlab-chip {
+  background: rgba(0, 240, 255, 0.14);
+  border: 1px solid rgba(0, 240, 255, 0.35);
+  color: var(--intro-cyan);
+  padding: 2px 7px;
+  border-radius: 4px;
+  font-size: 0.68rem;
+  font-family: var(--intro-font-mono);
+}
+
+/* ==========================================================================
+   FEATURE 3: 360° CAM-FACING 3D MONOLITHS & SATELLITE NODES
+   ZERO BLANK SPACE • 14 STRATEGIC VISUAL NODES
+   ========================================================================== */
+.introlab-orbit-cluster {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  pointer-events: auto;
+  z-index: 30;
+}
+
+/* Master Monolith Cards */
+.introlab-banner-card {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 295px;
+  height: 385px;
+  margin-top: -192px;
+  margin-left: -147px;
+  background: rgba(8, 13, 24, 0.95);
+  backdrop-filter: blur(14px);
+  border: 2px solid var(--banner-accent, var(--intro-cyan));
+  border-radius: 18px;
+  box-shadow: 
+    0 0 28px var(--banner-glow, rgba(0, 240, 255, 0.35)),
+    0 22px 55px rgba(0, 0, 0, 0.92);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transform-style: preserve-3d;
+  backface-visibility: visible; /* 100% render guarantee */
+  pointer-events: auto;
+  text-decoration: none;
+  color: #fff;
+  cursor: pointer;
+  z-index: 35;
+  will-change: transform, box-shadow;
+  transition: box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.introlab-banner-card:hover {
+  border-color: #fff;
+  box-shadow: 
+    0 0 50px var(--banner-accent, var(--intro-cyan)),
+    0 28px 70px rgba(0, 0, 0, 0.96);
+  z-index: 70;
+}
+
+.introlab-banner-top {
+  height: 40px;
+  padding: 0 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(0, 0, 0, 0.55);
+  border-bottom: 1.5px solid rgba(255, 255, 255, 0.12);
+  flex-shrink: 0;
+}
+
+.introlab-banner-route {
+  font-family: var(--intro-font-mono);
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--banner-accent, var(--intro-cyan));
+  letter-spacing: 0.5px;
+}
+
+.introlab-banner-badge {
+  font-size: 0.65rem;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: var(--banner-accent, var(--intro-cyan));
+  color: #000;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+}
+
+.introlab-banner-visual {
+  height: 155px;
+  position: relative;
+  overflow: hidden;
+  background: #050812;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.introlab-banner-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.introlab-banner-card:hover .introlab-banner-img {
+  transform: scale(1.08);
+}
+
+.introlab-banner-visual-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 35%, rgba(8, 13, 24, 0.95) 100%);
+}
+
+.introlab-banner-sector-tag {
+  position: absolute;
+  top: 8px;
+  left: 10px;
+  font-family: var(--intro-font-mono);
+  font-size: 0.65rem;
+  background: rgba(0, 0, 0, 0.75);
+  padding: 2px 6px;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #fff;
+}
+
+.introlab-banner-content {
+  flex: 1;
+  padding: 10px 14px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.introlab-banner-title {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.introlab-banner-jp {
+  font-size: 0.7rem;
+  font-family: 'Noto Sans JP', sans-serif;
+  color: rgba(255, 255, 255, 0.65);
+  font-weight: 400;
+}
+
+.introlab-banner-desc {
+  margin: 4px 0;
+  font-size: 0.76rem;
+  color: rgba(255, 255, 255, 0.82);
+  line-height: 1.35;
+  font-family: sans-serif;
+}
+
+.introlab-banner-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 7px 12px;
+  border-radius: 8px;
+  background: var(--banner-accent, var(--intro-cyan));
+  color: #000;
+  font-family: var(--intro-font-display);
+  font-size: 0.82rem;
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  border: none;
+  transition: all 0.2s ease;
+}
+
+.introlab-banner-card:hover .introlab-banner-btn {
+  background: #fff;
+  color: #000;
+  box-shadow: 0 0 15px #fff;
+}
+
+/* Satellite Preview Monoliths (Fills every flank & orbit angle) */
+.introlab-satellite-card {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 220px;
+  height: 270px;
+  margin-top: -135px;
+  margin-left: -110px;
+  background: rgba(6, 9, 18, 0.9);
+  backdrop-filter: blur(12px);
+  border: 1.5px solid var(--sat-accent, rgba(0, 240, 255, 0.6));
+  border-radius: 14px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.85);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transform-style: preserve-3d;
+  backface-visibility: visible;
+  pointer-events: auto;
+  text-decoration: none;
+  color: #fff;
+  cursor: pointer;
+  z-index: 32;
+  will-change: transform;
+}
+
+.introlab-satellite-visual {
+  height: 110px;
+  position: relative;
+  overflow: hidden;
+}
+
+.introlab-satellite-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.introlab-satellite-body {
+  flex: 1;
+  padding: 8px 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.introlab-satellite-title {
+  font-size: 0.88rem;
+  font-weight: 700;
+  margin: 0;
+  color: #fff;
+}
+
+.introlab-satellite-sub {
+  font-family: var(--intro-font-mono);
+  font-size: 0.68rem;
+  color: var(--sat-accent, var(--intro-cyan));
+}
+
+/* Distant Cosmic Kanji & Sound Effect Particles */
+.introlab-sfx-cluster {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+  pointer-events: none;
+}
+
+.introlab-sfx-particle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  font-family: var(--intro-font-title);
+  font-size: 2.8rem;
+  font-weight: 900;
+  color: #fff;
+  text-shadow: 
+    0 0 14px var(--intro-cyan),
+    0 0 35px var(--intro-magenta),
+    2px 2px 0 #000;
+  opacity: 0.7;
+  backface-visibility: visible;
+  will-change: transform;
+}
+
+/* ==========================================================================
+   MINIMALIST SLEEK CINEMATIC HUD
+   PURE SHOWCASE • ZERO BUTTONS • ZERO CLUTTER
+   ========================================================================== */
+.introlab-cinematic-hud {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 18px 24px;
+}
+
+.introlab-cinematic-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.introlab-brand-mark {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.introlab-brand-title {
+  font-family: var(--intro-font-title);
+  font-size: 1.35rem;
+  letter-spacing: 1.5px;
+  color: #fff;
+  line-height: 1;
+  text-shadow: 0 0 12px rgba(0, 240, 255, 0.7);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.introlab-brand-badge {
+  background: var(--intro-magenta);
+  color: #fff;
+  font-size: 0.7rem;
+  font-family: var(--intro-font-mono);
+  padding: 2px 7px;
+  border-radius: 4px;
+  letter-spacing: 1px;
+}
+
+.introlab-brand-sub {
+  font-family: var(--intro-font-mono);
+  font-size: 0.68rem;
+  color: rgba(255, 255, 255, 0.55);
+  letter-spacing: 1.2px;
+  margin-top: 3px;
+}
+
+.introlab-back-link {
+  pointer-events: auto;
+  font-family: var(--intro-font-mono);
+  font-size: 0.74rem;
+  color: rgba(0, 240, 255, 0.9);
+  text-decoration: none;
+  letter-spacing: 1px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  background: rgba(10, 14, 23, 0.75);
+  border: 1px solid rgba(0, 240, 255, 0.35);
+  transition: all 0.2s ease;
+}
+
+.introlab-back-link:hover {
+  color: #000;
+  background: var(--intro-cyan);
+  box-shadow: 0 0 15px var(--intro-cyan);
+}
+
+.introlab-cinematic-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+/* Indikator Koordinat Sederhana XYZ (Minimalist & Compact) */
+.introlab-flight-tracker {
+  font-family: var(--intro-font-mono);
+  font-size: 0.74rem;
+  color: rgba(255, 255, 255, 0.9);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(6, 10, 18, 0.88);
+  backdrop-filter: blur(14px);
+  border: 1px solid rgba(0, 240, 255, 0.35);
+  border-radius: 20px;
+  padding: 5px 14px;
+  letter-spacing: 0.5px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.65);
+  white-space: nowrap;
+}
+
+.introlab-coord-label {
+  color: var(--intro-cyan);
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+.introlab-coord-dot {
+  color: rgba(255, 255, 255, 0.35);
+}
+
+.introlab-coord-yaw {
+  color: var(--intro-yellow);
+  font-weight: 700;
+}
+
+.introlab-flight-tracker strong {
+  color: #fff;
+  font-weight: 700;
+}
+
+/* Top and bottom subtle vignettes */
+.introlab-cinematic-hud::before,
+.introlab-cinematic-hud::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 45px;
+  pointer-events: none;
+}
+
+.introlab-cinematic-hud::before {
+  top: 0;
+  background: linear-gradient(180deg, rgba(2, 4, 8, 0.88) 0%, transparent 100%);
+}
+
+.introlab-cinematic-hud::after {
+  bottom: 0;
+  background: linear-gradient(0deg, rgba(2, 4, 8, 0.88) 0%, transparent 100%);
+}
+
+/* Responsive Scaling Across All Devices */
+@media (max-width: 768px) {
+  :root {
+    --intro-orbit-radius: 400px;
+  }
+  .introlab-page-canvas {
+    width: min(340px, 88vw);
+    height: auto;
+    max-height: 46vh;
+    border-radius: 16px;
+  }
+  .introlab-floating-theater {
+    width: 94vw;
+    height: 56vh;
+  }
+  .introlab-banner-card {
+    width: 220px;
+    height: 300px;
+    margin-top: -150px;
+    margin-left: -110px;
+    border-radius: 14px;
+  }
+  .introlab-satellite-card {
+    width: 170px;
+    height: 220px;
+    margin-top: -110px;
+    margin-left: -85px;
+    border-radius: 12px;
+  }
+  .introlab-page-body {
+    grid-template-columns: 1fr;
+    padding: 8px 10px;
+    gap: 8px;
+  }
+  .introlab-specs-watermark {
+    display: none;
+  }
+}

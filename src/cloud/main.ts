@@ -168,25 +168,6 @@ function updateDOM() {
             </div>
           `}
         </div>
-
-        <!-- Mobile category pills: instant touch-filter for mobile & tablet -->
-        <div class="flex items-center gap-1 overflow-x-auto no-scrollbar py-0.5 md:hidden">
-          ${[
-            { id: 'all', label: 'Semua', count: counts.all },
-            { id: 'image', label: 'Foto', count: counts.image },
-            { id: 'audio', label: 'Audio', count: counts.audio },
-            { id: 'video', label: 'Video', count: counts.video },
-            { id: 'document', label: 'Dok', count: counts.document }
-          ].map(c => `
-            <button type="button" data-category="${c.id}" class="category-option-btn shrink-0 px-2 py-0.5 rounded-md text-[10px] font-mono font-bold transition-all ${
-              state.selectedCategory === c.id 
-                ? 'cyber-btn-solid-accent shadow-sm' 
-                : 'cyber-btn-solid-surface text-[var(--c-text-muted)] hover:text-white'
-            }">
-              ${c.label} (${c.count})
-            </button>
-          `).join('')}
-        </div>
       </div>
     `;
   }
@@ -1323,31 +1304,35 @@ async function fetchFiles(showLoading = true) {
     }
   } catch (_) {}
 
-  // 2. Direct Supabase Storage fallback
-  try {
-    const { data, error } = await supabaseClient.storage.from(BUCKET_NAME).list('', {
-      limit: 1000,
-      offset: 0,
-      sortBy: { column: 'created_at', order: 'desc' },
-    });
-
-    if (!error && data) {
-      const files = data.filter((f) => f.name !== '.emptyFolderPlaceholder');
-      state.files = files.map((file) => {
-        const { data: urlData } = supabaseClient.storage.from(BUCKET_NAME).getPublicUrl(file.name);
-        return {
-          ...file,
-          publicUrl: urlData.publicUrl,
-        };
+  // 2. Direct Supabase Storage fallback if valid JWT
+  if (typeof SUPABASE_KEY === 'string' && SUPABASE_KEY.startsWith('eyJ')) {
+    try {
+      const { data, error } = await supabaseClient.storage.from(BUCKET_NAME).list('', {
+        limit: 1000,
+        offset: 0,
+        sortBy: { column: 'created_at', order: 'desc' },
       });
-      try {
-        localStorage.setItem(CACHE_KEY, JSON.stringify(state.files));
-      } catch (_) {}
-    } else {
-      showToast('Gagal memuat file', 'error');
+
+      if (!error && data) {
+        const files = data.filter((f) => f.name !== '.emptyFolderPlaceholder');
+        state.files = files.map((file) => {
+          const { data: urlData } = supabaseClient.storage.from(BUCKET_NAME).getPublicUrl(file.name);
+          return {
+            ...file,
+            publicUrl: urlData.publicUrl,
+          };
+        });
+        try {
+          localStorage.setItem(CACHE_KEY, JSON.stringify(state.files));
+        } catch (_) {}
+      } else if (state.files.length === 0) {
+        showToast('Gagal memuat file', 'error');
+      }
+    } catch(e) {
+      if (state.files.length === 0) {
+        showToast('Gagal memuat file', 'error');
+      }
     }
-  } catch(e) {
-    showToast('Gagal memuat file', 'error');
   }
 
   state.loading = false;
@@ -1513,8 +1498,11 @@ window.addEventListener('resize', () => {
   clearTimeout(resizeTimer);
   resizeTimer = setTimeout(() => {
     try {
-      if (sessionStorage.getItem('cariearsa_cloud_force') === 'desktop') return;
-      if (window.innerWidth <= 1024) {
+      const isMobileUA = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|Tablet|Silk|Kindle|PlayBook/i.test(navigator.userAgent || '');
+      const isTouch = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+      const isCoarse = window.matchMedia && (window.matchMedia('(pointer: coarse)').matches || window.matchMedia('(hover: none)').matches);
+      const isSmallOrTablet = window.innerWidth <= 1024 || (window.screen && Math.min(window.screen.width, window.screen.height) <= 1024);
+      if (isMobileUA || isTouch || isCoarse || isSmallOrTablet) {
         window.location.replace('/cloud/mobile/' + window.location.search + window.location.hash);
       }
     } catch (_) {}
