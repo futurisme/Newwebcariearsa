@@ -200,13 +200,13 @@ body::before {
   font-size: 0.82rem;
 }
 
-/* WRAPPER (Restored exact original proportions with safe top billboard clearance) */
+/* WRAPPER (Precision balanced top billboard clearance) */
 .manga-wrapper {
   width: 100%;
   max-width: 1280px;
   margin: 0 auto;
   background: transparent;
-  padding-top: 50px;
+  padding-top: 36px;
   padding-bottom: 10px;
   display: flex;
   flex-direction: column;
@@ -220,7 +220,7 @@ body::before {
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  padding: 10px 16px 8px 16px;
+  padding: 4px 16px 6px 16px;
   background: transparent;
   position: relative;
   z-index: 10;
