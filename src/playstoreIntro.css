@@ -145,40 +145,33 @@ body.ps-intro-active {
   0% {
     opacity: 0;
     transform: translate3d(0, 70px, 0) scale(1.05);
-    filter: blur(8px);
     visibility: hidden;
   }
   48% {
     opacity: 0;
     transform: translate3d(0, 70px, 0) scale(1.05);
-    filter: blur(8px);
     visibility: hidden;
   }
   56% {
     opacity: 1;
     visibility: visible;
     transform: translate3d(0, 40px, 0) scale(1.02);
-    filter: blur(0px);
   }
   75% {
     opacity: 1;
     transform: translate3d(0, 0px, 0) scale(1);
-    filter: contrast(1.1) brightness(1.05) blur(0px);
   }
   85% {
     opacity: 1;
     transform: translate3d(0, 0px, 0) scale(1);
-    filter: contrast(1.1) brightness(1.05) blur(0px);
   }
   87.9% {
     opacity: 0.95;
     transform: translate3d(0, 45px, 0) scale(1.03);
-    filter: blur(2px);
   }
   96.5% {
     opacity: 0;
     transform: translate3d(0, 140px, 0) scale(1.35);
-    filter: blur(14px);
     visibility: hidden;
   }
   100% {

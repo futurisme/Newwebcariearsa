@@ -212,47 +212,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Floating Manga SFX Particle Generator
-  const sfxList = ['ドンッ!!', 'ゴゴゴゴ', 'ドドドド', 'バァァァン', 'ズキュウゥン', 'カッ', 'シャアァ', 'パラッ', 'ザワ…'];
-  const btnSpawnSfx = document.getElementById('btnSpawnSfx');
-
-  const spawnSfxGlyph = (text) => {
-    const glyph = document.createElement('div');
-    glyph.textContent = text || sfxList[Math.floor(Math.random() * sfxList.length)];
-    glyph.style.position = 'fixed';
-    glyph.style.left = `${Math.random() * 70 + 15}vw`;
-    glyph.style.top = `${Math.random() * 70 + 15}vh`;
-    glyph.style.fontFamily = "'Noto Sans JP', sans-serif";
-    glyph.style.fontWeight = '900';
-    glyph.style.fontSize = `${Math.random() * 2 + 1.8}rem`;
-    glyph.style.color = Math.random() > 0.5 ? 'var(--manga-red)' : 'var(--ink-true-black)';
-    glyph.style.webkitTextStroke = '1.5px var(--paper-white)';
-    glyph.style.pointerEvents = 'none';
-    glyph.style.zIndex = '9999';
-    glyph.style.opacity = '0';
-    glyph.style.transform = `rotate(${Math.random() * 60 - 30}deg) scale(0.4)`;
-    glyph.style.transition = 'all 3s cubic-bezier(0.2, 1, 0.3, 1)';
-
-    document.body.appendChild(glyph);
-
-    requestAnimationFrame(() => {
-      glyph.style.opacity = '0.9';
-      glyph.style.transform = `translateY(-80px) rotate(${Math.random() * 60 - 30}deg) scale(1.3)`;
-    });
-
-    setTimeout(() => {
-      glyph.style.opacity = '0';
-      glyph.style.transform = `translateY(-140px) scale(0.8)`;
-      setTimeout(() => glyph.remove(), 3000);
-    }, 1800);
-  };
-
-  if (btnSpawnSfx) {
-    btnSpawnSfx.addEventListener('click', () => {
-      spawnSfxGlyph();
-      showToast('Spawned Manga SFX Particle', '🎌');
-    });
-  }
+  // Floating Manga SFX Particle Generator removed as requested (universal)
 
   // 6. Interactive Gallery Slideshow
   const track = document.getElementById('demoGalleryTrack');

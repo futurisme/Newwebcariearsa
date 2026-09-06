@@ -123,7 +123,7 @@ body::before {
   width: 100%;
   max-width: 540px;
   margin: 0 auto;
-  padding: 0 12px 28px 12px;
+  padding: 48px 12px 28px 12px;
   display: flex;
   flex-direction: column;
   position: relative;
@@ -142,7 +142,7 @@ body::before {
 
 .logo-frame {
   display: inline-flex;
-  filter: drop-shadow(3px 3px 0px rgba(0, 0, 0, 0.9));
+  filter: drop-shadow(3px 3px 0px #FF003C);
   justify-content: flex-start;
   align-self: flex-start;
 }
@@ -186,65 +186,59 @@ body::before {
   line-height: 1;
 }
 
-/* Batang 1: Biru Langit Cyber Neon */
+/* Batang 1: Biru Langit Cyber Neon (Cahaya lembut, tajam & jelas terlihat) */
 .logo-slash.slash-sky {
   color: #00E5FF;
   margin-right: 1px;
   text-shadow: 
-    0 0 6px rgba(0, 229, 255, 1),
-    0 0 14px rgba(0, 229, 255, 0.85),
-    0 0 24px rgba(0, 229, 255, 0.55);
+    0 0 2px rgba(0, 229, 255, 0.75),
+    0 0 6px rgba(0, 229, 255, 0.28);
 }
 
-/* Batang 2: Pink Cyber Neon */
+/* Batang 2: Pink Cyber Neon (Cahaya lembut, tajam & jelas terlihat) */
 .logo-slash.slash-pink {
   color: #FF007F;
   margin-right: 4px;
   text-shadow: 
-    0 0 6px rgba(255, 0, 127, 1),
-    0 0 14px rgba(0, 229, 127, 0.85),
-    0 0 24px rgba(255, 0, 127, 0.55);
+    0 0 2px rgba(255, 0, 127, 0.75),
+    0 0 6px rgba(255, 0, 127, 0.28);
 }
 
-/* "C" & "A": Putih Neon Cerah Cyber */
+/* "C" & "A": Putih Bersih Tajam Cyber */
 .logo-c,
 .logo-a {
   color: #FFFFFF;
   font-weight: 900;
   text-shadow: 
-    0 0 6px rgba(255, 255, 255, 1),
-    0 0 14px rgba(255, 255, 255, 0.85),
-    0 0 24px rgba(255, 255, 255, 0.55);
+    0 0 2px rgba(255, 255, 255, 0.70),
+    0 0 5px rgba(0, 229, 255, 0.22);
 }
 
-/* "RI": Pink Cyber Neon Terang */
+/* "RI": Pink Cyber Neon Terang & Tajam */
 .logo-ri {
   color: #FF007F;
   font-weight: 900;
   text-shadow: 
-    0 0 6px rgba(255, 0, 127, 1),
-    0 0 14px rgba(255, 0, 127, 0.9),
-    0 0 24px rgba(255, 0, 127, 0.65);
+    0 0 2px rgba(255, 0, 127, 0.75),
+    0 0 6px rgba(255, 0, 127, 0.28);
 }
 
-/* "EA": Biru Langit Cyber Neon */
+/* "EA": Biru Langit Cyber Neon Terang & Tajam */
 .logo-ea {
   color: #00E5FF;
   font-weight: 900;
   text-shadow: 
-    0 0 6px rgba(0, 229, 255, 1),
-    0 0 14px rgba(0, 229, 255, 0.85),
-    0 0 24px rgba(0, 229, 255, 0.55);
+    0 0 2px rgba(0, 229, 255, 0.75),
+    0 0 6px rgba(0, 229, 255, 0.28);
 }
 
-/* "RSA": Kuning Cerah Terang Cyber Neon */
+/* "RSA": Kuning Cerah Terang Cyber Neon & Tajam */
 .logo-rsa {
   color: #FFE600;
   font-weight: 900;
   text-shadow: 
-    0 0 6px rgba(255, 230, 0, 1),
-    0 0 14px rgba(255, 230, 0, 0.9),
-    0 0 24px rgba(255, 230, 0, 0.6);
+    0 0 2px rgba(255, 230, 0, 0.75),
+    0 0 6px rgba(255, 230, 0, 0.28);
 }
 
 /* ACTION BUTTONS GROUP */
@@ -839,13 +833,13 @@ body::before {
   );
 }
 
-/* 5. GALLERY 3 (Banner Image 4: 2 corner dipotong miring - bayangan ruby terang) */
+/* 5. GALLERY 3 (Banner Image 4: 2 corner dipotong miring - bayangan kuning cerah cyber) */
 .gallery-3-frame {
   width: 100%;
   aspect-ratio: 16 / 6;
   min-height: 120px;
   max-height: 220px;
-  filter: drop-shadow(4px 4px 0px #FF003C);
+  filter: drop-shadow(4px 4px 0px #FFE600);
 }
 
 .gallery-3-border-layer {
@@ -887,9 +881,9 @@ body::before {
   white-space: nowrap;
 }
 
-/* 5. LINK HUB CARD - Bottom-right cut corner */
+/* 5. RELATED FEATURED WEBSITES (HUB CARD) - Bottom-right cut corner (bayangan ruby cerah cyber) */
 .hub-frame {
-  filter: drop-shadow(4px 4px 0px #000000);
+  filter: drop-shadow(4px 4px 0px #FF0055);
 }
 
 .hub-border-layer {
@@ -926,19 +920,23 @@ body::before {
   align-items: center;
   border-bottom: 2px solid var(--paper-white);
   margin: -10px -12px 2px -12px;
+  gap: 6px;
 }
 
 .hub-sticky-header h2 {
   font-family: var(--font-display);
-  font-size: 1.15rem;
+  font-size: 1.02rem;
   margin: 0;
   font-style: italic;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
 }
 
 .hub-sticky-header .status {
   font-size: 0.72rem;
   font-weight: bold;
   color: var(--manga-accent);
+  flex-shrink: 0;
 }
 
 .hub-links-mobile {

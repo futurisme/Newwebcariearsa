@@ -24,6 +24,38 @@ import { initPlayStoreIntro, replayPlayStoreIntro, skipPlayStoreIntro } from './
   if (window.__cariearsa_anime_intro_initialized) return;
   window.__cariearsa_anime_intro_initialized = true;
 
+  // Prioritized Cache Engine & Asset Preloader (2026 Web Engineering)
+  const prioritizeIntroCache = () => {
+    try {
+      // 1. Memory Image Pre-decode (0ms lag when camera tilts to face girl)
+      const girlImg = new Image();
+      girlImg.src = '/assets/girl.avif';
+      if ('decode' in girlImg) {
+        girlImg.decode().catch(() => {});
+      }
+
+      // 2. Browser CacheStorage API (Permanent offline & zero-latency reload)
+      if ('caches' in window) {
+        caches.open('cariearsa-cache-v2026.2').then((cache) => {
+          const introUrls = [
+            '/assets/girl.avif',
+            '/public/assets/girl.avif'
+          ];
+          introUrls.forEach((url) => {
+            fetch(url, { priority: 'high', cache: 'force-cache' })
+              .then((res) => {
+                if (res && res.status === 200) {
+                  cache.put(url, res.clone());
+                }
+              })
+              .catch(() => {});
+          });
+        }).catch(() => {});
+      }
+    } catch (_) {}
+  };
+  prioritizeIntroCache();
+
   // Check if current context is Play Store (/hub)
   const isPlaystorePage = () => {
     const path = window.location.pathname.toLowerCase();
@@ -88,12 +120,6 @@ import { initPlayStoreIntro, replayPlayStoreIntro, skipPlayStoreIntro } from './
   const HORIZON_LOCK_MS = 9000;      // Act VI Menatap Wajah Karakter Lurus Sejajar / Horizon Lock (9.00s)
   const SNAP_DOWN_DIVE_MS = 10200;   // Act VII Sedikit Dipercepat: Selesai Menatap Wajah & Cepat Kembali Nengok Kebawah (10.20s)
   const FINAL_IMPACT_MS = 11550;     // Act VIII Touchdown & Layar Jadi Normal (11.55s)
-
-  // Respect system reduced-motion accessibility preference
-  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    document.body.classList.add('splash-completed');
-    return;
-  }
 
   // Determine subpage context name for holographic crest
   const getSubpageMeta = () => {
@@ -761,21 +787,6 @@ import { initPlayStoreIntro, replayPlayStoreIntro, skipPlayStoreIntro } from './
           </div>
         </div>
 
-        <!-- Japanese Manga/Cyber SFX Particles flanking the screen -->
-        <div class="anime-sfx-particles">
-          <!-- Act I Descent Kanji Particles -->
-          <span class="anime-float-sfx sfx-1" style="--d: 0.1s; --x: -32vw; --y: -24vh;">限界突破</span>
-          <span class="anime-float-sfx sfx-2" style="--d: 0.45s; --x: 35vw; --y: 20vh;">覚醒</span>
-          <span class="anime-float-sfx sfx-3" style="--d: 0.8s; --x: 30vw; --y: -22vh;">神速</span>
-          <span class="anime-float-sfx sfx-4" style="--d: 0.35s; --x: -36vw; --y: 18vh;">ドォォン</span>
-          <!-- Act III 360° Slingshot Wave Particles (Flanking outside viewport center) -->
-          <span class="anime-float-sfx sfx-5" style="--d: 4.5s; --x: -38vw; --y: -32vh;">電脳同期</span>
-          <span class="anime-float-sfx sfx-6" style="--d: 5.2s; --x: -32vw; --y: 26vh;">絶対零度</span>
-          <span class="anime-float-sfx sfx-7" style="--d: 6.0s; --x: 34vw; --y: -18vh;">極限覚醒</span>
-          <span class="anime-float-sfx sfx-8" style="--d: 7.8s; --x: -28vw; --y: -26vh;">神速殲滅</span>
-          <span class="anime-float-sfx sfx-9" style="--d: 8.8s; --x: 30vw; --y: 28vh;">終極形態</span>
-        </div>
-
         <!-- Top-Docked Sleek Holographic Crest (Leaves central area completely open) -->
         <div class="anime-warp-crest">
           <div class="crest-tag">${meta.tag}</div>
@@ -833,10 +844,8 @@ import { initPlayStoreIntro, replayPlayStoreIntro, skipPlayStoreIntro } from './
     if (phoneFrame) phoneFrame.classList.remove('animating');
     if (rig) rig.classList.remove('camera-flying');
 
-    if (povCamera) void povCamera.offsetWidth; // Force reflow
-    if (handheldUnit) void handheldUnit.offsetWidth;
-    if (phoneFrame) void phoneFrame.offsetWidth;
-    if (rig) void rig.offsetWidth;
+    // Batch single reflow flush (Zero layout thrashing)
+    void document.body.offsetHeight;
 
     if (povCamera) povCamera.classList.add('animating');
     if (handheldUnit) handheldUnit.classList.add('animating');

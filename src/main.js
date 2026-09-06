@@ -69,53 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
     scrollTimeout = window.setTimeout(() => { scrollTimeout = 0; }, 250);
   }, { passive: true });
 
-  // 3. Automated Floating Japanese SFX (Visibility-aware, throttled, zero leak)
-  const sfxList = ['ドンッ!!', 'ゴゴゴ', 'ドドドド', 'バァァァン', 'ズキュウゥン', 'カッ', 'シャアァ', 'パラッ'];
-  let activeSfxCount = 0;
-  const MAX_CONCURRENT_SFX = 3;
-
-  const spawnFloatingSfx = () => {
-    if (document.hidden) return;
-    if (activeSfxCount >= MAX_CONCURRENT_SFX) return;
-    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-
-    activeSfxCount++;
-    const sfx = document.createElement('div');
-    sfx.textContent = sfxList[Math.floor(Math.random() * sfxList.length)];
-    sfx.style.position = 'fixed';
-    sfx.style.left = `${Math.random() * 75 + 10}vw`;
-    sfx.style.top = `${Math.random() * 75 + 10}vh`;
-    sfx.style.fontFamily = "'Noto Sans JP', sans-serif";
-    sfx.style.fontWeight = '900';
-    sfx.style.fontSize = `${Math.random() * 1.3 + 1}rem`;
-    sfx.style.color = Math.random() > 0.5 ? '#BC002D' : '#1A1A1A';
-    sfx.style.webkitTextStroke = '1px #FFFFFF';
-    sfx.style.pointerEvents = 'none';
-    sfx.style.zIndex = '9998';
-    sfx.style.opacity = '0';
-    sfx.style.transform = `translate3d(0, 0, 0) rotate(${Math.random() * 40 - 20}deg) scale(0.6)`;
-    sfx.style.transition = 'transform 3.5s cubic-bezier(0.25, 1, 0.5, 1), opacity 3.5s ease-out';
-    sfx.style.willChange = 'transform, opacity';
-    
-    document.body.appendChild(sfx);
-
-    requestAnimationFrame(() => {
-      sfx.style.opacity = '0.55';
-      sfx.style.transform = `translate3d(0, -60px, 0) rotate(${Math.random() * 40 - 20}deg) scale(1.15)`;
-    });
-
-    setTimeout(() => {
-      sfx.style.opacity = '0';
-      sfx.style.transform = `translate3d(0, -110px, 0) scale(0.85)`;
-      setTimeout(() => {
-        if (sfx.parentNode) sfx.parentNode.removeChild(sfx);
-        activeSfxCount = Math.max(0, activeSfxCount - 1);
-      }, 1000);
-    }, 2200);
-  };
-  
-  const sfxInterval = setInterval(spawnFloatingSfx, 2800);
-  setTimeout(spawnFloatingSfx, 400);
+  // 3. Floating Japanese SFX feature removed as requested (universal)
 
   // 4. Hardware-Accelerated 120 FPS Parallax Effect (RAF Throttled)
   const panels = document.querySelectorAll('.panel');

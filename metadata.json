@@ -1,6 +1,6 @@
 {
   "name": "CARIEARSA Portfolio",
-  "description": "A visually stunning manga and anime styled personal brand portfolio, CARIEARSA360 cinematic theater, design system library, anime streaming platform, and CARIEARSA-CLOUD Supabase storage vault.",
+  "description": "Portofolio digital dan galeri interaktif resmi karya Fadhil Akbar Cariearsa (fadhil.dev), memadukan estetika visual manga-cyberpunk modern dengan rekayasa web interaktif, visual cinematic 360, dan ekosistem cloud vault.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

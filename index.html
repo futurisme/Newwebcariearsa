@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
   <script>
     (function() {
@@ -37,10 +37,90 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CARIEARSA Portfolio</title>
-  <meta name="description" content="A visually stunning manga and anime styled personal brand portfolio, CARIEARSA360 cinematic theater, design system library, anime streaming platform, and CARIEARSA-CLOUD Supabase storage vault.">
+  <meta name="description" content="Portofolio digital dan galeri interaktif resmi karya Fadhil Akbar Cariearsa (fadhil.dev), memadukan estetika visual manga-cyberpunk modern dengan rekayasa web interaktif, visual cinematic 360, dan ekosistem cloud vault.">
+  <meta name="keywords" content="CARIEARSA, Fadhil Akbar Cariearsa, fadhil.dev, cariearsa.com, Portofolio Web, Manga Web Design, Cyberpunk Portfolio, Creative Developer, Web Apps 2026, Cloud Vault">
+  <meta name="author" content="Fadhil Akbar Cariearsa">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+  <meta name="googlebot" content="index, follow">
+  <link rel="canonical" href="https://cariearsa.com/">
+  <link rel="alternate" hreflang="id" href="https://cariearsa.com/">
+  <link rel="alternate" hreflang="en" href="https://cariearsa.com/">
+  <link rel="alternate" hreflang="ja" href="https://cariearsa.com/">
+  <link rel="alternate" media="only screen and (max-width: 1024px)" href="https://cariearsa.com/mobile/">
+
+  <!-- Open Graph / Facebook / WhatsApp -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://cariearsa.com/">
   <meta property="og:title" content="CARIEARSA Portfolio">
-  <meta property="og:description" content="A visually stunning manga and anime styled personal brand portfolio, CARIEARSA360 cinematic theater, design system library, anime streaming platform, and CARIEARSA-CLOUD Supabase storage vault.">
+  <meta property="og:description" content="Portofolio digital dan galeri interaktif resmi karya Fadhil Akbar Cariearsa (fadhil.dev), memadukan estetika visual manga-cyberpunk modern dengan rekayasa web interaktif, visual cinematic 360, dan ekosistem cloud vault.">
+  <meta property="og:image" content="https://cariearsa.com/assets/image4.avif">
+  <meta property="og:image:alt" content="CARIEARSA Character Portrait">
+  <meta property="og:site_name" content="CARIEARSA">
+  <meta property="og:locale" content="id_ID">
+  <meta property="og:locale:alternate" content="en_US">
+  <meta property="og:locale:alternate" content="ja_JP">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="CARIEARSA Portfolio">
+  <meta name="twitter:description" content="Portofolio digital dan galeri interaktif resmi karya Fadhil Akbar Cariearsa (fadhil.dev), memadukan estetika visual manga-cyberpunk modern dengan rekayasa web interaktif, visual cinematic 360, dan ekosistem cloud vault.">
+  <meta name="twitter:image" content="https://cariearsa.com/assets/image4.avif">
+  <meta name="twitter:image:alt" content="CARIEARSA Character Portrait">
+
+  <!-- Schema.org JSON-LD Structured Data for Google Indexing -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": "https://cariearsa.com/#website",
+        "url": "https://cariearsa.com/",
+        "name": "CARIEARSA Portfolio",
+        "alternateName": "Cariearsa.com",
+        "description": "Portofolio digital dan galeri interaktif resmi karya Fadhil Akbar Cariearsa yang memadukan estetika visual manga modern dengan rekayasa web interaktif.",
+        "inLanguage": ["id", "en", "ja"],
+        "publisher": {
+          "@type": "Person",
+          "@id": "https://fadhil.dev/#person",
+          "name": "Fadhil Akbar Cariearsa",
+          "url": "https://fadhil.dev"
+        }
+      },
+      {
+        "@type": "Person",
+        "@id": "https://fadhil.dev/#person",
+        "name": "Fadhil Akbar Cariearsa",
+        "url": "https://fadhil.dev",
+        "sameAs": [
+          "https://cariearsa.com",
+          "https://github.com/futurisme"
+        ],
+        "jobTitle": "Creative Web Developer & Digital Creator"
+      }
+    ]
+  }
+  </script>
+
   <link rel="stylesheet" href="/src/style.css">
+  <link rel="stylesheet" href="/src/animeIntro.css">
+  <!-- Prioritized Caching & Instant Preload for 12s Anime Cinematic Intro Assets -->
+  <link rel="preload" href="/assets/girl.avif" as="image" type="image/avif" fetchpriority="high">
+  <link rel="modulepreload" href="/src/animeIntro.js">
+  <script>
+    if ('serviceWorker' in navigator) {
+      const registerSW = () => {
+        navigator.serviceWorker.register('/sw.js').then((reg) => {
+          reg.update();
+        }).catch(function() {});
+      };
+      if (document.readyState === 'complete') {
+        registerSW();
+      } else {
+        window.addEventListener('load', registerSW);
+      }
+    }
+  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preconnect" href="https://www.youtube.com">
@@ -225,7 +305,7 @@
       <div class="cyber-card-frame portrait-frame">
         <div class="cyber-border-layer portrait-border-layer">
           <section class="panel portrait-panel">
-            <img src="https://images.unsplash.com/photo-1541562232579-512a21360020?auto=format&fit=crop&w=400&q=80" alt="Character" class="manga-img" width="400" height="400" loading="lazy" decoding="async">
+            <img src="/assets/image4.avif" alt="Character Portrait" class="manga-img" width="923" height="923" loading="lazy" decoding="async" onerror="if(this.src.indexOf('public/assets/image4.avif') === -1) this.src='/public/assets/image4.avif'; else if(this.src.indexOf('assets/image4.avif') === -1) this.src='assets/image4.avif';">
             <div class="sfx">ドンッ!!</div>
           </section>
         </div>
@@ -235,7 +315,7 @@
       <div class="cyber-card-frame gallery-1-frame">
         <div class="cyber-border-layer gallery-1-border-layer">
           <section class="panel gallery-panel gallery-1">
-            <img src="https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=600&q=80" alt="Scene 1" class="manga-img" width="600" height="300" loading="lazy" decoding="async">
+            <img src="/assets/image1.avif" alt="Gallery Scene 1" class="manga-img" width="1080" height="537" loading="lazy" decoding="async" onerror="if(this.src.indexOf('public/assets/image1.avif') === -1) this.src='/public/assets/image1.avif'; else if(this.src.indexOf('assets/image1.avif') === -1) this.src='assets/image1.avif';">
           </section>
         </div>
       </div>
@@ -244,7 +324,7 @@
       <div class="cyber-card-frame gallery-2-frame">
         <div class="cyber-border-layer gallery-2-border-layer">
           <section class="panel gallery-panel gallery-2">
-            <img src="https://images.unsplash.com/photo-1528360983277-13d401cdc186?auto=format&fit=crop&w=600&q=80" alt="Scene 2" class="manga-img" width="600" height="300" loading="lazy" decoding="async">
+            <img src="/assets/image2.avif" alt="Gallery Scene 2" class="manga-img" width="1080" height="754" loading="lazy" decoding="async" onerror="if(this.src.indexOf('public/assets/image2.avif') === -1) this.src='/public/assets/image2.avif'; else if(this.src.indexOf('assets/image2.avif') === -1) this.src='assets/image2.avif';">
           </section>
         </div>
       </div>
@@ -253,7 +333,7 @@
       <div class="cyber-card-frame gallery-3-frame">
         <div class="cyber-border-layer gallery-3-border-layer">
           <section class="panel gallery-panel gallery-3">
-            <img src="https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=1200&q=80" alt="Scene 3" class="manga-img" width="1200" height="300" loading="lazy" decoding="async">
+            <img src="/assets/image3.avif" alt="Gallery Panorama" class="manga-img" width="2400" height="1080" loading="lazy" decoding="async" onerror="if(this.src.indexOf('public/assets/image3.avif') === -1) this.src='/public/assets/image3.avif'; else if(this.src.indexOf('assets/image3.avif') === -1) this.src='assets/image3.avif';">
             <div class="sfx-lg">ゴゴゴゴ</div>
           </section>
         </div>
@@ -265,8 +345,8 @@
         <div class="cyber-border-layer hub-border-layer">
           <section id="hub" class="panel hub-panel">
             <header class="hub-sticky-header">
-              <h2>LINK HUB</h2>
-              <span class="status">ONLINE</span>
+              <h2>RELATED FEATURED WEBSITES</h2>
+              <span class="status">ACTIVE</span>
             </header>
             <div class="hub-links">
               <a href="javascript:void(0)" class="hub-btn-anchor hub-btn-playstore coming-soon-btn" role="button" tabindex="0" title="Coming Soon (Dekorasi)" onclick="event.preventDefault()">
@@ -291,45 +371,6 @@
       <p>&copy; 2026 CARIEARSA | Some Rights Reserved.</p>
     </footer>
   </div><!-- /#manga-wrapper -->
-
-<!-- ANIME CINEMATIC OPENING SPLASH SCREEN & VFX OVERLAY -->
-<aside id="anime-splash-overlay" class="anime-splash-overlay" aria-label="Anime Cinematic Intro">
-  <!-- Dynamic Radial Hyperspeed Lines -->
-  <div class="anime-speedlines" id="anime-speedlines"></div>
-
-  <!-- Anamorphic Anime Lens Flare & Prismatic Beam System -->
-  <div class="anime-flare-system">
-    <div class="anime-beam-streak horizontal-streak"></div>
-    <div class="anime-beam-streak diagonal-streak"></div>
-    <div class="anime-light-core"></div>
-    <div class="anime-light-halo"></div>
-  </div>
-
-  <!-- 3D Parallax Manga Kanji SFX Particles -->
-  <div class="anime-sfx-particles">
-    <span class="anime-float-sfx sfx-1" style="--d: 0.1s; --x: -28vw; --y: -24vh;">限界突破</span>
-    <span class="anime-float-sfx sfx-2" style="--d: 0.35s; --x: 30vw; --y: 20vh;">覚醒</span>
-    <span class="anime-float-sfx sfx-3" style="--d: 0.5s; --x: 24vw; --y: -22vh;">神速</span>
-    <span class="anime-float-sfx sfx-4" style="--d: 0.25s; --x: -32vw; --y: 18vh;">ドォォン</span>
-    <span class="anime-float-sfx sfx-5" style="--d: 0.4s; --x: 0vw; --y: -35vh;">ゴゴゴゴ</span>
-  </div>
-
-  <!-- Central Anime Dimensional Crest (Zooms Through Camera) -->
-  <div class="anime-warp-crest" id="anime-warp-crest">
-    <div class="crest-tag">2026 Personal Portfolio Collection</div>
-    <div class="crest-title-box">
-      <h1 class="crest-title">CARIEARSA.COM X FADHIL.DEV</h1>
-      <span class="crest-jp">BY FADHIL AKBAR CARIEARSA</span>
-    </div>
-    <div class="crest-progress-rail">
-      <div class="crest-progress-fill" id="crest-progress-fill"></div>
-    </div>
-    <div class="crest-status-line">Welcome to my personal website</div>
-  </div>
-
-  <!-- Impact Flash Shockwave -->
-  <div class="anime-impact-flash" id="anime-impact-flash"></div>
-</aside>
 
 <script src="https://www.youtube.com/iframe_api"></script>
 <script type="module" src="/src/animeIntro.js"></script>

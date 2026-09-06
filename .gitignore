@@ -5,5 +5,7 @@ coverage/
 .DS_Store
 *.log
 .vault_storage/
+bun.lock
+bun.lockb
 .env*
 !.env.example

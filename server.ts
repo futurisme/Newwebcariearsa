@@ -57,6 +57,21 @@ async function startServer() {
   await initBucket();
 
   app.use(express.json());
+
+  // Service Worker endpoint with scope header
+  app.get('/sw.js', (req, res) => {
+    res.setHeader('Content-Type', 'application/javascript');
+    res.setHeader('Service-Worker-Allowed', '/');
+    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+    res.sendFile(path.join(appDir, 'public/sw.js'));
+  });
+
+  // Permanent caching for intro visual & media assets
+  app.use(['/assets', '/public/assets'], express.static(path.join(appDir, 'public/assets'), {
+    maxAge: '1y',
+    immutable: true
+  }));
+
   app.use('/public', express.static(path.join(appDir, 'public'), {
     maxAge: '7d'
   }));
