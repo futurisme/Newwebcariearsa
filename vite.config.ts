@@ -26,8 +26,25 @@ export default defineConfig(() => {
             apiApp.get('/api/health', (_r: any, s: any) => s.json({ status: 'ok', time: new Date().toISOString() }));
 
             server.middlewares.use((req: any, res: any, next: any) => {
+              if (req.url && req.url.startsWith('/public/')) {
+                req.url = req.url.replace(/^\/public/, '');
+              }
               if (req.url && req.url.startsWith('/api')) {
                 return apiApp(req, res, next);
+              }
+              if (req.url === '/mobile') {
+                res.writeHead(302, { Location: '/mobile/' });
+                return res.end();
+              }
+              // Server-side mobile detection for dev
+              if (req.url === '/' || req.url === '/index.html') {
+                const ua = req.headers['user-agent'] || '';
+                const chMobile = req.headers['sec-ch-ua-mobile'];
+                const isMobileUA = chMobile === '?1' || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|Tablet|Silk|Kindle|PlayBook|Nexus|SM-|Pixel|XiaoMi|Oppo|Vivo|Realme|HarmonyOS|Huawei/i.test(ua);
+                if (isMobileUA) {
+                  res.writeHead(302, { Location: '/mobile/' });
+                  return res.end();
+                }
               }
               next();
             });
@@ -49,9 +66,14 @@ export default defineConfig(() => {
       watch: process.env.DISABLE_HMR === 'true' ? null : {},
     },
     build: {
+      target: 'es2022',
+      cssCodeSplit: true,
+      modulePreload: { polyfill: false },
+      chunkSizeWarningLimit: 1200,
       rollupOptions: {
         input: {
           main: path.resolve(__dirname, 'index.html'),
+          mobile: path.resolve(__dirname, 'mobile/index.html'),
           hub: path.resolve(__dirname, 'hub/index.html'),
           japan: path.resolve(__dirname, 'japan/index.html'),
           japanMobile: path.resolve(__dirname, 'japan/mobile/index.html'),
@@ -61,7 +83,18 @@ export default defineConfig(() => {
           cloud: path.resolve(__dirname, 'cloud/index.html'),
           cloudMobile: path.resolve(__dirname, 'cloud/mobile/index.html'),
           note: path.resolve(__dirname, 'note/index.html'),
-          introlab: path.resolve(__dirname, 'introlab/index.html')
+          introlab: path.resolve(__dirname, 'introlab/index.html'),
+          c360: path.resolve(__dirname, '360/index.html')
+        },
+        output: {
+          manualChunks(id) {
+            if (id.includes('node_modules/@supabase')) {
+              return 'vendor-supabase';
+            }
+            if (id.includes('node_modules/lucide')) {
+              return 'vendor-lucide';
+            }
+          }
         }
       }
     }

@@ -267,11 +267,12 @@ export function initPlayStoreIntro() {
         <div class="ps-backdrop-girl-container" id="ps-backdrop-girl-container">
           <div class="ps-girl-frame">
             <img 
-              src="/anime_girl_pov.jpeg" 
+              src="/assets/girl.avif" 
               alt="Anime Girl Looking at Camera" 
               class="ps-girl-img" 
+              id="ps-girl-img"
               referrerPolicy="no-referrer"
-              onerror="if(this.src.indexOf('public/anime_girl_pov.jpeg') === -1) this.src='/public/anime_girl_pov.jpeg'; else if(this.src.indexOf('assets/anime_girl_pov.jpg') === -1) this.src='/assets/anime_girl_pov.jpg';"
+              onerror="if(this.src.indexOf('public/assets/girl.avif') === -1) this.src='/public/assets/girl.avif'; else if(this.src.indexOf('assets/girl.avif') === -1) this.src='assets/girl.avif';"
             />
             <div class="ps-girl-atmosphere"></div>
             <div class="ps-girl-vignette"></div>
@@ -441,7 +442,7 @@ export function initPlayStoreIntro() {
         <!-- Forward-Facing Alignment Telemetry HUD -->
         <div id="ps-align-hud" class="ps-align-hud">
           <div class="ps-hud-reticle"></div>
-          <div class="ps-hud-status">POV CAMERA: HORIZON LOCK • 0.00° PITCH</div>
+          <div class="ps-hud-status">DESIGN x DEVELOP x DEPLOY</div>
         </div>
 
       </div>
@@ -580,6 +581,44 @@ export function initPlayStoreIntro() {
 
   psActiveTimers = [t1, t2, t3, t4, t5, t6, t7, t8, t9, tEnd];
 }
+
+export function skipPlayStoreIntro() {
+  if (!window.__cariearsa_ps_intro_running && !document.body.classList.contains('ps-intro-active')) {
+    return;
+  }
+  clearAllPSTimers();
+
+  if (psAudioCtx && psAudioCtx.state !== 'closed') {
+    try {
+      psAudioCtx.suspend();
+    } catch (_) {}
+  }
+
+  const stage = document.getElementById('ps-intro-stage');
+  const camera = document.getElementById('ps-pov-camera');
+  const assembly = document.getElementById('ps-phone-assembly');
+  const hud = document.getElementById('ps-horizon-hud');
+
+  document.body.classList.add('ps-intro-skipping');
+
+  setTimeout(() => {
+    document.body.classList.remove('ps-intro-active');
+    document.body.classList.remove('ps-intro-skipping');
+    document.body.classList.add('ps-intro-completed');
+
+    if (stage) {
+      stage.style.display = 'none';
+      stage.classList.remove('fade-out');
+    }
+    if (camera) camera.classList.remove('animating');
+    if (assembly) assembly.classList.remove('animating');
+    if (hud) hud.classList.remove('visible');
+    window.__cariearsa_ps_intro_running = false;
+  }, 300);
+}
+
+// Expose globally for instant access
+window.skipPlayStoreIntro = skipPlayStoreIntro;
 
 export function replayPlayStoreIntro() {
   clearAllPSTimers();

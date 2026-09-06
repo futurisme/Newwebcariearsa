@@ -1,5 +1,5 @@
 import './animeIntro.css';
-import { initPlayStoreIntro, replayPlayStoreIntro } from './playstoreIntro.js';
+import { initPlayStoreIntro, replayPlayStoreIntro, skipPlayStoreIntro } from './playstoreIntro.js';
 
 /**
  * CARIEARSA UNIVERSAL 12-SECOND ANIME CYBER CINEMATIC 3D ENGINE (2026)
@@ -35,8 +35,42 @@ import { initPlayStoreIntro, replayPlayStoreIntro } from './playstoreIntro.js';
     );
   };
 
+  // Desktop/Laptop Exclusive Shortcut: Shift + S to smoothly skip the intro once
+  const bindKeyboardSkipShortcut = () => {
+    if (window.__cariearsa_shift_s_bound) return;
+    window.__cariearsa_shift_s_bound = true;
+
+    window.addEventListener('keydown', (e) => {
+      // Ignore if user is currently typing in an input, textarea, or contenteditable
+      const target = e.target;
+      const isTyping = target && (
+        target.tagName === 'INPUT' ||
+        target.tagName === 'TEXTAREA' ||
+        target.tagName === 'SELECT' ||
+        target.isContentEditable
+      );
+      if (isTyping) return;
+
+      // Check strictly for Shift + S (case insensitive: key 's'/'S' or code 'KeyS')
+      if (e.shiftKey && (e.key === 's' || e.key === 'S' || e.code === 'KeyS')) {
+        if (isPlaystorePage()) {
+          if (document.body.classList.contains('ps-intro-active') || window.__cariearsa_ps_intro_running) {
+            e.preventDefault();
+            skipPlayStoreIntro();
+          }
+        } else {
+          if (document.body.classList.contains('splash-active')) {
+            e.preventDefault();
+            skipUniversalIntro();
+          }
+        }
+      }
+    }, { passive: false });
+  };
+
   // If on Play Store, activate bespoke landscape phone 3D intro
   if (isPlaystorePage()) {
+    bindKeyboardSkipShortcut();
     window.replayAnimeIntro = replayPlayStoreIntro;
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', () => initPlayStoreIntro());
@@ -64,13 +98,31 @@ import { initPlayStoreIntro, replayPlayStoreIntro } from './playstoreIntro.js';
   // Determine subpage context name for holographic crest
   const getSubpageMeta = () => {
     const path = window.location.pathname.toLowerCase();
-    if (path.includes('cloud')) return { title: 'CARIEARSA', tag: 'CYBER CLOUD STORAGE', jp: 'クラウドストレージ // 超高速同期' };
-    if (path.includes('aniwatch')) return { title: 'ANIWATCH', tag: 'NEURAL STREAMING', jp: 'アニウォッチ // 電脳配信' };
-    if (path.includes('japan')) return { title: 'CARIEARSA', tag: 'JAPAN 3D EXPLORER', jp: '日本地図 // 神速探査' };
-    if (path.includes('components')) return { title: 'CARIEARSA', tag: 'CYBER DESIGN SYSTEM', jp: '設計体系 // 限界突破' };
-    if (path.includes('hub')) return { title: 'CARIEARSA', tag: 'PLAY STORE HUB', jp: 'プレイスポット // 接続完了' };
-    if (path.includes('note')) return { title: 'CARIEARSA', tag: 'NEURAL VAULT NOTE', jp: 'ノート // 思考同期' };
-    return { title: 'CARIEARSA', tag: 'CYBER DIMENSIONAL LINK', jp: 'カリエアルサ // 終極跳躍' };
+    let title = 'CARIEARSA.COM X FADHIL.DEV';
+    if (path.includes('cloud')) {
+      title = 'CLOUD DATABASE';
+    } else if (path.includes('aniwatch')) {
+      title = 'ANIWATCH';
+    } else if (path.includes('japan')) {
+      title = 'JAPAN 3D EXPLORER';
+    } else if (path.includes('components')) {
+      title = 'CYBER DESIGN SYSTEM';
+    } else if (path.includes('hub') || path.includes('playstore')) {
+      title = 'PLAY STORE HUB';
+    } else if (path.includes('note')) {
+      title = 'NEURAL VAULT NOTE';
+    } else if (path.includes('360')) {
+      title = '360° PANORAMA';
+    } else {
+      title = 'CARIEARSA.COM X FADHIL.DEV';
+    }
+
+    return {
+      tag: '2026 Personal Portfolio Collection',
+      title: title,
+      sub: 'BY FADHIL AKBAR CARIEARSA',
+      status: 'Welcome to my personal website'
+    };
   };
 
   const meta = getSubpageMeta();
@@ -459,9 +511,12 @@ import { initPlayStoreIntro, replayPlayStoreIntro } from './playstoreIntro.js';
       alignHud.className = 'anime-align-hud';
       alignHud.innerHTML = `
         <div class="anime-hud-reticle"></div>
-        <div class="anime-hud-status">POV CAMERA: HORIZON LOCK • 0.00° PITCH</div>
+        <div class="anime-hud-status">DESIGN x DEVELOP x DEPLOY</div>
       `;
       povCamera.appendChild(alignHud);
+    } else {
+      const hudStatus = alignHud.querySelector('.anime-hud-status');
+      if (hudStatus) hudStatus.textContent = 'DESIGN x DEVELOP x DEPLOY';
     }
 
     if (!handheldUnit) {
@@ -589,11 +644,12 @@ import { initPlayStoreIntro, replayPlayStoreIntro } from './playstoreIntro.js';
         <div class="anime-backdrop-girl-container" id="anime-backdrop-girl-container">
           <div class="anime-girl-frame">
             <img 
-              src="/anime_girl_pov.jpeg" 
+              src="/assets/girl.avif" 
               alt="Anime Girl Looking at Camera" 
               class="anime-girl-img" 
+              id="anime-girl-img"
               referrerPolicy="no-referrer"
-              onerror="if(this.src.indexOf('public/anime_girl_pov.jpeg') === -1) this.src='/public/anime_girl_pov.jpeg'; else if(this.src.indexOf('assets/anime_girl_pov.jpg') === -1) this.src='/assets/anime_girl_pov.jpg';"
+              onerror="if(this.src.indexOf('public/assets/girl.avif') === -1) this.src='/public/assets/girl.avif'; else if(this.src.indexOf('assets/girl.avif') === -1) this.src='assets/girl.avif';"
             />
             <div class="anime-girl-atmosphere"></div>
             <div class="anime-girl-vignette"></div>
@@ -722,14 +778,15 @@ import { initPlayStoreIntro, replayPlayStoreIntro } from './playstoreIntro.js';
 
         <!-- Top-Docked Sleek Holographic Crest (Leaves central area completely open) -->
         <div class="anime-warp-crest">
-          <div class="crest-tag">◤ ${meta.tag} • 12S CINEMATIC ◢</div>
+          <div class="crest-tag">${meta.tag}</div>
           <div class="crest-title-box">
             <h1 class="crest-title">${meta.title}</h1>
-            <span class="crest-jp">${meta.jp}</span>
+            <span class="crest-jp">${meta.sub}</span>
           </div>
           <div class="crest-progress-rail">
             <div class="crest-progress-fill"></div>
           </div>
+          <div class="crest-status-line">${meta.status}</div>
         </div>
 
         <div class="anime-impact-flash"></div>
@@ -740,6 +797,27 @@ import { initPlayStoreIntro, replayPlayStoreIntro } from './playstoreIntro.js';
       // Remove any skip button if present to enforce strict unskippable rule
       const skipBtn = splash.querySelector('#skip-intro-btn, .anime-skip-pill');
       if (skipBtn) skipBtn.remove();
+
+      // Ensure crest elements reflect the universal meta accurately
+      const crestTag = splash.querySelector('.crest-tag');
+      if (crestTag) crestTag.textContent = meta.tag;
+
+      const crestTitle = splash.querySelector('.crest-title');
+      if (crestTitle) crestTitle.textContent = meta.title;
+
+      const crestSub = splash.querySelector('.crest-jp');
+      if (crestSub) crestSub.textContent = meta.sub;
+
+      let crestStatus = splash.querySelector('.crest-status-line');
+      if (!crestStatus) {
+        const crest = splash.querySelector('.anime-warp-crest');
+        if (crest) {
+          crestStatus = document.createElement('div');
+          crestStatus.className = 'crest-status-line';
+          crest.appendChild(crestStatus);
+        }
+      }
+      if (crestStatus) crestStatus.textContent = meta.status;
     }
 
     // 4. Lock body and trigger 12s master animations across all 3D rigs
@@ -785,6 +863,9 @@ import { initPlayStoreIntro, replayPlayStoreIntro } from './playstoreIntro.js';
     const tEnd = setTimeout(() => {
       document.body.classList.remove('splash-active');
       document.body.classList.add('splash-completed');
+      if (typeof window.__cariearsa_activate_hero_audio === 'function') {
+        window.__cariearsa_activate_hero_audio();
+      }
 
       splash.classList.add('fade-out');
       setTimeout(() => {
@@ -800,6 +881,53 @@ import { initPlayStoreIntro, replayPlayStoreIntro } from './playstoreIntro.js';
     // Store active timers for clean replays
     window.__cariearsa_active_intro_timers = [t1, t2, t3, t4, t5, t6, t7, tEnd];
   };
+
+  // Smooth Desktop Skip Function for Universal Intro
+  const skipUniversalIntro = () => {
+    if (!document.body.classList.contains('splash-active')) return;
+
+    if (window.__cariearsa_active_intro_timers) {
+      window.__cariearsa_active_intro_timers.forEach((t) => clearTimeout(t));
+      window.__cariearsa_active_intro_timers = [];
+    }
+
+    if (audioCtx && audioCtx.state !== 'closed') {
+      try {
+        audioCtx.suspend();
+      } catch (_) {}
+    }
+
+    const splash = document.getElementById('anime-splash-overlay');
+    const povCamera = document.getElementById('anime-pov-camera');
+    const handheldUnit = document.getElementById('anime-handheld-unit');
+    const phoneFrame = document.getElementById('anime-phone-frame');
+    const rig = document.getElementById('anime-camera-rig');
+    const alignHud = document.getElementById('anime-align-hud');
+
+    document.body.classList.add('splash-skipping');
+
+    setTimeout(() => {
+      document.body.classList.remove('splash-active');
+      document.body.classList.remove('splash-skipping');
+      document.body.classList.add('splash-completed');
+      if (typeof window.__cariearsa_activate_hero_audio === 'function') {
+        window.__cariearsa_activate_hero_audio();
+      }
+
+      if (splash) {
+        splash.style.display = 'none';
+        splash.classList.remove('fade-out');
+      }
+      if (povCamera) povCamera.classList.remove('animating');
+      if (handheldUnit) handheldUnit.classList.remove('animating');
+      if (phoneFrame) phoneFrame.classList.remove('animating');
+      if (rig) rig.classList.remove('camera-flying');
+      if (alignHud) alignHud.classList.remove('visible');
+    }, 300);
+  };
+
+  // Expose skip function globally
+  window.skipAnimeIntro = skipUniversalIntro;
 
   // Expose replay function globally
   window.replayAnimeIntro = () => {
@@ -820,6 +948,8 @@ import { initPlayStoreIntro, replayPlayStoreIntro } from './playstoreIntro.js';
       });
     }
   };
+
+  bindKeyboardSkipShortcut();
 
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => {

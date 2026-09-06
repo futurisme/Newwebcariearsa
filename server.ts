@@ -1,12 +1,14 @@
 import express from 'express';
 import path from 'path';
-import { fileURLToPath } from 'url';
 import { createClient } from '@supabase/supabase-js';
 import { cloudRouter } from './src/server/cloudApi.ts';
 import { noteRouter } from './src/server/noteApi.ts';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const getDirname = () => {
+  if (typeof __dirname !== 'undefined') return __dirname;
+  return process.cwd();
+};
+const appDir = getDirname();
 
 try {
   if (typeof (process as any).loadEnvFile === 'function') {
@@ -44,11 +46,42 @@ async function initBucket() {
   }
 }
 
+function isMobileClient(req: express.Request): boolean {
+  const chMobile = req.headers['sec-ch-ua-mobile'];
+  if (chMobile === '?1') return true;
+  const ua = (req.headers['user-agent'] as string) || '';
+  return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|Tablet|Silk|Kindle|PlayBook|Nexus|SM-|Pixel|XiaoMi|Oppo|Vivo|Realme|HarmonyOS|Huawei/i.test(ua);
+}
+
 async function startServer() {
   await initBucket();
 
   app.use(express.json());
-  app.use('/public', express.static(path.join(__dirname, 'public')));
+  app.use('/public', express.static(path.join(appDir, 'public'), {
+    maxAge: '7d'
+  }));
+
+  // Security & Performance response headers
+  app.use((req, res, next) => {
+    res.setHeader('X-Content-Type-Options', 'nosniff');
+    res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+    next();
+  });
+
+  // Mobile redirect handler
+  app.get('/mobile', (req, res) => {
+    res.redirect(302, '/mobile/');
+  });
+
+  app.use((req, res, next) => {
+    if (req.path === '/' || req.path === '/index.html') {
+      if (isMobileClient(req)) {
+        const qs = req.url.includes('?') ? req.url.slice(req.url.indexOf('?')) : '';
+        return res.redirect(302, `/mobile/${qs}`);
+      }
+    }
+    next();
+  });
 
   // Mount Cloud Storage API routes
   app.use('/api', cloudRouter);
@@ -57,6 +90,11 @@ async function startServer() {
   // Health check
   app.get('/api/health', (req, res) => {
     res.json({ status: 'ok', time: new Date().toISOString() });
+  });
+
+  // Direct alias for CARIEARSA360 (/360 -> /introlab/)
+  app.get(['/360', '/360/'], (req, res) => {
+    res.redirect('/introlab/');
   });
 
   // Vite Middleware for Dev / Static Files for Prod
@@ -68,9 +106,21 @@ async function startServer() {
     });
     app.use(vite.middlewares);
   } else {
-    const distPath = path.join(__dirname, 'dist');
-    app.use(express.static(distPath));
-    app.get(['/introlab', '/introlab/'], (req, res) => {
+    const distPath = path.join(appDir, 'dist');
+    app.use('/assets', express.static(path.join(distPath, 'assets'), {
+      maxAge: '1y',
+      immutable: true
+    }));
+    app.use('/public', express.static(path.join(appDir, 'public'), {
+      maxAge: '7d'
+    }));
+    app.use(express.static(distPath, {
+      maxAge: '1h'
+    }));
+    app.get(['/mobile', '/mobile/'], (req, res) => {
+      res.sendFile(path.join(distPath, 'mobile/index.html'));
+    });
+    app.get(['/introlab', '/introlab/', '/360', '/360/'], (req, res) => {
       res.sendFile(path.join(distPath, 'introlab/index.html'));
     });
     app.get(['/hub', '/hub/'], (req, res) => {
@@ -79,11 +129,20 @@ async function startServer() {
     app.get(['/japan', '/japan/'], (req, res) => {
       res.sendFile(path.join(distPath, 'japan/index.html'));
     });
+    app.get(['/japan/mobile', '/japan/mobile/'], (req, res) => {
+      res.sendFile(path.join(distPath, 'japan/mobile/index.html'));
+    });
     app.get(['/aniwatch', '/aniwatch/'], (req, res) => {
       res.sendFile(path.join(distPath, 'aniwatch/index.html'));
     });
+    app.get(['/aniwatch/watch', '/aniwatch/watch/'], (req, res) => {
+      res.sendFile(path.join(distPath, 'aniwatch/watch/index.html'));
+    });
     app.get(['/cloud', '/cloud/'], (req, res) => {
       res.sendFile(path.join(distPath, 'cloud/index.html'));
+    });
+    app.get(['/cloud/mobile', '/cloud/mobile/'], (req, res) => {
+      res.sendFile(path.join(distPath, 'cloud/mobile/index.html'));
     });
     app.get(['/note', '/note/'], (req, res) => {
       res.sendFile(path.join(distPath, 'note/index.html'));

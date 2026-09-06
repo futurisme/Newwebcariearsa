@@ -1,149 +1,294 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <script>
+    (function() {
+      try {
+        // 1. User-Agent Client Hints (Chromium, Android, modern Edge/Chrome on Mobile)
+        var uaData = navigator.userAgentData;
+        if (uaData && uaData.mobile === true) {
+          window.location.replace('/mobile/' + window.location.search + window.location.hash);
+          return;
+        }
+
+        // 2. High-precision Mobile & Tablet Regex Matching
+        var ua = navigator.userAgent || navigator.vendor || window.opera || '';
+        var isMobileUA = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|Tablet|Silk|Kindle|PlayBook|Nexus|SM-|Pixel|XiaoMi|Oppo|Vivo|Realme|HarmonyOS|Huawei/i.test(ua);
+        
+        // iPadOS 13+ detection (reports as MacIntel with multi-touch points)
+        var isIPadOS = (navigator.platform === 'MacIntel' || ua.includes('Macintosh')) && (navigator.maxTouchPoints && navigator.maxTouchPoints > 1);
+
+        // 3. Hardware Capabilities & Pointer Queries
+        var hasTouch = (navigator.maxTouchPoints && navigator.maxTouchPoints > 0) || ('ontouchstart' in window);
+        var isCoarse = window.matchMedia && (window.matchMedia('(pointer: coarse)').matches || window.matchMedia('(hover: none)').matches);
+
+        // 4. Viewport & Physical Screen Boundary (Mobile/Tablet limit <= 1024px)
+        var screenMin = (window.screen && window.screen.width && window.screen.height) 
+          ? Math.min(window.screen.width, window.screen.height) 
+          : window.innerWidth;
+        var isMobileOrTabletDim = screenMin <= 1024 || window.innerWidth <= 1024;
+
+        if (isMobileUA || isIPadOS || (hasTouch && isMobileOrTabletDim) || (isCoarse && isMobileOrTabletDim)) {
+          window.location.replace('/mobile/' + window.location.search + window.location.hash);
+        }
+      } catch (e) {}
+    })();
+  </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CARIEARSA Portfolio</title>
-  <meta name="description" content="A visually stunning manga and anime styled personal brand portfolio, design system library, anime streaming platform, and CARIEARSA-CLOUD Supabase storage vault.">
+  <meta name="description" content="A visually stunning manga and anime styled personal brand portfolio, CARIEARSA360 cinematic theater, design system library, anime streaming platform, and CARIEARSA-CLOUD Supabase storage vault.">
   <meta property="og:title" content="CARIEARSA Portfolio">
-  <meta property="og:description" content="A visually stunning manga and anime styled personal brand portfolio, design system library, anime streaming platform, and CARIEARSA-CLOUD Supabase storage vault.">
+  <meta property="og:description" content="A visually stunning manga and anime styled personal brand portfolio, CARIEARSA360 cinematic theater, design system library, anime streaming platform, and CARIEARSA-CLOUD Supabase storage vault.">
   <link rel="stylesheet" href="/src/style.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://www.youtube.com">
+  <link rel="preconnect" href="https://www.youtube-nocookie.com">
+  <link rel="preconnect" href="https://i.ytimg.com">
+  <link rel="dns-prefetch" href="https://fonts.googleapis.com">
+  <link rel="dns-prefetch" href="https://fonts.gstatic.com">
+  <link rel="dns-prefetch" href="https://images.unsplash.com">
+  <link rel="dns-prefetch" href="https://www.youtube.com">
+  <link rel="dns-prefetch" href="https://i.ytimg.com">
   <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Noto+Sans+JP:wght@400;700;900&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
 </head>
 <body>
   <div class="manga-wrapper" id="manga-wrapper">
-        <div class="marquee">
+        <div class="marquee" aria-label="Dynamic Billboard">
           <div class="marquee-group">
-            <span>CARIEARSA</span> <span class="jp-text">カリエアルサ</span>
-            <span>FADHIL.DEV</span> <span class="jp-text">ファディル</span>
-            <span>MANGA STYLE</span> <span class="jp-text">漫画</span>
-            <span>CARIEARSA</span> <span class="jp-text">カリエアルサ</span>
-            <span>FADHIL.DEV</span> <span class="jp-text">ファディル</span>
-            <span>MANGA STYLE</span> <span class="jp-text">漫画</span>
+            <span class="billboard-item neon-white">FADHIL.DEV</span>
+            <span class="billboard-item neon-yellow jp-font">キャリーアルサ</span>
+            <span class="billboard-item neon-white">CARIEARSA.COM</span>
+            <span class="billboard-item neon-yellow jp-font">ファディル</span>
+            <span class="billboard-item neon-ruby">PORTFOLIOS</span>
+            <span class="billboard-item neon-yellow jp-font">ポートフォリオ</span>
+            <span class="billboard-item neon-white">FADHIL.DEV</span>
+            <span class="billboard-item neon-yellow jp-font">キャリーアルサ</span>
+            <span class="billboard-item neon-white">CARIEARSA.COM</span>
+            <span class="billboard-item neon-yellow jp-font">ファディル</span>
+            <span class="billboard-item neon-ruby">PORTFOLIOS</span>
+            <span class="billboard-item neon-yellow jp-font">ポートフォリオ</span>
+            <span class="billboard-item neon-white">FADHIL.DEV</span>
+            <span class="billboard-item neon-yellow jp-font">キャリーアルサ</span>
+            <span class="billboard-item neon-white">CARIEARSA.COM</span>
+            <span class="billboard-item neon-yellow jp-font">ファディル</span>
+            <span class="billboard-item neon-ruby">PORTFOLIOS</span>
+            <span class="billboard-item neon-yellow jp-font">ポートフォリオ</span>
           </div>
           <div class="marquee-group" aria-hidden="true">
-            <span>CARIEARSA</span> <span class="jp-text">カリエアルサ</span>
-            <span>FADHIL.DEV</span> <span class="jp-text">ファディル</span>
-            <span>MANGA STYLE</span> <span class="jp-text">漫画</span>
-            <span>CARIEARSA</span> <span class="jp-text">カリエアルサ</span>
-            <span>FADHIL.DEV</span> <span class="jp-text">ファディル</span>
-            <span>MANGA STYLE</span> <span class="jp-text">漫画</span>
+            <span class="billboard-item neon-white">FADHIL.DEV</span>
+            <span class="billboard-item neon-yellow jp-font">キャリーアルサ</span>
+            <span class="billboard-item neon-white">CARIEARSA.COM</span>
+            <span class="billboard-item neon-yellow jp-font">ファディル</span>
+            <span class="billboard-item neon-ruby">PORTFOLIOS</span>
+            <span class="billboard-item neon-yellow jp-font">ポートフォリオ</span>
+            <span class="billboard-item neon-white">FADHIL.DEV</span>
+            <span class="billboard-item neon-yellow jp-font">キャリーアルサ</span>
+            <span class="billboard-item neon-white">CARIEARSA.COM</span>
+            <span class="billboard-item neon-yellow jp-font">ファディル</span>
+            <span class="billboard-item neon-ruby">PORTFOLIOS</span>
+            <span class="billboard-item neon-yellow jp-font">ポートフォリオ</span>
+            <span class="billboard-item neon-white">FADHIL.DEV</span>
+            <span class="billboard-item neon-yellow jp-font">キャリーアルサ</span>
+            <span class="billboard-item neon-white">CARIEARSA.COM</span>
+            <span class="billboard-item neon-yellow jp-font">ファディル</span>
+            <span class="billboard-item neon-ruby">PORTFOLIOS</span>
+            <span class="billboard-item neon-yellow jp-font">ポートフォリオ</span>
           </div>
         </div>
 
         <nav class="manga-nav">
-          <div class="logo-wrapper">
-            <div class="logo">
-              <h1>CARIEARSA</h1>
+          <div class="header-main-group">
+            <div class="logo-frame">
+              <div class="logo">
+                <h1 class="logo-cyber" aria-label="CARIEARSA">
+                  <span class="logo-slash slash-sky" aria-hidden="true">/</span><span class="logo-slash slash-pink" aria-hidden="true">/</span><span class="logo-c">C</span><span class="logo-a">A</span><span class="logo-ri">RI</span><span class="logo-ea">EA</span><span class="logo-rsa">RSA</span>
+                </h1>
+              </div>
             </div>
-            <a href="/components/" class="manga-btn components-nav-btn" title="Design System & Component Library">
-              <span>COMPONENTS</span>
-            </a>
-            <a href="/cloud/" class="manga-btn cloud-nav-btn" title="CARIEARSA-CLOUD Storage" style="background: #0284c7; color: #ffffff; border-color: var(--ink-true-black);">
-              <span>CLOUD</span>
-            </a>
-            <a href="/aniwatch/" class="manga-btn aniwatch-nav-btn" title="Anime Streaming Platform" style="background: var(--manga-red); color: var(--paper-white); border-color: var(--ink-true-black);">
-              <span>ANIWATCH</span>
-            </a>
-            <a href="/introlab/" class="manga-btn introlab-nav-btn" title="IntroLab 360° Animation Chamber" style="background: #9d4edd; color: #ffffff; border-color: var(--ink-true-black);">
-              <span>INTROLAB 360°</span>
-            </a>
-          </div>
-          <div class="nav-buttons">
-            <button type="button" id="replay-cinematic-btn" class="manga-btn replay-btn" title="Replay Anime Cinematic Opening" aria-label="Replay anime cinematic opening">
-              <span>▶ REPLAY INTRO</span>
-            </button>
-            <a href="#intro" class="manga-btn"><span>INTRO</span></a>
-            <a href="#gallery" class="manga-btn"><span>GALLERY</span></a>
-            <a href="#hub" class="manga-btn"><span>HUB</span></a>
+            <div class="header-action-group">
+              <a href="/cloud/" class="manga-btn cloud-nav-btn" title="CARIEARSA Cloud Database">
+                <span class="nav-btn-icon">☁</span>
+                <span class="nav-btn-text">CLOUD DATABASE</span>
+              </a>
+              <button type="button" id="replay-cinematic-btn" class="manga-btn replay-btn" title="Replay Anime Cinematic Opening" aria-label="Replay anime cinematic opening">
+                <span class="nav-btn-icon">▶</span>
+                <span class="nav-btn-text">REPLAY INTRO</span>
+              </button>
+            </div>
           </div>
         </nav>
 
     <main class="manga-grid">
-      <!-- Hero (8x4) -->
-      <section id="intro" class="panel hero-panel">
-        <div class="speed-lines-bg"></div>
-        <div class="hero-content">
-          <h2 class="hero-title">ENTER THE<br>CARIEARSA</h2>
-          <p class="hero-subtitle">Owned by <a href="https://fadhil.dev" target="_blank" class="highlight-link">fadhil.dev</a></p>
-          <div class="japanese-vertical">ようこそ</div>
+      <!-- Hero (8x4) with Responsive Video Screen Embed - Cyber Cut Corner (Bottom-Right) -->
+      <div class="cyber-card-frame hero-frame">
+        <div class="cyber-border-layer hero-border-layer">
+          <section id="intro" class="panel hero-panel" aria-label="Enter the Cariearsa Banner">
+            <!-- Responsive Background Video Layer -->
+            <div class="hero-video-wrap" id="hero-video-wrap">
+              <iframe 
+                id="hero-yt-player"
+                class="hero-video-embed"
+                src="https://www.youtube.com/embed/0opyaQPK6bY?si=GT5XogXThZ0yy2ga&amp;enablejsapi=1&amp;autoplay=1&amp;mute=0&amp;controls=0&amp;start=178&amp;loop=1&amp;playlist=0opyaQPK6bY&amp;playsinline=1&amp;rel=0&amp;modestbranding=1&amp;iv_load_policy=3" 
+                title="YouTube video player" 
+                frameborder="0" 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                referrerpolicy="strict-origin-when-cross-origin" 
+                allowfullscreen>
+              </iframe>
+              <div class="hero-video-tint"></div>
+            </div>
+
+            <!-- Manga Speed Lines Overlay (Z-index: 3, above video, below text) -->
+            <div class="speed-lines-bg"></div>
+
+            <!-- Hero Content Overlay (Z-index: 5, pristine typography & readability) -->
+            <div class="hero-content">
+              <h2 class="hero-title">
+                <span class="hero-brand-name">Cariearsa.com</span>
+                <span class="hero-brand-sep"><span class="hero-neon-x">x</span></span>
+                <span class="hero-brand-owner">Fadhil.dev</span>
+              </h2>
+              <div class="hero-cyber-badge-wrap">
+                <div class="hero-cyber-badge" id="hero-personal-website-badge">
+                  <span class="badge-text-personal">PERSONAL</span>
+                  <span class="badge-text-website">WEBSITE</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Cyber Audio Indicator & Sound Controller -->
+            <button type="button" id="hero-sound-toggle" class="hero-sound-badge" title="Klik untuk mengaktifkan audio 100% jernih">
+              <span class="sound-icon">🔊</span>
+              <span class="sound-text">AUDIO ACTIVE</span>
+            </button>
+          </section>
         </div>
-      </section>
+      </div>
 
-      <!-- Profile (4x2) -->
-      <section class="panel info-panel text-panel">
-        <div class="panel-header">PROFILE</div>
-        <p>A digital realm of creativity. Exploring the boundaries between engineering and art. Inspired by the dense, impactful layouts of Japanese manga and anime culture.</p>
-        <p>Hosted at <a href="https://cariearsa.com" target="_blank" class="highlight-link">cariearsa.com</a>.</p>
-      </section>
+      <!-- About Panel (4x2) - Cyber Cut Corner (Top-Left & Bottom-Right) -->
+      <div class="cyber-card-frame about-frame">
+        <div class="cyber-border-layer about-border-layer">
+          <section class="panel info-panel text-panel" id="about-panel">
+            <div class="about-header-row">
+              <div class="panel-header cyber-textbox" id="about-header">ABOUT:</div>
+              <div class="lang-flags-group" role="group" aria-label="Language Selector">
+                <button type="button" class="lang-flag-btn" data-lang="id" title="Bahasa Indonesia" aria-label="Ganti bahasa ke Indonesia">
+                  <svg class="flag-icon" viewBox="0 0 24 16" width="18" height="12" aria-hidden="true">
+                    <rect width="24" height="8" fill="#E70011"/>
+                    <rect y="8" width="24" height="8" fill="#FFFFFF"/>
+                    <rect width="24" height="16" fill="none" stroke="#000000" stroke-width="1"/>
+                  </svg>
+                  <span class="flag-code">ID</span>
+                </button>
+                <button type="button" class="lang-flag-btn active" data-lang="en" title="English" aria-label="Switch language to English">
+                  <svg class="flag-icon" viewBox="0 0 60 40" width="18" height="12" aria-hidden="true">
+                    <clipPath id="uk-flag-clip">
+                      <rect width="60" height="40"/>
+                    </clipPath>
+                    <g clip-path="url(#uk-flag-clip)">
+                      <rect width="60" height="40" fill="#012169"/>
+                      <path d="M0,0 L60,40 M60,0 L0,40" stroke="#fff" stroke-width="8"/>
+                      <path d="M0,0 L60,40 M60,0 L0,40" stroke="#C8102E" stroke-width="4"/>
+                      <path d="M30,0 v40 M0,20 h60" stroke="#fff" stroke-width="12"/>
+                      <path d="M30,0 v40 M0,20 h60" stroke="#C8102E" stroke-width="7"/>
+                      <rect width="60" height="40" fill="none" stroke="#000000" stroke-width="2"/>
+                    </g>
+                  </svg>
+                  <span class="flag-code">EN</span>
+                </button>
+                <button type="button" class="lang-flag-btn" data-lang="jp" title="日本語 (Japanese)" aria-label="言語を日本語に変更">
+                  <svg class="flag-icon" viewBox="0 0 24 16" width="18" height="12" aria-hidden="true">
+                    <rect width="24" height="16" fill="#FFFFFF"/>
+                    <circle cx="12" cy="8" r="4.8" fill="#BC002D"/>
+                    <rect width="24" height="16" fill="none" stroke="#000000" stroke-width="1"/>
+                  </svg>
+                  <span class="flag-code">JP</span>
+                </button>
+              </div>
+            </div>
+            <p class="about-text" id="about-description">
+              <span id="about-text-content">A collection of digital assets and portfolios under personal ownership.</span>
+              <span class="about-owned-wrap">
+                <span class="about-owned-badge" id="about-owned-badge">
+                  <span class="owned-label">OWNED BY</span>
+                  <a href="https://fadhil.dev" target="_blank" rel="noopener noreferrer" class="owned-link" title="fadhil.dev official website">FADHIL.DEV</a>
+                </span>
+              </span>
+            </p>
+          </section>
+        </div>
+      </div>
 
-      <!-- Portrait Panel (4x4) -->
-      <section class="panel portrait-panel">
-        <img src="https://images.unsplash.com/photo-1541562232579-512a21360020?auto=format&fit=crop&w=400&q=80" alt="Character" class="manga-img">
-        <div class="sfx">ドンッ!!</div>
-      </section>
+      <!-- Portrait Panel (Banner Image 1 - Cyber Cut Corner Bottom-Right) -->
+      <div class="cyber-card-frame portrait-frame">
+        <div class="cyber-border-layer portrait-border-layer">
+          <section class="panel portrait-panel">
+            <img src="https://images.unsplash.com/photo-1541562232579-512a21360020?auto=format&fit=crop&w=400&q=80" alt="Character" class="manga-img" width="400" height="400" loading="lazy" decoding="async">
+            <div class="sfx">ドンッ!!</div>
+          </section>
+        </div>
+      </div>
 
-      <!-- Gallery 1 (4x2) -->
-      <section class="panel gallery-panel gallery-1">
-        <img src="https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=600&q=80" alt="Scene 1" class="manga-img">
-      </section>
+      <!-- Gallery 1 (Banner Image 2 - Cyber Cut Corner Bottom-Right) -->
+      <div class="cyber-card-frame gallery-1-frame">
+        <div class="cyber-border-layer gallery-1-border-layer">
+          <section class="panel gallery-panel gallery-1">
+            <img src="https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=600&q=80" alt="Scene 1" class="manga-img" width="600" height="300" loading="lazy" decoding="async">
+          </section>
+        </div>
+      </div>
       
-      <!-- Gallery 2 (4x2) -->
-      <section class="panel gallery-panel gallery-2">
-        <img src="https://images.unsplash.com/photo-1528360983277-13d401cdc186?auto=format&fit=crop&w=600&q=80" alt="Scene 2" class="manga-img">
-      </section>
+      <!-- Gallery 2 (Banner Image 3 - Cyber Cut Corner Bottom-Right) -->
+      <div class="cyber-card-frame gallery-2-frame">
+        <div class="cyber-border-layer gallery-2-border-layer">
+          <section class="panel gallery-panel gallery-2">
+            <img src="https://images.unsplash.com/photo-1528360983277-13d401cdc186?auto=format&fit=crop&w=600&q=80" alt="Scene 2" class="manga-img" width="600" height="300" loading="lazy" decoding="async">
+          </section>
+        </div>
+      </div>
 
-      <!-- Gallery 3 (8x2) -->
-      <section class="panel gallery-panel gallery-3">
-        <img src="https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=1200&q=80" alt="Scene 3" class="manga-img">
-        <div class="sfx-lg">ゴゴゴゴ</div>
-      </section>
+      <!-- Gallery 3 (Banner Image 4 - Cyber Cut Corner Top-Left & Bottom-Right) -->
+      <div class="cyber-card-frame gallery-3-frame">
+        <div class="cyber-border-layer gallery-3-border-layer">
+          <section class="panel gallery-panel gallery-3">
+            <img src="https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=1200&q=80" alt="Scene 3" class="manga-img" width="1200" height="300" loading="lazy" decoding="async">
+            <div class="sfx-lg">ゴゴゴゴ</div>
+          </section>
+        </div>
+      </div>
 
       <!-- Hub (4x2) -->
-      <section id="hub" class="panel hub-panel">
-        <header class="hub-sticky-header">
-          <h2>LINK HUB</h2>
-          <span class="status">ONLINE</span>
-        </header>
-        <div class="hub-links">
-          <a href="/cloud/" class="custom-shape-btn slash-btn" style="border: 3px solid var(--ink-true-black); cursor: pointer; text-decoration: none; background: #0284c7; color: #fff;">
-            <span class="btn-text">CLOUD VAULT</span>
-            <span class="btn-jp">クラウド</span>
-          </a>
-          <a href="/aniwatch/" class="custom-shape-btn slash-btn" style="border: 3px solid var(--ink-true-black); cursor: pointer; text-decoration: none; background: var(--manga-red); color: #fff;">
-            <span class="btn-text">ANIWATCH</span>
-            <span class="btn-jp">アニメ配信</span>
-          </a>
-          <a href="/hub/" class="custom-shape-btn slash-btn" style="border: 3px solid var(--ink-true-black); cursor: pointer; text-decoration: none;">
-            <span class="btn-text">PLAY STORE</span>
-            <span class="btn-jp">ストア</span>
-          </a>
-          <a href="https://fadhil.dev" target="_blank" class="custom-shape-btn slash-btn">
-            <span class="btn-text">FADHIL.DEV</span>
-            <span class="btn-jp">公式サイト</span>
-          </a>
-          <a href="https://cariearsa.com" target="_blank" class="custom-shape-btn impact-btn">
-            <span class="btn-text">CARIEARSA.COM</span>
-            <span class="btn-jp">メインサイト</span>
-          </a>
-          <a href="#" class="custom-shape-btn speech-btn">
-            <span class="btn-text">CONTACT</span>
-            <span class="btn-jp">連絡先</span>
-          </a>
+      <!-- Hub (4x2) - Cyber Cut Corner (Bottom-Right) -->
+      <div class="cyber-card-frame hub-frame">
+        <div class="cyber-border-layer hub-border-layer">
+          <section id="hub" class="panel hub-panel">
+            <header class="hub-sticky-header">
+              <h2>LINK HUB</h2>
+              <span class="status">ONLINE</span>
+            </header>
+            <div class="hub-links">
+              <a href="javascript:void(0)" class="hub-btn-anchor hub-btn-playstore coming-soon-btn" role="button" tabindex="0" title="Coming Soon (Dekorasi)" onclick="event.preventDefault()">
+                <span class="custom-shape-btn slash-btn hub-btn-plate">
+                  <span class="btn-text">COMING SOON!</span>
+                  <span class="btn-jp">近日公開 // SOON</span>
+                </span>
+              </a>
+              <a href="https://fadhil.dev" target="_blank" rel="noopener noreferrer" class="hub-btn-anchor hub-btn-fadhil" title="Official Website of Fadhil.dev">
+                <span class="custom-shape-btn slash-btn hub-btn-plate">
+                  <span class="btn-text">FADHIL.DEV</span>
+                  <span class="btn-jp">公式サイト // DEV</span>
+                </span>
+              </a>
+            </div>
+          </section>
         </div>
-      </section>
+      </div>
     </main>
     
     <footer class="manga-footer">
-      <p>&copy; 2026 CARIEARSA | Engineered with Pure Code</p>
-      <a href="/japan/" class="manga-btn japan-shortcut" style="padding: 2px 8px; font-size: 0.65rem;">
-        <span class="btn-text">JAPAN MAP</span>
-      </a>
-      <a href="/introlab/" class="manga-btn introlab-shortcut" style="padding: 2px 8px; font-size: 0.65rem; background: #9d4edd; color: #ffffff; border-color: var(--ink-true-black);">
-        <span class="btn-text">INTROLAB 360°</span>
-      </a>
+      <p>&copy; 2026 CARIEARSA | Some Rights Reserved.</p>
     </footer>
   </div><!-- /#manga-wrapper -->
 
@@ -171,21 +316,22 @@
 
   <!-- Central Anime Dimensional Crest (Zooms Through Camera) -->
   <div class="anime-warp-crest" id="anime-warp-crest">
-    <div class="crest-tag">◤ DIMENSIONAL SYNC • 2026 ◢</div>
+    <div class="crest-tag">2026 Personal Portfolio Collection</div>
     <div class="crest-title-box">
-      <h1 class="crest-title">CARIEARSA</h1>
-      <span class="crest-jp">カリエアルサ // HYPER-WARP</span>
+      <h1 class="crest-title">CARIEARSA.COM X FADHIL.DEV</h1>
+      <span class="crest-jp">BY FADHIL AKBAR CARIEARSA</span>
     </div>
     <div class="crest-progress-rail">
       <div class="crest-progress-fill" id="crest-progress-fill"></div>
     </div>
-    <div class="crest-status-line">SYNCHRONIZING NEURAL LINK • STANDBY</div>
+    <div class="crest-status-line">Welcome to my personal website</div>
   </div>
 
   <!-- Impact Flash Shockwave -->
   <div class="anime-impact-flash" id="anime-impact-flash"></div>
 </aside>
 
+<script src="https://www.youtube.com/iframe_api"></script>
 <script type="module" src="/src/animeIntro.js"></script>
 <script type="module" src="/src/main.js"></script>
 </body>

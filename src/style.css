@@ -74,6 +74,15 @@ html {
   overflow: hidden; 
   height: 100vh;
   width: 100vw;
+  scrollbar-width: none; /* Universal hidden scrollbar (Firefox, Chrome 121+, Safari 18+) */
+  -ms-overflow-style: none; /* IE 10+, Edge Legacy */
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Chromium Edge, Opera, Android WebView */
+  width: 0;
+  height: 0;
 }
 
 body {
@@ -105,33 +114,91 @@ body::before {
   z-index: 9999;
 }
 
-/* MARQUEE */
+/* DYNAMIC TOP BILLBOARD (MARQUEE) - FIXED-TO-SCREEN BUTTERY SMOOTH INFINITE NEON LOOP */
 .marquee {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
   display: flex;
-  background: var(--ink-true-black);
-  color: var(--paper-white);
-  padding: 4px 0;
+  background: #05070c;
+  color: #ffffff;
+  padding: 5px 0;
   overflow: hidden;
-  border-bottom: 2px solid var(--manga-red);
+  border-bottom: 2px solid #FF003C;
+  box-shadow: 
+    0 2px 0 0 #FFE600,
+    0 3px 10px rgba(255, 230, 0, 0.85),
+    0 -1px 8px rgba(255, 0, 60, 0.75);
+  margin-bottom: 0;
   flex-shrink: 0;
+  user-select: none;
+  z-index: 1000;
 }
 .marquee-group {
   display: flex;
   flex-shrink: 0;
-  min-width: 100%;
-  justify-content: space-around;
-  animation: scroll-left 15s linear infinite;
-  font-family: var(--font-display);
-  font-size: 0.9rem;
-  letter-spacing: 2px;
-  font-style: italic;
-  font-weight: 700;
-  text-transform: uppercase;
   align-items: center;
+  justify-content: flex-start;
+  animation: billboard-scroll 30s linear infinite;
+  will-change: transform;
 }
-.marquee-group span { margin: 0 16px; display: inline-block; }
-.marquee-group .jp-text { color: var(--manga-yellow); font-family: var(--font-jp); font-style: normal; letter-spacing: 1px; font-size: 0.75rem; }
-@keyframes scroll-left { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
+@keyframes billboard-scroll {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-100%, 0, 0);
+  }
+}
+.marquee:hover .marquee-group {
+  animation-play-state: running;
+}
+.billboard-item {
+  display: inline-flex;
+  align-items: center;
+  margin: 0 26px;
+  font-size: 0.92rem;
+  font-weight: 700;
+  white-space: nowrap;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+/* 1. Putih Cerah Neon */
+.billboard-item.neon-white {
+  color: #FFFFFF;
+  font-family: var(--font-display, 'Bangers', 'Oswald', sans-serif);
+  text-shadow: 
+    0 0 6px rgba(255, 255, 255, 1),
+    0 0 14px rgba(255, 255, 255, 0.85),
+    0 0 24px rgba(255, 255, 255, 0.55);
+}
+/* 2. Kuning Cerah Neon */
+.billboard-item.neon-yellow {
+  color: #FFE600;
+  text-shadow: 
+    0 0 6px rgba(255, 230, 0, 1),
+    0 0 14px rgba(255, 230, 0, 0.9),
+    0 0 24px rgba(255, 230, 0, 0.6);
+}
+/* 3. Pink Ruby Jepang Neon Terang */
+.billboard-item.neon-ruby {
+  color: #FF0055;
+  font-family: var(--font-display, 'Bangers', 'Oswald', sans-serif);
+  font-style: italic;
+  letter-spacing: 2.5px;
+  text-shadow: 
+    0 0 6px rgba(255, 0, 85, 1),
+    0 0 16px rgba(255, 0, 85, 0.9),
+    0 0 28px rgba(255, 0, 85, 0.6);
+}
+.billboard-item.jp-font {
+  font-family: var(--font-jp, 'Noto Sans JP', sans-serif);
+  font-weight: 900;
+  font-style: normal;
+  letter-spacing: 1.5px;
+  font-size: 0.82rem;
+}
 
 /* WRAPPER */
 .manga-wrapper {
@@ -139,6 +206,7 @@ body::before {
   max-width: 1280px;
   margin: 0 auto;
   background: transparent;
+  padding-top: 34px;
   padding-bottom: 12px;
   display: flex;
   flex-direction: column;
@@ -149,54 +217,224 @@ body::before {
 /* NAV */
 .manga-nav {
   display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  padding: 16px 16px 12px 16px;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 14px 16px 10px 16px;
   background: transparent;
   position: relative;
   z-index: 10;
   flex-shrink: 0;
 }
 
-.logo-wrapper {
+.header-main-group {
   display: flex;
   align-items: center;
-  gap: 12px;
+  justify-content: flex-start;
+  gap: 16px;
+  width: 100%;
+  flex-wrap: wrap;
+}
+
+.header-action-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo-frame {
+  display: inline-flex;
+  filter: drop-shadow(3px 3px 0px rgba(0, 0, 0, 0.9));
 }
 
 .logo {
-  border-left: 6px solid var(--ink-true-black);
-  padding-left: 12px;
+  background: #000000;
+  border-left: 5px solid #00E5FF;
+  padding: 4px 18px 4px 10px;
+  display: inline-flex;
+  align-items: center;
+  /* 1 corner sisi kanan bawah dipotong miring (1 corner saja) agar ber-style cyber 1 sisi */
+  clip-path: polygon(
+    0% 0%,
+    100% 0%,
+    100% calc(100% - 12px),
+    calc(100% - 12px) 100%,
+    0% 100%
+  );
 }
 
-.components-nav-btn {
-  background: var(--manga-accent);
-  color: var(--ink-true-black);
+/* CLOUD DATABASE Button - Cyber High-Contrast Blue */
+.cloud-nav-btn {
+  background: #0284c7;
+  color: #FFFFFF;
   border: 2px solid var(--ink-true-black);
   box-shadow: 3px 3px 0px var(--ink-true-black);
-  font-weight: 900;
-  letter-spacing: 1px;
-  font-size: 0.75rem;
-  padding: 4px 10px;
+  font-family: var(--font-display, 'Oswald', sans-serif);
+  font-weight: 800;
+  letter-spacing: 1.2px;
+  font-size: 0.82rem;
+  padding: 5px 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  text-decoration: none;
   transform: skew(-6deg);
+  transition: transform 0.16s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.16s ease, color 0.16s ease, box-shadow 0.16s ease;
+  cursor: pointer;
+  user-select: none;
 }
 
-.components-nav-btn:hover {
-  background: var(--manga-red);
-  color: var(--paper-white);
+.cloud-nav-btn > * {
+  transform: skew(6deg);
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.cloud-nav-btn:hover {
+  background: #00E5FF;
+  color: #000000;
+  border-color: #000000;
   box-shadow: 4px 4px 0px var(--ink-true-black);
   transform: skew(-6deg) translate(-2px, -2px);
 }
 
-.logo h1 {
-  font-family: var(--font-display);
-  font-size: 2.5rem;
+.cloud-nav-btn:active {
+  transform: skew(-6deg) translate(1px, 1px);
+  box-shadow: 2px 2px 0px var(--ink-true-black);
+}
+
+/* REPLAY INTRO Button - Cyber Yellow & Ink Black */
+.replay-btn {
+  background: #000000;
+  color: #FFE600;
+  border: 2px solid #FFE600;
+  box-shadow: 3px 3px 0px var(--ink-true-black);
+  font-family: var(--font-display, 'Oswald', sans-serif);
+  font-weight: 800;
+  letter-spacing: 1.2px;
+  font-size: 0.82rem;
+  padding: 5px 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  text-decoration: none;
+  transform: skew(-6deg);
+  transition: transform 0.16s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.16s ease, color 0.16s ease, box-shadow 0.16s ease, border-color 0.16s ease;
+  cursor: pointer;
+  user-select: none;
+}
+
+.replay-btn > * {
+  transform: skew(6deg);
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.replay-btn:hover {
+  background: #FFE600;
+  color: #000000;
+  border-color: #000000;
+  box-shadow: 4px 4px 0px var(--ink-true-black);
+  transform: skew(-6deg) translate(-2px, -2px);
+}
+
+.replay-btn:active {
+  transform: skew(-6deg) translate(1px, 1px);
+  box-shadow: 2px 2px 0px var(--ink-true-black);
+}
+
+.logo h1,
+.logo h1.logo-cyber {
+  font-family: var(--font-display, 'Oswald', sans-serif);
+  font-size: 2.35rem;
   margin: 0;
-  letter-spacing: -1px;
+  letter-spacing: 0.5px;
   text-transform: uppercase;
   font-style: italic;
-  font-weight: 700;
-  line-height: 0.9;
+  font-weight: 800;
+  line-height: 1;
+  display: inline-flex;
+  align-items: baseline;
+  user-select: none;
+}
+
+/* Slashes "//" */
+.logo-slash {
+  font-family: var(--font-display, 'Oswald', sans-serif);
+  font-weight: 900;
+  font-style: italic;
+  display: inline-block;
+  line-height: 1;
+}
+/* Batang 1: Biru Langit Cyber Neon */
+.logo-slash.slash-sky {
+  color: #00E5FF;
+  margin-right: 1px;
+  text-shadow: 
+    0 0 6px rgba(0, 229, 255, 1),
+    0 0 14px rgba(0, 229, 255, 0.85),
+    0 0 24px rgba(0, 229, 255, 0.55);
+}
+/* Batang 2: Pink Cyber Neon */
+.logo-slash.slash-pink {
+  color: #FF007F;
+  margin-right: 4px;
+  text-shadow: 
+    0 0 6px rgba(255, 0, 127, 1),
+    0 0 14px rgba(255, 0, 127, 0.85),
+    0 0 24px rgba(255, 0, 127, 0.55);
+}
+
+/* "C" & "A": Putih Neon Cerah Cyber */
+.logo-c,
+.logo-a {
+  color: #FFFFFF;
+  font-weight: 900;
+  text-shadow: 
+    0 0 6px rgba(255, 255, 255, 1),
+    0 0 14px rgba(255, 255, 255, 0.85),
+    0 0 24px rgba(255, 255, 255, 0.55);
+}
+
+/* "RI": Pink Cyber Neon Terang (dipercerah dari ruby) */
+.logo-ri {
+  color: #FF007F;
+  font-weight: 900;
+  text-shadow: 
+    0 0 6px rgba(255, 0, 127, 1),
+    0 0 14px rgba(255, 0, 127, 0.9),
+    0 0 24px rgba(255, 0, 127, 0.65);
+}
+
+/* Backward compatibility */
+.logo-ari {
+  color: #FF007F;
+  font-weight: 900;
+  text-shadow: 
+    0 0 6px rgba(255, 0, 127, 1),
+    0 0 14px rgba(255, 0, 127, 0.9),
+    0 0 24px rgba(255, 0, 127, 0.65);
+}
+
+/* "EA": Biru Langit Cyber Neon */
+.logo-ea {
+  color: #00E5FF;
+  font-weight: 900;
+  text-shadow: 
+    0 0 6px rgba(0, 229, 255, 1),
+    0 0 14px rgba(0, 229, 255, 0.85),
+    0 0 24px rgba(0, 229, 255, 0.55);
+}
+
+/* "RSA": Kuning Cerah Terang Cyber Neon */
+.logo-rsa {
+  color: #FFE600;
+  font-weight: 900;
+  text-shadow: 
+    0 0 6px rgba(255, 230, 0, 1),
+    0 0 14px rgba(255, 230, 0, 0.9),
+    0 0 24px rgba(255, 230, 0, 0.6);
 }
 
 .nav-buttons {
@@ -259,107 +497,646 @@ body::before {
   transition: all 0.4s ease;
 }
 
+/* CYBER CARD FRAMES (With matching cut-corner shadows & 3px cyber borders) */
+.cyber-card-frame {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  min-height: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.cyber-border-layer {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  width: 100%;
+  height: 100%;
+  background: #000000;
+  padding: 3px;
+  box-sizing: border-box;
+  min-height: 0;
+}
+
+.cyber-border-layer > .panel {
+  flex: 1;
+  width: 100%;
+  height: 100%;
+  border: none;
+  box-shadow: none;
+  box-sizing: border-box;
+  min-height: 0;
+}
+
 /* 12x8 COMPACT GRID PLACEMENTS */
-.hero-panel {
+/* 1. HERO BANNER: 2 corner kiri atas & kanan bawah dipotong miring (bersama bayangan merah) */
+.hero-frame {
   grid-area: 1 / 1 / 5 / 9;
+  filter: drop-shadow(4px 4px 0px var(--manga-red));
+}
+
+.hero-border-layer {
+  clip-path: polygon(
+    28px 0%,
+    100% 0%,
+    100% calc(100% - 28px),
+    calc(100% - 28px) 100%,
+    0% 100%,
+    0% 28px
+  );
+}
+
+.hero-panel {
   background: var(--ink-true-black);
   color: var(--paper-white);
   justify-content: center;
   align-items: center;
   text-align: center;
-  box-shadow: 4px 4px 0px 0px var(--manga-red);
+  position: relative;
+  overflow: hidden;
+  clip-path: polygon(
+    27px 0%,
+    100% 0%,
+    100% calc(100% - 27px),
+    calc(100% - 27px) 100%,
+    0% 100%,
+    0% 27px
+  );
 }
-.info-panel {
+
+/* 2. ABOUT: 2 corner kiri atas & kanan bawah dipotong miring (bayangan biru langit cyber terang neon) */
+.about-frame {
   grid-area: 1 / 9 / 3 / 13;
-  padding: 12px;
+  filter: drop-shadow(4px 4px 0px #00E5FF);
+}
+
+.about-border-layer {
+  clip-path: polygon(
+    22px 0%,
+    100% 0%,
+    100% calc(100% - 22px),
+    calc(100% - 22px) 100%,
+    0% 100%,
+    0% 22px
+  );
+}
+
+.info-panel {
+  padding: 12px 14px 12px 20px;
   justify-content: flex-start;
+  clip-path: polygon(
+    21px 0%,
+    100% 0%,
+    100% calc(100% - 21px),
+    calc(100% - 21px) 100%,
+    0% 100%,
+    0% 21px
+  );
+}
+
+/* 3. PORTRAIT PANEL (Banner Image 1): 1 corner kanan bawah dipotong miring (bayangan kuning terang neon) */
+.portrait-frame {
+  grid-area: 3 / 9 / 7 / 13;
+  filter: drop-shadow(4px 4px 0px #FFE600);
+}
+.portrait-border-layer {
+  clip-path: polygon(
+    0% 0%,
+    100% 0%,
+    100% calc(100% - 22px),
+    calc(100% - 22px) 100%,
+    0% 100%
+  );
 }
 .portrait-panel {
   grid-area: 3 / 9 / 7 / 13;
+  clip-path: polygon(
+    0% 0%,
+    100% 0%,
+    100% calc(100% - 21px),
+    calc(100% - 21px) 100%,
+    0% 100%
+  );
+}
+
+/* 4. GALLERY 1 & 2 (Banner Image 2 & 3): 1 corner kanan dipotong miring (Banner 2 ruby terang, Banner 3 biru langit terang) */
+.gallery-1-frame {
+  grid-area: 5 / 1 / 7 / 5;
+  filter: drop-shadow(4px 4px 0px #FF003C);
+}
+.gallery-1-border-layer {
+  clip-path: polygon(
+    0% 0%,
+    100% 0%,
+    100% calc(100% - 18px),
+    calc(100% - 18px) 100%,
+    0% 100%
+  );
 }
 .gallery-1 {
   grid-area: 5 / 1 / 7 / 5;
+  clip-path: polygon(
+    0% 0%,
+    100% 0%,
+    100% calc(100% - 17px),
+    calc(100% - 17px) 100%,
+    0% 100%
+  );
+}
+
+.gallery-2-frame {
+  grid-area: 5 / 5 / 7 / 9;
+  filter: drop-shadow(4px 4px 0px #00E5FF);
+}
+.gallery-2-border-layer {
+  clip-path: polygon(
+    0% 0%,
+    100% 0%,
+    100% calc(100% - 18px),
+    calc(100% - 18px) 100%,
+    0% 100%
+  );
 }
 .gallery-2 {
   grid-area: 5 / 5 / 7 / 9;
+  clip-path: polygon(
+    0% 0%,
+    100% 0%,
+    100% calc(100% - 17px),
+    calc(100% - 17px) 100%,
+    0% 100%
+  );
+}
+
+/* 5. GALLERY 3 (Banner Image 4): 2 corner kiri atas & kanan bawah dipotong miring (bayangan ruby terang) */
+.gallery-3-frame {
+  grid-area: 7 / 1 / 9 / 9;
+  filter: drop-shadow(4px 4px 0px #FF003C);
+}
+.gallery-3-border-layer {
+  clip-path: polygon(
+    22px 0%,
+    100% 0%,
+    100% calc(100% - 22px),
+    calc(100% - 22px) 100%,
+    0% 100%,
+    0% 22px
+  );
 }
 .gallery-3 {
   grid-area: 7 / 1 / 9 / 9;
   background: var(--bg-gray);
+  clip-path: polygon(
+    21px 0%,
+    100% 0%,
+    100% calc(100% - 21px),
+    calc(100% - 21px) 100%,
+    0% 100%,
+    0% 21px
+  );
 }
-.hub-panel {
+
+/* 3. LINK HUB: 1 corner kanan bawah dipotong miring (bersama bayangan hitam) */
+.hub-frame {
   grid-area: 7 / 9 / 9 / 13;
+  filter: drop-shadow(4px 4px 0px #000000);
+}
+
+.hub-border-layer {
+  clip-path: polygon(
+    0% 0%,
+    100% 0%,
+    100% calc(100% - 22px),
+    calc(100% - 22px) 100%,
+    0% 100%
+  );
+}
+
+.hub-panel {
   padding: 8px;
   background: var(--bg-gray);
   flex-direction: column;
   align-items: stretch;
   justify-content: flex-start;
   overflow-y: auto;
+  clip-path: polygon(
+    0% 0%,
+    100% 0%,
+    100% calc(100% - 21px),
+    calc(100% - 21px) 100%,
+    0% 100%
+  );
 }
 
-/* HERO STYLES */
+/* Layer 1: Responsive Background Video Embed Wrap */
+.hero-video-wrap {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: 1;
+  background: #000000;
+  pointer-events: none;
+}
+.hero-video-embed {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 120%;
+  height: 190%;
+  min-width: 100%;
+  min-height: 100%;
+  border: none;
+  pointer-events: auto;
+}
+@media (min-aspect-ratio: 16/9) {
+  .hero-video-embed {
+    width: 100%;
+    height: 185%;
+  }
+}
+@media (max-aspect-ratio: 16/9) {
+  .hero-video-embed {
+    width: 185%;
+    height: 100%;
+  }
+}
+
+/* Layer 2: Subtle Contrast Vignette Tint */
+.hero-video-tint {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.65) 100%);
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* Layer 3: Manga Speed Lines (Over video, under text) */
 .speed-lines-bg {
   position: absolute;
   top: -50%; left: -50%; right: -50%; bottom: -50%;
-  background: repeating-linear-gradient(45deg, transparent 0, transparent 20px, rgba(255,255,255,0.05) 20px, rgba(255,255,255,0.05) 40px);
+  background: repeating-linear-gradient(45deg, transparent 0, transparent 18px, rgba(255,255,255,0.18) 18px, rgba(255,255,255,0.18) 36px);
+  pointer-events: none;
+  z-index: 3;
+  mix-blend-mode: screen;
+}
+
+/* Layer 5: Hero Text Overlay */
+.hero-content {
+  position: relative;
+  z-index: 5;
   pointer-events: none;
 }
+.hero-content a {
+  pointer-events: auto;
+}
 .hero-title {
-  font-family: var(--font-display);
-  font-size: 3.8rem;
-  line-height: 0.9;
+  font-family: var(--font-display, 'Oswald', sans-serif);
+  font-size: clamp(2.1rem, 3.8vw, 3.4rem);
+  line-height: 1.05;
   margin: 0;
   font-style: italic;
-  text-transform: uppercase;
+  font-weight: 800;
   position: relative;
-  z-index: 2;
-  letter-spacing: -1px;
+  letter-spacing: -0.5px;
+  color: var(--paper-white, #FFFFFF);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  column-gap: 12px;
+  row-gap: 4px;
+  text-shadow: 
+    0 0 10px rgba(0,0,0,1),
+    0 0 20px rgba(0,0,0,0.9),
+    2px 2px 0px #000000,
+    -2px -2px 0px #000000,
+    2px -2px 0px #000000,
+    -2px 2px 0px #000000;
+  user-select: none;
+}
+.hero-brand-name {
+  color: #FFFFFF;
+}
+.hero-brand-sep {
+  display: inline-flex;
+  align-items: center;
+}
+.hero-neon-x {
+  color: #00F0FF;
+  font-style: italic;
+  font-weight: 900;
+  font-size: 1.15em;
+  text-transform: lowercase;
+  display: inline-block;
+  padding: 0 4px;
+  text-shadow: 
+    0 0 6px rgba(0, 240, 255, 1),
+    0 0 14px rgba(0, 240, 255, 0.9),
+    0 0 24px rgba(0, 240, 255, 0.75),
+    2px 2px 0px #000000,
+    -2px -2px 0px #000000;
+  animation: neon-x-pulse 2.5s ease-in-out infinite alternate;
+}
+@keyframes neon-x-pulse {
+  0% {
+    text-shadow: 
+      0 0 6px rgba(0, 240, 255, 1),
+      0 0 14px rgba(0, 240, 255, 0.9),
+      0 0 24px rgba(0, 240, 255, 0.75),
+      2px 2px 0px #000000,
+      -2px -2px 0px #000000;
+  }
+  100% {
+    text-shadow: 
+      0 0 10px rgba(0, 240, 255, 1),
+      0 0 20px rgba(0, 240, 255, 1),
+      0 0 32px rgba(0, 240, 255, 0.9),
+      2px 2px 0px #000000,
+      -2px -2px 0px #000000;
+  }
+}
+.hero-brand-owner {
+  color: #FFFFFF;
+}
+
+/* Video Embed Overlay: Cyber Futuristic White Textbox with Ruby Red Shadow */
+.hero-cyber-badge-wrap {
+  margin-top: 14px;
+  display: inline-flex;
+  justify-content: center;
+  filter: drop-shadow(3px 3px 0px #FF003C);
+  pointer-events: auto;
+}
+.hero-cyber-badge {
+  background: #FFFFFF;
+  padding: 4px 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  clip-path: polygon(
+    8px 0%,
+    100% 0%,
+    100% calc(100% - 8px),
+    calc(100% - 8px) 100%,
+    0% 100%,
+    0% 8px
+  );
+  font-family: var(--font-display, 'Oswald', sans-serif);
+  font-size: 0.88rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  user-select: none;
+  transition: transform 0.2s cubic-bezier(0.25, 1, 0.5, 1);
+}
+.hero-cyber-badge:hover {
+  transform: translate(-1px, -1px);
+}
+.hero-cyber-badge .badge-text-personal {
+  color: #000000;
+  font-weight: 900;
+}
+.hero-cyber-badge .badge-text-website {
+  color: #FF003C;
+  font-weight: 900;
 }
 .hero-subtitle {
-  font-size: 0.8rem;
-  margin-top: 12px;
-  position: relative;
-  z-index: 2;
-  background: var(--paper-white);
-  color: var(--ink-true-black);
-  padding: 2px 6px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  display: inline-block;
+  display: none;
 }
 .highlight-link { color: var(--manga-red); text-decoration: none; }
 .japanese-vertical {
   position: absolute;
-  right: 12px;
-  top: 12px;
+  right: 14px;
+  top: 14px;
   writing-mode: vertical-rl;
   font-family: var(--font-jp);
   font-size: 1.5rem;
   font-weight: 900;
-  color: rgba(255,255,255,0.15);
+  color: rgba(255,255,255,0.45);
   letter-spacing: 6px;
   font-style: italic;
+  text-shadow: 0 0 8px rgba(0,0,0,0.95), 1px 1px 0px #000000;
+  z-index: 5;
+  pointer-events: none;
 }
 
-/* INFO PANEL STYLES */
-.panel-header {
-  background: var(--ink-true-black);
-  color: var(--paper-white);
-  padding: 2px 6px;
-  font-size: 0.65rem;
-  font-weight: bold;
+/* Layer 6: Cyber Sound Badge */
+.hero-sound-badge {
+  position: absolute;
+  bottom: 12px;
+  left: 12px;
+  z-index: 6;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  background: rgba(0, 0, 0, 0.88);
+  border: 1.5px solid #00E5FF;
+  color: #00E5FF;
+  font-family: var(--font-display, 'Oswald', sans-serif);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 0 8px rgba(0, 229, 255, 0.5);
+  pointer-events: auto;
+}
+.hero-sound-badge:hover {
+  background: #00E5FF;
+  color: #000000;
+  box-shadow: 0 0 15px rgba(0, 229, 255, 0.9);
+}
+.hero-sound-badge.needs-unmute {
+  border-color: #FFE600;
+  color: #FFE600;
+  box-shadow: 0 0 12px rgba(255, 230, 0, 0.7);
+  animation: sound-badge-pulse 1.8s infinite;
+}
+@keyframes sound-badge-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+/* INFO / ABOUT PANEL STYLES */
+.info-panel {
+  grid-area: 1 / 9 / 3 / 13;
+  padding: 12px 14px;
+  justify-content: flex-start;
+  display: flex;
+  flex-direction: column;
+}
+
+.panel-header,
+.cyber-textbox {
+  background: #000000;
+  color: #FFFFFF;
+  padding: 6px 16px 6px 14px;
+  font-family: var(--font-display, 'Oswald', sans-serif);
+  font-size: 1.25rem;
+  font-weight: 900;
   text-transform: uppercase;
   font-style: italic;
-  display: inline-block;
+  letter-spacing: 2.5px;
+  display: inline-flex;
+  align-items: center;
   align-self: flex-start;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
+  line-height: 1;
+  text-shadow: 
+    0 0 4px rgba(255, 255, 255, 0.85),
+    0 0 10px rgba(0, 229, 255, 0.5);
+  /* Cyber Futuristic Textbox: 2 corners are diagonally slanted (miring) out of 4 corners (top-left & bottom-right) */
+  clip-path: polygon(
+    10px 0%,                     /* Top-Left: miring cut */
+    100% 0%,                     /* Top-Right: 90° straight */
+    100% calc(100% - 10px),      /* Down to bottom-right cut */
+    calc(100% - 10px) 100%,      /* Bottom-Right: miring cut */
+    0% 100%,                     /* Bottom-Left: 90° straight */
+    0% 10px                      /* Up to top-left cut */
+  );
+  filter: drop-shadow(3px 3px 0px #FF003C);
+  border-left: 3px solid #00E5FF;
+  position: relative;
+  user-select: none;
 }
+
+.about-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  gap: 8px;
+}
+
+.about-header-row .panel-header {
+  margin-bottom: 0;
+}
+
+.lang-flags-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.lang-flag-btn {
+  background: var(--paper-white);
+  border: 2px solid var(--ink-true-black);
+  box-shadow: 2px 2px 0px var(--ink-true-black);
+  padding: 2px 6px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  border-radius: 0;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease, color 0.15s ease;
+  font-family: var(--font-display, 'Oswald', sans-serif);
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: var(--ink-true-black);
+  line-height: 1;
+}
+
+.lang-flag-btn:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 3px 3px 0px var(--manga-red);
+}
+
+.lang-flag-btn.active {
+  background: var(--ink-true-black);
+  color: #FFFFFF;
+  box-shadow: 2px 2px 0px var(--manga-accent);
+}
+
+.flag-icon {
+  display: block;
+  flex-shrink: 0;
+  border-radius: 1px;
+}
+
+.flag-code {
+  font-weight: 900;
+  letter-spacing: 0.5px;
+}
+
+.info-panel .about-text {
+  font-size: 0.98rem;
+  line-height: 1.45;
+  font-weight: 600;
+  color: var(--ink-black);
+  margin: 0;
+  letter-spacing: 0.2px;
+  font-style: normal;
+  min-height: 52px;
+}
+
+/* Card ABOUT: "OWNED BY FADHIL.DEV" Cyber Sky-Blue Textbox with Black Shadow */
+.about-owned-wrap {
+  display: inline-flex;
+  vertical-align: middle;
+  margin-left: 8px;
+  margin-top: 4px;
+  filter: drop-shadow(3px 3px 0px #000000);
+}
+
+.about-owned-badge {
+  background: #0284c7;
+  color: #FFFFFF;
+  padding: 3px 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  clip-path: polygon(
+    8px 0%,
+    100% 0%,
+    100% calc(100% - 8px),
+    calc(100% - 8px) 100%,
+    0% 100%,
+    0% 8px
+  );
+  font-family: var(--font-display, 'Oswald', sans-serif);
+  font-size: 0.82rem;
+  font-weight: 900;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  user-select: none;
+  transition: transform 0.15s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.about-owned-badge:hover {
+  transform: translate(-1px, -1px);
+}
+
+.about-owned-badge .owned-label {
+  color: #000000;
+  font-weight: 900;
+}
+
+.about-owned-badge .owned-link {
+  color: #FFFFFF;
+  font-weight: 900;
+  text-decoration: none;
+  cursor: pointer;
+  transition: text-shadow 0.2s ease;
+}
+
+.about-owned-badge .owned-link:hover {
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.9);
+  text-decoration: underline;
+}
+
 .info-panel p {
-  font-size: 0.75rem;
-  line-height: 1.3;
-  font-weight: 500;
-  margin: 0 0 6px 0;
+  font-size: 1.05rem;
+  line-height: 1.45;
+  font-weight: 600;
+  color: var(--ink-black);
+  margin: 0;
 }
 
 /* SFX */
@@ -418,50 +1195,320 @@ body::before {
 .hub-links {
   display: flex;
   flex-direction: row;
-  gap: 6px;
+  gap: 16px;
+  align-items: stretch;
+  padding: 6px 8px 8px 8px;
+  height: calc(100% - 36px);
+  box-sizing: border-box;
 }
 
-/* Custom Buttons */
+/* Hub Links Stable Anchor (Anti-Glitch Zero-Latency Engine) */
+.hub-btn-anchor {
+  position: relative;
+  display: flex;
+  flex: 1;
+  text-decoration: none;
+  outline: none;
+  user-select: none;
+  -webkit-user-select: none;
+  padding: 4px;
+  margin: -4px;
+  align-items: stretch;
+}
+
+/* Invisible hit buffer preventing cursor edge clutching/glitching on micro-displacements */
+.hub-btn-anchor::after {
+  content: '';
+  position: absolute;
+  inset: -6px;
+  z-index: 0;
+  pointer-events: auto;
+}
+
+/* Custom Buttons (Cyber Arcade Engine) */
 .custom-shape-btn {
   position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 8px 4px;
+  padding: 10px 14px;
   flex: 1;
-  background: var(--paper-white);
-  color: var(--ink-true-black);
+  width: 100%;
   text-decoration: none;
-  border: 3px solid var(--ink-true-black);
-  box-shadow: 3px 3px 0px 0px var(--ink-true-black);
-  transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1), box-shadow 0.2s cubic-bezier(0, 0, 0.2, 1), color 0.2s;
+  border-width: 3px;
+  border-style: solid;
   text-transform: uppercase;
   font-weight: 700;
   overflow: hidden;
   z-index: 1;
+  cursor: pointer;
+  outline: none;
+  user-select: none;
+  -webkit-user-select: none;
+  will-change: transform, box-shadow, border-color, background-color;
+  transition: 
+    transform 0.18s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.18s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.18s ease,
+    background-color 0.18s ease,
+    color 0.18s ease;
 }
+
+.hub-btn-plate {
+  pointer-events: none; /* Passes pointer tracking to stationary anchor to prevent edge fluttering */
+}
+
+/* Pseudo-element 1: Hardware-Accelerated Cyber Kinetic Slash Wipe */
 .custom-shape-btn::before {
   content: '';
   position: absolute;
-  top: 0; left: 0; width: 100%; height: 100%;
-  background: var(--manga-accent);
+  top: 0;
+  left: -2px;
+  width: calc(100% + 4px);
+  height: 100%;
   transform: scaleX(0);
-  transform-origin: left;
-  transition: transform 0.3s cubic-bezier(0.85, 0, 0.15, 1);
-  z-index: -1;
-}
-.custom-shape-btn:hover::before {
-  transform: scaleX(1);
-}
-.custom-shape-btn:hover {
-  transform: translate(-3px, -3px);
-  box-shadow: 6px 6px 0px 0px var(--manga-red);
+  transform-origin: left center;
+  transition: transform 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 1;
+  will-change: transform;
+  pointer-events: none;
 }
 
-.slash-btn { transform: skew(-12deg); }
-.slash-btn:hover { transform: skew(-12deg) translate(-3px, -3px); }
-.slash-btn > * { transform: skew(12deg); }
+/* Pseudo-element 2: Cyber High-Speed Glint Streak on Hover */
+.custom-shape-btn::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -120%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.45), transparent);
+  transform: skewX(-20deg);
+  z-index: 3;
+  pointer-events: none;
+  opacity: 0;
+}
+
+.hub-btn-anchor:hover .custom-shape-btn::after,
+.custom-shape-btn:hover::after {
+  opacity: 1;
+  animation: cyber-glint 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes cyber-glint {
+  0% { left: -120%; }
+  100% { left: 160%; }
+}
+
+/* Diagonal Parallelogram Cyber Slash */
+.slash-btn { 
+  transform: skew(-12deg); 
+}
+
+.slash-btn > * { 
+  transform: skew(12deg);
+  position: relative;
+  z-index: 2;
+  pointer-events: none;
+  transition: color 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* -------------------------------------------------------------
+   1. BUTTON: PLAY STORE (hub-btn-playstore)
+   Default:
+     - inner-fill: #00E5FF (biru langit cyber terang)
+     - outline: #000000 (hitam)
+     - bayangan: #FF003C (merah ruby terang)
+     - teks: #000000 (hitam)
+   Hover / Click (Active):
+     - inner-fill: #FF003C (merah ruby terang)
+     - outline: #000000 (hitam)
+     - bayangan: #00E5FF (biru langit terang)
+     - teks: #FFFFFF (putih bersih / terang)
+   ------------------------------------------------------------- */
+.hub-btn-playstore .hub-btn-plate,
+.hub-btn-playstore.custom-shape-btn {
+  background-color: #00E5FF;
+  border-color: #000000;
+  box-shadow: 4px 4px 0px 0px #FF003C;
+  color: #000000;
+}
+
+.hub-btn-playstore .btn-text,
+.hub-btn-playstore .btn-jp {
+  color: #000000;
+}
+
+.hub-btn-playstore .hub-btn-plate::before,
+.hub-btn-playstore.custom-shape-btn::before {
+  background-color: #FF003C; /* Merah ruby terang */
+}
+
+/* Hover & Focus State */
+.hub-btn-playstore:hover .hub-btn-plate,
+.hub-btn-playstore:focus-visible .hub-btn-plate,
+.hub-btn-playstore.custom-shape-btn:hover,
+.hub-btn-playstore.custom-shape-btn:focus-visible {
+  transform: skew(-12deg) translate(-3px, -3px);
+  background-color: #FF003C;
+  border-color: #000000;
+  box-shadow: 6px 6px 0px 0px #00E5FF;
+  color: #FFFFFF;
+}
+
+.hub-btn-playstore:hover .btn-text,
+.hub-btn-playstore:hover .btn-jp,
+.hub-btn-playstore:focus-visible .btn-text,
+.hub-btn-playstore:focus-visible .btn-jp,
+.hub-btn-playstore.custom-shape-btn:hover .btn-text,
+.hub-btn-playstore.custom-shape-btn:hover .btn-jp,
+.hub-btn-playstore.custom-shape-btn:focus-visible .btn-text,
+.hub-btn-playstore.custom-shape-btn:focus-visible .btn-jp {
+  color: #FFFFFF;
+}
+
+.hub-btn-playstore:hover .hub-btn-plate::before,
+.hub-btn-playstore:focus-visible .hub-btn-plate::before,
+.hub-btn-playstore.custom-shape-btn:hover::before,
+.hub-btn-playstore.custom-shape-btn:focus-visible::before {
+  transform: scaleX(1);
+}
+
+/* Active (Click) State */
+.hub-btn-playstore:active .hub-btn-plate,
+.hub-btn-playstore.custom-shape-btn:active {
+  transform: skew(-12deg) translate(2px, 2px);
+  background-color: #FF003C;
+  border-color: #000000;
+  box-shadow: 2px 2px 0px 0px #00E5FF;
+  color: #FFFFFF;
+}
+
+.hub-btn-playstore:active .btn-text,
+.hub-btn-playstore:active .btn-jp,
+.hub-btn-playstore.custom-shape-btn:active .btn-text,
+.hub-btn-playstore.custom-shape-btn:active .btn-jp {
+  color: #FFFFFF;
+}
+
+.hub-btn-playstore:active .hub-btn-plate::before,
+.hub-btn-playstore.custom-shape-btn:active::before {
+  transform: scaleX(1);
+}
+
+.hub-btn-playstore .btn-text {
+  font-size: 1.05rem;
+  font-weight: 900;
+  letter-spacing: 1px;
+  line-height: 1.15;
+}
+
+.hub-btn-playstore .btn-jp {
+  font-family: var(--font-jp);
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  line-height: 1.2;
+}
+
+/* -------------------------------------------------------------
+   2. BUTTON: FADHIL.DEV (hub-btn-fadhil)
+   Default:
+     - inner-fill: #000000 (hitam)
+     - outline: #FFD000 (kuning/bronze terang)
+     - bayangan: #00E5FF (biru langit terang)
+     - teks: #FFD000 (kuning terang)
+   Hover / Click (Active):
+     - inner-fill: #FFD000 (kuning/bronze terang)
+     - outline: #000000 (hitam)
+     - bayangan: #FF003C (merah ruby terang)
+     - teks: #000000 (hitam)
+   ------------------------------------------------------------- */
+.hub-btn-fadhil .hub-btn-plate,
+.hub-btn-fadhil.custom-shape-btn {
+  background-color: #000000;
+  border-color: #FFD000;
+  box-shadow: 4px 4px 0px 0px #00E5FF;
+  color: #FFD000;
+}
+
+.hub-btn-fadhil .btn-text,
+.hub-btn-fadhil .btn-jp {
+  color: #FFD000;
+}
+
+.hub-btn-fadhil .hub-btn-plate::before,
+.hub-btn-fadhil.custom-shape-btn::before {
+  background-color: #FFD000; /* Kuning / bronze terang */
+}
+
+/* Hover & Focus State */
+.hub-btn-fadhil:hover .hub-btn-plate,
+.hub-btn-fadhil:focus-visible .hub-btn-plate,
+.hub-btn-fadhil.custom-shape-btn:hover,
+.hub-btn-fadhil.custom-shape-btn:focus-visible {
+  transform: skew(-12deg) translate(-3px, -3px);
+  background-color: #FFD000;
+  border-color: #000000;
+  box-shadow: 6px 6px 0px 0px #FF003C;
+  color: #000000;
+}
+
+.hub-btn-fadhil:hover .btn-text,
+.hub-btn-fadhil:hover .btn-jp,
+.hub-btn-fadhil:focus-visible .btn-text,
+.hub-btn-fadhil:focus-visible .btn-jp,
+.hub-btn-fadhil.custom-shape-btn:hover .btn-text,
+.hub-btn-fadhil.custom-shape-btn:hover .btn-jp,
+.hub-btn-fadhil.custom-shape-btn:focus-visible .btn-text,
+.hub-btn-fadhil.custom-shape-btn:focus-visible .btn-jp {
+  color: #000000;
+}
+
+.hub-btn-fadhil:hover .hub-btn-plate::before,
+.hub-btn-fadhil:focus-visible .hub-btn-plate::before,
+.hub-btn-fadhil.custom-shape-btn:hover::before,
+.hub-btn-fadhil.custom-shape-btn:focus-visible::before {
+  transform: scaleX(1);
+}
+
+/* Active (Click) State */
+.hub-btn-fadhil:active .hub-btn-plate,
+.hub-btn-fadhil.custom-shape-btn:active {
+  transform: skew(-12deg) translate(2px, 2px);
+  background-color: #FFD000;
+  border-color: #000000;
+  box-shadow: 2px 2px 0px 0px #FF003C;
+  color: #000000;
+}
+
+.hub-btn-fadhil:active .btn-text,
+.hub-btn-fadhil:active .btn-jp,
+.hub-btn-fadhil.custom-shape-btn:active .btn-text,
+.hub-btn-fadhil.custom-shape-btn:active .btn-jp {
+  color: #000000;
+}
+
+.hub-btn-fadhil:active .hub-btn-plate::before,
+.hub-btn-fadhil.custom-shape-btn:active::before {
+  transform: scaleX(1);
+}
+
+.hub-btn-fadhil .btn-text {
+  font-size: 1.05rem;
+  font-weight: 900;
+  letter-spacing: 1px;
+  line-height: 1.15;
+}
+
+.hub-btn-fadhil .btn-jp {
+  font-family: var(--font-jp);
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  line-height: 1.2;
+}
 
 .impact-btn { background: var(--manga-red); color: var(--paper-white); }
 .impact-btn::before { background: var(--ink-true-black); }
@@ -486,6 +1533,14 @@ body::before {
   font-size: 0.65rem;
   border-top: 3px solid var(--ink-true-black);
   flex-shrink: 0;
+}
+
+.manga-footer p {
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  margin: 0;
+  line-height: 1;
 }
 
 /* COMIC SHAKE ANIMATION */
@@ -630,17 +1685,21 @@ body::before {
   body { height: auto; overflow-y: auto; overflow-x: hidden; }
   .manga-wrapper { height: auto; min-height: 100vh; }
   .manga-nav { flex-direction: column; align-items: flex-start; gap: 12px; }
-  .nav-buttons { width: 100%; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
-  .manga-btn { flex: 1; text-align: center; }
+  .header-main-group { flex-direction: column; align-items: flex-start; gap: 10px; width: 100%; }
+  .header-action-group { width: 100%; justify-content: flex-start; gap: 10px; flex-wrap: wrap; }
+  .logo h1.logo-cyber { font-size: 1.85rem; }
   .manga-grid { 
     display: flex; 
     flex-direction: column; 
+    gap: 14px;
   }
+  .cyber-card-frame { width: 100%; height: auto; }
   .panel { min-height: 250px; }
   .hero-panel { min-height: 350px; }
   .hub-panel { min-height: auto; }
-  .hub-links { flex-direction: column; gap: 12px; padding-bottom: 8px; }
-  .custom-shape-btn { padding: 16px; margin: 0 4px; }
+  .hub-links { flex-direction: column; gap: 14px; padding-bottom: 8px; }
+  .hub-btn-anchor { width: 100%; margin: 0; padding: 2px 0; }
+  .custom-shape-btn { padding: 14px; margin: 0; width: 100%; }
   
   .playstore-container {
     height: 100vh;
@@ -649,6 +1708,4 @@ body::before {
     border: none;
   }
 }
-
-@import "./animeIntro.css";
 

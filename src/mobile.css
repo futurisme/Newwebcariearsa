@@ -1,0 +1,1203 @@
+:root, [data-theme="original"] {
+  --ink-black: #111111;
+  --ink-true-black: #000000;
+  --paper-white: #F8F9FA;
+  --bg-gray: #E9ECEF;
+  --manga-red: #FF003C;
+  --manga-accent: #00F0FF;
+  --manga-yellow: #FFEA00;
+  --theme-name: "Original Manga";
+  
+  --font-display: 'Oswald', sans-serif;
+  --font-body: 'Oswald', sans-serif;
+  --font-jp: 'Noto Sans JP', sans-serif;
+}
+
+* { 
+  box-sizing: border-box; 
+  -webkit-tap-highlight-color: transparent;
+}
+
+html { 
+  font-size: 14px;
+  overflow-x: hidden;
+  width: 100%;
+  height: 100%;
+  scrollbar-width: none; /* Universal hidden scrollbar (Firefox, Chrome 121+, Safari 18+) */
+  -ms-overflow-style: none; /* IE 10+, Edge Legacy */
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Chromium Edge, Opera, Android WebView */
+  width: 0;
+  height: 0;
+}
+
+body {
+  margin: 0;
+  padding: 34px 0 0 0;
+  background-color: var(--bg-gray);
+  color: var(--ink-black);
+  font-family: var(--font-body);
+  background-image: radial-gradient(var(--ink-true-black) 1px, transparent 0);
+  background-size: 20px 20px;
+  background-position: -10px -10px;
+  position: relative;
+  min-height: 100vh;
+  width: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Subtle textured scanline overlay */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.05) 50%);
+  background-size: 100% 4px;
+  z-index: 999;
+  pointer-events: none;
+  opacity: 0.35;
+}
+
+/* MARQUEE BILLBOARD - FIXED-TO-SCREEN 2-Layer Outline: Merah Ruby lalu Kuning Glow layaknya versi Desktop */
+.marquee {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: var(--ink-true-black);
+  color: var(--paper-white);
+  padding: 5px 0;
+  overflow: hidden;
+  white-space: nowrap;
+  border-bottom: 2px solid #FF003C;
+  box-shadow: 
+    0 2px 0 0 #FFE600,
+    0 3px 10px rgba(255, 230, 0, 0.85),
+    0 -1px 8px rgba(255, 0, 60, 0.75);
+  margin-bottom: 0;
+  z-index: 1000;
+  display: flex;
+  user-select: none;
+}
+
+.marquee-group {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  animation: marquee-scroll 24s linear infinite;
+  padding-right: 20px;
+  flex-shrink: 0;
+}
+
+@keyframes marquee-scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-100%); }
+}
+
+.billboard-item {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 0.82rem;
+  letter-spacing: 1px;
+}
+
+.billboard-item.jp-font {
+  font-family: var(--font-jp);
+  font-weight: 700;
+}
+
+.neon-white { color: #FFFFFF; }
+.neon-yellow { color: var(--manga-yellow); }
+.neon-ruby { color: var(--manga-red); }
+
+/* MOBILE WRAPPER */
+.mobile-wrapper {
+  width: 100%;
+  max-width: 540px;
+  margin: 0 auto;
+  padding: 0 12px 28px 12px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  z-index: 10;
+}
+
+/* MOBILE NAV - Logo //CARIEARSA dipastikan di sisi kiri */
+.mobile-nav {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 14px 4px 14px 4px;
+  gap: 12px;
+  width: 100%;
+}
+
+.logo-frame {
+  display: inline-flex;
+  filter: drop-shadow(3px 3px 0px rgba(0, 0, 0, 0.9));
+  justify-content: flex-start;
+  align-self: flex-start;
+}
+
+.logo {
+  background: #000000;
+  border-left: 5px solid #00E5FF;
+  padding: 4px 18px 4px 10px;
+  display: inline-flex;
+  align-items: center;
+  /* 1 corner sisi kanan bawah dipotong miring (1 corner saja) agar ber-style cyber 1 sisi */
+  clip-path: polygon(
+    0% 0%,
+    100% 0%,
+    100% calc(100% - 12px),
+    calc(100% - 12px) 100%,
+    0% 100%
+  );
+}
+
+.logo h1,
+.logo h1.logo-cyber {
+  font-family: var(--font-display, 'Oswald', sans-serif);
+  font-size: clamp(1.85rem, 6.8vw, 2.35rem);
+  margin: 0;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  font-style: italic;
+  font-weight: 800;
+  line-height: 1;
+  display: inline-flex;
+  align-items: baseline;
+  user-select: none;
+}
+
+.logo-slash {
+  font-family: var(--font-display, 'Oswald', sans-serif);
+  font-weight: 900;
+  font-style: italic;
+  display: inline-block;
+  line-height: 1;
+}
+
+/* Batang 1: Biru Langit Cyber Neon */
+.logo-slash.slash-sky {
+  color: #00E5FF;
+  margin-right: 1px;
+  text-shadow: 
+    0 0 6px rgba(0, 229, 255, 1),
+    0 0 14px rgba(0, 229, 255, 0.85),
+    0 0 24px rgba(0, 229, 255, 0.55);
+}
+
+/* Batang 2: Pink Cyber Neon */
+.logo-slash.slash-pink {
+  color: #FF007F;
+  margin-right: 4px;
+  text-shadow: 
+    0 0 6px rgba(255, 0, 127, 1),
+    0 0 14px rgba(0, 229, 127, 0.85),
+    0 0 24px rgba(255, 0, 127, 0.55);
+}
+
+/* "C" & "A": Putih Neon Cerah Cyber */
+.logo-c,
+.logo-a {
+  color: #FFFFFF;
+  font-weight: 900;
+  text-shadow: 
+    0 0 6px rgba(255, 255, 255, 1),
+    0 0 14px rgba(255, 255, 255, 0.85),
+    0 0 24px rgba(255, 255, 255, 0.55);
+}
+
+/* "RI": Pink Cyber Neon Terang */
+.logo-ri {
+  color: #FF007F;
+  font-weight: 900;
+  text-shadow: 
+    0 0 6px rgba(255, 0, 127, 1),
+    0 0 14px rgba(255, 0, 127, 0.9),
+    0 0 24px rgba(255, 0, 127, 0.65);
+}
+
+/* "EA": Biru Langit Cyber Neon */
+.logo-ea {
+  color: #00E5FF;
+  font-weight: 900;
+  text-shadow: 
+    0 0 6px rgba(0, 229, 255, 1),
+    0 0 14px rgba(0, 229, 255, 0.85),
+    0 0 24px rgba(0, 229, 255, 0.55);
+}
+
+/* "RSA": Kuning Cerah Terang Cyber Neon */
+.logo-rsa {
+  color: #FFE600;
+  font-weight: 900;
+  text-shadow: 
+    0 0 6px rgba(255, 230, 0, 1),
+    0 0 14px rgba(255, 230, 0, 0.9),
+    0 0 24px rgba(255, 230, 0, 0.6);
+}
+
+/* ACTION BUTTONS GROUP */
+.mobile-action-group {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+}
+
+.mobile-nav-btn {
+  font-family: var(--font-display, 'Oswald', sans-serif);
+  font-weight: 800;
+  letter-spacing: 1px;
+  font-size: 0.85rem;
+  padding: 8px 14px;
+  min-height: 42px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  text-decoration: none;
+  transform: skew(-6deg);
+  border: 2px solid var(--ink-true-black);
+  cursor: pointer;
+  user-select: none;
+  flex: 1;
+  max-width: 220px;
+  text-align: center;
+  transition: transform 0.16s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.16s ease, color 0.16s ease, box-shadow 0.16s ease, border-color 0.16s ease;
+}
+
+.mobile-nav-btn > * {
+  transform: skew(6deg);
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+/* CLOUD DATABASE BTN - Pertahankan style biru cerah */
+.cloud-nav-btn {
+  background: #0284c7;
+  color: #FFFFFF;
+  box-shadow: 3px 3px 0px var(--ink-true-black);
+}
+
+.cloud-nav-btn:hover {
+  background: #00E5FF;
+  color: #000000;
+  border-color: #000000;
+  box-shadow: 4px 4px 0px var(--ink-true-black);
+  transform: skew(-6deg) translate(-2px, -2px);
+}
+
+.cloud-nav-btn:active {
+  background: #00E5FF;
+  color: #000000;
+  transform: skew(-6deg) translate(1px, 1px);
+  box-shadow: 1px 1px 0px var(--ink-true-black);
+}
+
+/* REPLAY INTRO BTN - Pertahankan style cyber yellow & black */
+.replay-btn {
+  background: #000000;
+  color: #FFE600;
+  border-color: #FFE600;
+  box-shadow: 3px 3px 0px var(--ink-true-black);
+}
+
+.replay-btn:hover {
+  background: #FFE600;
+  color: #000000;
+  border-color: #000000;
+  box-shadow: 4px 4px 0px var(--ink-true-black);
+  transform: skew(-6deg) translate(-2px, -2px);
+}
+
+.replay-btn:active {
+  background: #FFE600;
+  color: #000000;
+  border-color: #000000;
+  transform: skew(-6deg) translate(1px, 1px);
+  box-shadow: 1px 1px 0px var(--ink-true-black);
+}
+
+/* MAIN CONTENT COLUMN */
+.mobile-content-col {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+}
+
+/* CYBER CARD FRAMES (With matching cut-corner shadows & 3px cyber borders) */
+.cyber-card-frame {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  width: 100%;
+}
+
+.cyber-border-layer {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  background: #000000;
+  padding: 3px;
+  box-sizing: border-box;
+}
+
+.cyber-border-layer > .panel {
+  width: 100%;
+  border: none;
+  box-shadow: none;
+  box-sizing: border-box;
+}
+
+/* 1. HERO BANNER - Top-left & Bottom-right cyber cut corners */
+.hero-frame {
+  filter: drop-shadow(4px 4px 0px var(--manga-red));
+}
+
+.hero-border-layer {
+  clip-path: polygon(
+    22px 0%,
+    100% 0%,
+    100% calc(100% - 22px),
+    calc(100% - 22px) 100%,
+    0% 100%,
+    0% 22px
+  );
+}
+
+.hero-panel {
+  background: var(--ink-true-black);
+  color: var(--paper-white);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 16 / 9;
+  min-height: 200px;
+  max-height: 270px;
+  width: 100%;
+  clip-path: polygon(
+    21px 0%,
+    100% 0%,
+    100% calc(100% - 21px),
+    calc(100% - 21px) 100%,
+    0% 100%,
+    0% 21px
+  );
+}
+
+/* Layer 1: Background Video Embed Wrap */
+.hero-video-wrap {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: 1;
+  background: #000000;
+  pointer-events: none;
+}
+
+.hero-video-embed {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 118%;
+  height: 118%;
+  min-width: 100%;
+  min-height: 100%;
+  border: none;
+  pointer-events: none;
+}
+
+/* Layer 2: Vignette Tint */
+.hero-video-tint {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.7) 100%);
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* Layer 3: Manga Speed Lines */
+.speed-lines-bg {
+  position: absolute;
+  top: -50%; left: -50%; right: -50%; bottom: -50%;
+  background: repeating-linear-gradient(45deg, transparent 0, transparent 16px, rgba(255,255,255,0.15) 16px, rgba(255,255,255,0.15) 32px);
+  pointer-events: none;
+  z-index: 3;
+  mix-blend-mode: screen;
+}
+
+/* Layer 5: Hero Content */
+.hero-content {
+  position: relative;
+  z-index: 5;
+  pointer-events: none;
+  padding: 12px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.hero-title {
+  font-family: var(--font-display, 'Oswald', sans-serif);
+  font-size: clamp(1.4rem, 5.6vw, 1.85rem);
+  line-height: 1.15;
+  margin: 0;
+  font-style: italic;
+  font-weight: 800;
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  column-gap: 8px;
+  row-gap: 3px;
+  text-shadow: 
+    0 0 10px rgba(0,0,0,1),
+    2px 2px 0px #000000,
+    -2px -2px 0px #000000;
+  user-select: none;
+}
+
+.hero-neon-x {
+  color: #00F0FF;
+  font-style: italic;
+  font-weight: 900;
+  font-size: 1.1em;
+  padding: 0 2px;
+  text-shadow: 
+    0 0 6px rgba(0, 240, 255, 1),
+    0 0 14px rgba(0, 240, 255, 0.9),
+    2px 2px 0px #000000;
+  animation: neon-x-pulse 2.5s ease-in-out infinite alternate;
+}
+
+@keyframes neon-x-pulse {
+  0% { text-shadow: 0 0 6px rgba(0, 240, 255, 1), 2px 2px 0px #000000; }
+  100% { text-shadow: 0 0 14px rgba(0, 240, 255, 1), 2px 2px 0px #000000; }
+}
+
+.hero-cyber-badge-wrap {
+  margin-top: 10px;
+  display: inline-flex;
+  justify-content: center;
+  filter: drop-shadow(3px 3px 0px #FF003C);
+}
+
+.hero-cyber-badge {
+  background: #FFFFFF;
+  padding: 3px 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  clip-path: polygon(
+    6px 0%,
+    100% 0%,
+    100% calc(100% - 6px),
+    calc(100% - 6px) 100%,
+    0% 100%,
+    0% 6px
+  );
+  font-family: var(--font-display, 'Oswald', sans-serif);
+  font-size: 0.8rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  user-select: none;
+}
+
+.hero-cyber-badge .badge-text-personal { color: #000000; }
+.hero-cyber-badge .badge-text-website { color: #FF003C; }
+
+/* 2. ABOUT CARD - Top-left and bottom-right cut corners (bayangan biru langit cyber terang neon) */
+.about-frame {
+  filter: drop-shadow(4px 4px 0px #00E5FF);
+}
+
+.about-border-layer {
+  clip-path: polygon(
+    18px 0%,
+    100% 0%,
+    100% calc(100% - 18px),
+    calc(100% - 18px) 100%,
+    0% 100%,
+    0% 18px
+  );
+}
+
+.info-panel {
+  background: var(--paper-white);
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  clip-path: polygon(
+    17px 0%,
+    100% 0%,
+    100% calc(100% - 17px),
+    calc(100% - 17px) 100%,
+    0% 100%,
+    0% 17px
+  );
+}
+
+.about-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  gap: 8px;
+}
+
+.panel-header,
+.cyber-textbox {
+  background: #000000;
+  color: #FFFFFF;
+  padding: 5px 14px 5px 12px;
+  font-family: var(--font-display, 'Oswald', sans-serif);
+  font-size: 1.15rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  font-style: italic;
+  letter-spacing: 2px;
+  display: inline-flex;
+  align-items: center;
+  line-height: 1;
+  text-shadow: 0 0 4px rgba(255, 255, 255, 0.85);
+  clip-path: polygon(
+    8px 0%,
+    100% 0%,
+    100% calc(100% - 8px),
+    calc(100% - 8px) 100%,
+    0% 100%,
+    0% 8px
+  );
+  filter: drop-shadow(3px 3px 0px #FF003C);
+  border-left: 3px solid #00E5FF;
+  user-select: none;
+}
+
+.lang-flags-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.lang-flag-btn {
+  background: var(--paper-white);
+  border: 2px solid var(--ink-true-black);
+  box-shadow: 2px 2px 0px var(--ink-true-black);
+  padding: 4px 7px;
+  min-height: 28px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  font-family: var(--font-display, 'Oswald', sans-serif);
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: var(--ink-true-black);
+  line-height: 1;
+  transition: transform 0.15s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.15s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.15s ease, color 0.15s ease;
+}
+
+.lang-flag-btn:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 3px 3px 0px var(--manga-red);
+}
+
+.lang-flag-btn:active {
+  transform: translate(1px, 1px);
+  box-shadow: 1px 1px 0px var(--ink-true-black);
+}
+
+.lang-flag-btn.active {
+  background: var(--ink-true-black);
+  color: #FFFFFF;
+  box-shadow: 2px 2px 0px var(--manga-accent);
+}
+
+.flag-icon {
+  display: block;
+  flex-shrink: 0;
+}
+
+.flag-code {
+  font-weight: 900;
+}
+
+.info-panel .about-text {
+  font-size: 1rem;
+  line-height: 1.5;
+  font-weight: 600;
+  color: var(--ink-black);
+  margin: 0;
+  letter-spacing: 0.2px;
+}
+
+.about-owned-wrap {
+  display: inline-flex;
+  vertical-align: middle;
+  margin-left: 6px;
+  margin-top: 4px;
+  filter: drop-shadow(3px 3px 0px #000000);
+}
+
+.about-owned-badge {
+  background: #0284c7;
+  color: #FFFFFF;
+  padding: 3px 9px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  clip-path: polygon(
+    6px 0%,
+    100% 0%,
+    100% calc(100% - 6px),
+    calc(100% - 6px) 100%,
+    0% 100%,
+    0% 6px
+  );
+  font-family: var(--font-display, 'Oswald', sans-serif);
+  font-size: 0.78rem;
+  font-weight: 900;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  user-select: none;
+  transition: transform 0.15s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.about-owned-badge:hover {
+  transform: translate(-1px, -1px);
+}
+
+.about-owned-badge .owned-label { color: #000000; }
+.about-owned-badge .owned-link {
+  color: #FFFFFF;
+  text-decoration: none;
+  transition: text-shadow 0.2s ease;
+}
+
+.about-owned-badge .owned-link:hover {
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.95);
+  text-decoration: underline;
+}
+
+/* 3. PORTRAIT PANEL (Banner Image 1): 1 corner kanan bawah dipotong miring (bayangan kuning terang neon) */
+.portrait-frame {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  min-height: 220px;
+  max-height: 380px;
+  filter: drop-shadow(4px 4px 0px #FFE600);
+}
+
+.portrait-border-layer {
+  height: 100%;
+  clip-path: polygon(
+    0% 0%,
+    100% 0%,
+    100% calc(100% - 22px),
+    calc(100% - 22px) 100%,
+    0% 100%
+  );
+}
+
+.portrait-panel {
+  position: relative;
+  background: var(--paper-white);
+  border: none;
+  box-shadow: none;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  clip-path: polygon(
+    0% 0%,
+    100% 0%,
+    100% calc(100% - 21px),
+    calc(100% - 21px) 100%,
+    0% 100%
+  );
+}
+
+.portrait-panel .manga-img {
+  object-position: center 25%;
+}
+
+.manga-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  filter: grayscale(100%) contrast(1.2);
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), filter 0.35s ease;
+}
+
+/* Hovering dan klik transisi gambar manga (kembali berwarna penuh & membesar halus) */
+.portrait-panel:hover .manga-img,
+.portrait-panel:active .manga-img,
+.gallery-panel:hover .manga-img,
+.gallery-panel:active .manga-img {
+  filter: grayscale(0%) contrast(1.1);
+  transform: scale(1.03);
+}
+
+.sfx {
+  position: absolute;
+  bottom: 8px;
+  right: 10px;
+  font-family: var(--font-jp);
+  font-size: 2.2rem;
+  font-weight: 900;
+  color: transparent;
+  -webkit-text-stroke: 1.5px var(--ink-true-black);
+  transform: rotate(-10deg);
+  pointer-events: none;
+  text-shadow: 2px 2px 0px #FFFFFF;
+}
+
+/* 4. GALLERY GRIDS (Banner Image 2 ruby terang & Banner Image 3 biru langit terang) */
+.gallery-grid-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  width: 100%;
+}
+
+.gallery-1-frame,
+.gallery-2-frame {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  min-height: 105px;
+  max-height: 210px;
+}
+
+.gallery-1-frame {
+  filter: drop-shadow(4px 4px 0px #FF003C);
+}
+
+.gallery-2-frame {
+  filter: drop-shadow(4px 4px 0px #00E5FF);
+}
+
+.gallery-1-border-layer,
+.gallery-2-border-layer {
+  height: 100%;
+  clip-path: polygon(
+    0% 0%,
+    100% 0%,
+    100% calc(100% - 18px),
+    calc(100% - 18px) 100%,
+    0% 100%
+  );
+}
+
+.gallery-panel {
+  position: relative;
+  background: var(--paper-white);
+  border: none;
+  box-shadow: none;
+  overflow: hidden;
+  cursor: pointer;
+  width: 100%;
+  height: 100%;
+}
+
+.gallery-1,
+.gallery-2 {
+  clip-path: polygon(
+    0% 0%,
+    100% 0%,
+    100% calc(100% - 17px),
+    calc(100% - 17px) 100%,
+    0% 100%
+  );
+}
+
+/* 5. GALLERY 3 (Banner Image 4: 2 corner dipotong miring - bayangan ruby terang) */
+.gallery-3-frame {
+  width: 100%;
+  aspect-ratio: 16 / 6;
+  min-height: 120px;
+  max-height: 220px;
+  filter: drop-shadow(4px 4px 0px #FF003C);
+}
+
+.gallery-3-border-layer {
+  height: 100%;
+  clip-path: polygon(
+    22px 0%,
+    100% 0%,
+    100% calc(100% - 22px),
+    calc(100% - 22px) 100%,
+    0% 100%,
+    0% 22px
+  );
+}
+
+.gallery-3 {
+  clip-path: polygon(
+    21px 0%,
+    100% 0%,
+    100% calc(100% - 21px),
+    calc(100% - 21px) 100%,
+    0% 100%,
+    0% 21px
+  );
+}
+
+.sfx-lg {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(-5deg);
+  font-family: var(--font-jp);
+  font-size: 2.8rem;
+  font-weight: 900;
+  color: var(--manga-red);
+  -webkit-text-stroke: 1.5px var(--ink-true-black);
+  pointer-events: none;
+  opacity: 0.9;
+  font-style: italic;
+  white-space: nowrap;
+}
+
+/* 5. LINK HUB CARD - Bottom-right cut corner */
+.hub-frame {
+  filter: drop-shadow(4px 4px 0px #000000);
+}
+
+.hub-border-layer {
+  clip-path: polygon(
+    0% 0%,
+    100% 0%,
+    100% calc(100% - 20px),
+    calc(100% - 20px) 100%,
+    0% 100%
+  );
+}
+
+.hub-panel {
+  background: var(--bg-gray);
+  padding: 10px 12px 14px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  clip-path: polygon(
+    0% 0%,
+    100% 0%,
+    100% calc(100% - 19px),
+    calc(100% - 19px) 100%,
+    0% 100%
+  );
+}
+
+.hub-sticky-header {
+  background: var(--ink-true-black);
+  color: var(--paper-white);
+  padding: 6px 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid var(--paper-white);
+  margin: -10px -12px 2px -12px;
+}
+
+.hub-sticky-header h2 {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  margin: 0;
+  font-style: italic;
+}
+
+.hub-sticky-header .status {
+  font-size: 0.72rem;
+  font-weight: bold;
+  color: var(--manga-accent);
+}
+
+.hub-links-mobile {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: 100%;
+}
+
+.hub-btn-anchor {
+  position: relative;
+  display: flex;
+  width: 100%;
+  text-decoration: none;
+  outline: none;
+  user-select: none;
+  min-height: 52px;
+}
+
+.custom-shape-btn {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 16px;
+  width: 100%;
+  border-width: 3px;
+  border-style: solid;
+  text-transform: uppercase;
+  font-weight: 800;
+  overflow: hidden;
+  cursor: pointer;
+  outline: none;
+  user-select: none;
+  -webkit-user-select: none;
+  will-change: transform, box-shadow, border-color, background-color;
+  transition: 
+    transform 0.18s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.18s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.18s ease,
+    background-color 0.18s ease,
+    color 0.18s ease;
+}
+
+/* Skew -12deg persis seperti desktop */
+.slash-btn { 
+  transform: skew(-12deg); 
+}
+
+.slash-btn > * { 
+  transform: skew(12deg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+}
+
+/* Kinetic Slash Wipe Layer */
+.custom-shape-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -2px;
+  width: calc(100% + 4px);
+  height: 100%;
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 1;
+  will-change: transform;
+  pointer-events: none;
+}
+
+/* Cyber High-Speed Glint Streak Effect */
+.custom-shape-btn::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -120%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.45), transparent);
+  transform: skewX(-20deg);
+  z-index: 3;
+  pointer-events: none;
+  opacity: 0;
+}
+
+.hub-btn-anchor:hover .custom-shape-btn::after,
+.custom-shape-btn:hover::after {
+  opacity: 1;
+  animation: cyber-glint 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes cyber-glint {
+  0% { left: -120%; }
+  100% { left: 160%; }
+}
+
+.btn-text {
+  font-family: var(--font-display, 'Oswald', sans-serif);
+  font-size: 1.15rem;
+  letter-spacing: 1.5px;
+  line-height: 1.1;
+  font-weight: 900;
+  transition: color 0.15s ease;
+}
+
+.btn-jp {
+  font-family: var(--font-jp, sans-serif);
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  margin-top: 1px;
+  transition: color 0.15s ease;
+}
+
+/* COMING SOON BUTTON (Cyan Cyber Default -> Ruby Red Hover/Active) */
+.hub-btn-playstore .hub-btn-plate {
+  background-color: #00E5FF;
+  border-color: #000000;
+  box-shadow: 4px 4px 0px 0px #FF003C;
+  color: #000000;
+}
+
+.hub-btn-playstore .btn-text,
+.hub-btn-playstore .btn-jp {
+  color: #000000;
+}
+
+.hub-btn-playstore .hub-btn-plate::before {
+  background-color: #FF003C;
+}
+
+/* COMING SOON - Hover & Focus */
+.hub-btn-playstore:hover .hub-btn-plate,
+.hub-btn-playstore:focus-visible .hub-btn-plate {
+  transform: skew(-12deg) translate(-3px, -3px);
+  background-color: #FF003C;
+  border-color: #000000;
+  box-shadow: 6px 6px 0px 0px #00E5FF;
+  color: #FFFFFF;
+}
+
+.hub-btn-playstore:hover .btn-text,
+.hub-btn-playstore:hover .btn-jp,
+.hub-btn-playstore:focus-visible .btn-text,
+.hub-btn-playstore:focus-visible .btn-jp {
+  color: #FFFFFF;
+}
+
+.hub-btn-playstore:hover .hub-btn-plate::before,
+.hub-btn-playstore:focus-visible .hub-btn-plate::before {
+  transform: scaleX(1);
+}
+
+/* COMING SOON - Active (Click / Tap) */
+.hub-btn-playstore:active .hub-btn-plate {
+  transform: skew(-12deg) translate(2px, 2px);
+  background-color: #FF003C;
+  border-color: #000000;
+  box-shadow: 2px 2px 0px 0px #00E5FF;
+  color: #FFFFFF;
+}
+
+.hub-btn-playstore:active .btn-text,
+.hub-btn-playstore:active .btn-jp {
+  color: #FFFFFF;
+}
+
+.hub-btn-playstore:active .hub-btn-plate::before {
+  transform: scaleX(1);
+}
+
+/* FADHIL.DEV BUTTON (Pengembalian ke style & bentuk asli Desktop: Hitam Pekat + Border Kuning + Shadow Cyan Glow!) */
+.hub-btn-fadhil .hub-btn-plate {
+  background-color: #000000;
+  border-color: #FFD000;
+  box-shadow: 4px 4px 0px 0px #00E5FF;
+  color: #FFD000;
+}
+
+.hub-btn-fadhil .btn-text,
+.hub-btn-fadhil .btn-jp {
+  color: #FFD000;
+}
+
+.hub-btn-fadhil .hub-btn-plate::before {
+  background-color: #FFD000;
+}
+
+/* FADHIL.DEV - Hover & Focus */
+.hub-btn-fadhil:hover .hub-btn-plate,
+.hub-btn-fadhil:focus-visible .hub-btn-plate {
+  transform: skew(-12deg) translate(-3px, -3px);
+  background-color: #FFD000;
+  border-color: #000000;
+  box-shadow: 6px 6px 0px 0px #FF003C;
+  color: #000000;
+}
+
+.hub-btn-fadhil:hover .btn-text,
+.hub-btn-fadhil:hover .btn-jp,
+.hub-btn-fadhil:focus-visible .btn-text,
+.hub-btn-fadhil:focus-visible .btn-jp {
+  color: #000000;
+}
+
+.hub-btn-fadhil:hover .hub-btn-plate::before,
+.hub-btn-fadhil:focus-visible .hub-btn-plate::before {
+  transform: scaleX(1);
+}
+
+/* FADHIL.DEV - Active (Click / Tap) */
+.hub-btn-fadhil:active .hub-btn-plate {
+  transform: skew(-12deg) translate(2px, 2px);
+  background-color: #FFD000;
+  border-color: #000000;
+  box-shadow: 2px 2px 0px 0px #FF003C;
+  color: #000000;
+}
+
+.hub-btn-fadhil:active .btn-text,
+.hub-btn-fadhil:active .btn-jp {
+  color: #000000;
+}
+
+.hub-btn-fadhil:active .hub-btn-plate::before {
+  transform: scaleX(1);
+}
+
+/* FOOTER */
+.manga-footer {
+  text-align: center;
+  padding: 16px 0 8px 0;
+  font-size: 0.8rem;
+  color: var(--ink-black);
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  user-select: none;
+}
+
+.manga-footer p {
+  margin: 0;
+}
+
+/* TABLET REFINEMENT (@media 600px+) */
+@media (min-width: 600px) {
+  .mobile-wrapper {
+    max-width: 680px;
+    padding: 0 20px 36px 20px;
+  }
+
+  .portrait-frame {
+    aspect-ratio: 16 / 10;
+    max-height: 420px;
+  }
+}
+

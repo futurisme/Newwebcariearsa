@@ -508,8 +508,11 @@ body.splash-active .anime-pov-camera.animating {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: min(92vw, 860px);
-  height: min(84vh, 440px);
+  width: min(94vw, 960px);
+  height: min(86vh, 540px);
+  aspect-ratio: 16 / 9;
+  max-width: calc(min(86vh, 540px) * 16 / 9);
+  max-height: calc(min(94vw, 960px) * 9 / 16);
   transform-style: preserve-3d;
   will-change: transform;
   z-index: 20;
@@ -876,7 +879,7 @@ body.splash-active .anime-camera-rig {
   outline: 1.5px solid rgba(255, 255, 255, 0.9) !important;
 }
 
-/* Authentic Website Page Framing inside Smartphone Screen */
+/* Authentic Website Page Framing inside Smartphone Screen (100% Sesuai Asli & Konsisten) */
 body.splash-active #manga-wrapper,
 body.splash-active .manga-wrapper {
   width: 100% !important;
@@ -884,8 +887,7 @@ body.splash-active .manga-wrapper {
   max-width: 100% !important;
   margin: 0 !important;
   padding: 0 !important;
-  padding-top: 24px !important; /* Elegant clearance under phone status bar */
-  padding-bottom: 8px !important;
+  padding-bottom: 6px !important;
   background: var(--bg-gray, #E9ECEF) !important;
   color: var(--ink-black, #111111) !important;
   display: flex !important;
@@ -896,35 +898,32 @@ body.splash-active .manga-wrapper {
   box-sizing: border-box !important;
 }
 
-body.splash-active #manga-wrapper .marquee,
-body.splash-active .manga-wrapper .marquee {
+/* Maintain authentic top marquee billboard appearance */
+body.splash-active .marquee {
   flex-shrink: 0 !important;
-  height: 22px !important;
-  line-height: 22px !important;
-  font-size: 0.72rem !important;
-  border-top: 1.5px solid var(--ink-true-black, #000) !important;
-  border-bottom: 2px solid var(--ink-true-black, #000) !important;
 }
 
-body.splash-active #manga-wrapper .manga-nav,
+/* Maintain authentic navbar padding and layout */
 body.splash-active .manga-wrapper .manga-nav {
   flex-shrink: 0 !important;
-  padding: 4px 14px 6px 14px !important;
+  padding: 10px 16px 8px 16px !important;
 }
 
+/* Maintain authentic logo typography & vibrant cyber scale */
 body.splash-active #manga-wrapper .logo h1,
 body.splash-active .manga-wrapper .logo h1 {
-  font-size: 1.6rem !important;
+  font-size: 2.15rem !important;
   line-height: 1 !important;
 }
 
+/* Maintain authentic 12x8 manga grid layout & panel structure */
 body.splash-active #manga-wrapper .manga-grid,
 body.splash-active .manga-wrapper .manga-grid {
   display: grid !important;
   grid-template-columns: repeat(12, 1fr) !important;
   grid-template-rows: repeat(8, minmax(0, 1fr)) !important;
-  gap: 6px !important;
-  padding: 0 12px 6px 12px !important;
+  gap: 8px !important;
+  padding: 0 16px 6px 16px !important;
   flex: 1 !important;
   min-height: 0 !important;
   box-sizing: border-box !important;
@@ -934,6 +933,26 @@ body.splash-active .manga-wrapper .manga-grid {
 body.splash-active .anime-camera-rig.camera-flying {
   will-change: transform, filter !important;
   animation: animeMaster12sCameraFlight 12s cubic-bezier(0.2, 0.86, 0.22, 1) forwards !important;
+}
+
+/* Smooth Desktop Keyboard Skip Transition (Shift + S) */
+body.splash-skipping #anime-camera-viewport,
+body.splash-skipping #anime-pov-camera,
+body.splash-skipping #anime-handheld-unit,
+body.splash-skipping #anime-camera-rig {
+  transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1), filter 0.32s ease !important;
+  transform: translate3d(0, 0, 0) rotateX(0deg) rotateY(0deg) rotateZ(0deg) scale(1) !important;
+  filter: none !important;
+  animation: none !important;
+}
+
+body.splash-skipping .anime-splash-overlay,
+body.splash-skipping #anime-phone-frame,
+body.splash-skipping #anime-align-hud,
+body.splash-skipping .anime-dynamic-backdrop {
+  transition: opacity 0.28s ease-out !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
 }
 
 /* Settle State: Absolute Zero CPU/GPU Overhead */
@@ -1667,49 +1686,57 @@ body.splash-completed .anime-splash-overlay {
 
 .crest-tag {
   font-family: 'Oswald', sans-serif;
-  font-size: 0.82rem;
-  letter-spacing: 3px;
+  font-size: clamp(0.72rem, 1.8vw, 0.86rem);
+  letter-spacing: 2.5px;
   color: #00F0FF;
-  text-shadow: 0 0 10px #00F0FF;
-  margin-bottom: 4px;
+  text-shadow: 0 0 10px rgba(0, 240, 255, 0.9), 0 1px 3px rgba(0, 0, 0, 0.8);
+  margin-bottom: 5px;
   font-weight: 700;
+  text-transform: uppercase;
+  white-space: nowrap;
 }
 
 .crest-title-box {
-  background: rgba(0, 0, 0, 0.88);
+  background: rgba(4, 7, 14, 0.92);
   border: 2px solid #FFFFFF;
-  box-shadow: 4px 4px 0px #FF003C, 0 0 25px rgba(255, 0, 60, 0.7);
+  box-shadow: 4px 4px 0px #FF003C, 0 0 25px rgba(255, 0, 60, 0.75);
   padding: 8px 24px;
   transform: skew(-6deg);
+  backdrop-filter: blur(8px);
 }
 
 .crest-title {
   font-family: 'Bangers', 'Oswald', sans-serif;
-  font-size: 2.4rem;
-  line-height: 0.95;
+  font-size: clamp(1.3rem, 3.4vw, 2.3rem);
+  line-height: 1.0;
   color: #FFFFFF;
   margin: 0;
-  letter-spacing: 2px;
+  letter-spacing: 1.5px;
   font-style: italic;
   font-weight: 900;
   text-transform: uppercase;
+  white-space: nowrap;
+  text-shadow: 2px 2px 0px #000000, 0 0 18px rgba(255, 255, 255, 0.45);
 }
 
 .crest-jp {
   display: block;
-  font-family: 'Noto Sans JP', sans-serif;
-  font-size: 0.78rem;
+  font-family: 'Oswald', 'Rajdhani', sans-serif;
+  font-size: clamp(0.72rem, 1.6vw, 0.85rem);
   color: #FFE600;
   letter-spacing: 2px;
-  margin-top: 3px;
+  margin-top: 4px;
   font-weight: 700;
+  text-transform: uppercase;
+  white-space: nowrap;
+  text-shadow: 0 0 10px rgba(255, 230, 0, 0.9), 0 1px 2px #000000;
 }
 
 .crest-progress-rail {
-  width: 200px;
+  width: min(250px, 80vw);
   height: 4px;
-  background: rgba(255, 255, 255, 0.25);
-  border: 1px solid #FFFFFF;
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.75);
   margin-top: 8px;
   overflow: hidden;
   box-shadow: 0 0 12px rgba(0, 240, 255, 0.8);
@@ -1720,6 +1747,20 @@ body.splash-completed .anime-splash-overlay {
   width: 0%;
   background: linear-gradient(90deg, #00F0FF, #FFE600, #FF003C);
   animation: animeProgressFillClean 11s cubic-bezier(0.2, 0.8, 0.25, 1) forwards;
+}
+
+.crest-status-line {
+  display: block;
+  font-family: 'Oswald', 'Space Grotesk', sans-serif;
+  font-size: clamp(0.72rem, 1.6vw, 0.85rem);
+  font-weight: 600;
+  color: #FFFFFF;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-top: 8px;
+  text-shadow: 0 0 10px rgba(0, 240, 255, 0.85), 0 2px 4px rgba(0, 0, 0, 0.95);
+  white-space: nowrap;
+  text-align: center;
 }
 
 @keyframes animeProgressFillClean {
