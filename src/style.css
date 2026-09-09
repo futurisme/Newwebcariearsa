@@ -264,15 +264,15 @@ body::before {
   );
 }
 
-/* CLOUD DATABASE Button - Cyber Chamfer Shape (Cut Top-Left 9px & Bottom-Right 9px) with Solid Black Outline */
+/* CLOUD DATABASE Button - Scaled Cyber Chamfer Shape (Cut Top-Left 12px & Bottom-Right 12px) with Solid Black Outline */
 .cloud-nav-btn,
 .manga-btn.cloud-nav-btn {
   position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
-  padding: 6px 14px;
+  gap: 8px;
+  padding: 9px 20px;
   background-color: transparent !important;
   background: transparent !important;
   border: none !important;
@@ -282,20 +282,20 @@ body::before {
   clip-path: none !important;
   font-family: var(--font-display, 'Oswald', sans-serif);
   font-weight: 800;
-  letter-spacing: 1.2px;
-  font-size: 0.82rem;
+  letter-spacing: 1.3px;
+  font-size: 1.02rem;
   line-height: 1.1;
   text-decoration: none;
   cursor: pointer;
   user-select: none;
   white-space: nowrap;
   /* Outer Drop-shadow adheres accurately to the cut-corner polygon of the inner black layer */
-  filter: drop-shadow(3.5px 3.5px 0px #00E5FF);
+  filter: drop-shadow(4px 4px 0px #00E5FF);
   transition: transform 0.16s cubic-bezier(0.16, 1, 0.3, 1), filter 0.16s ease;
   will-change: transform, filter;
 }
 
-/* Outer black cyber border layer (Cut Top-Left 9px & Bottom-Right 9px) */
+/* Outer black cyber border layer (Cut Top-Left 12px & Bottom-Right 12px) */
 .cloud-nav-btn::before,
 .manga-btn.cloud-nav-btn::before {
   content: '';
@@ -303,31 +303,31 @@ body::before {
   inset: 0;
   background-color: #000000;
   clip-path: polygon(
-    9px 0%,
+    12px 0%,
     100% 0%,
-    100% calc(100% - 9px),
-    calc(100% - 9px) 100%,
+    100% calc(100% - 12px),
+    calc(100% - 12px) 100%,
     0% 100%,
-    0% 9px
+    0% 12px
   );
   z-index: 1;
   pointer-events: none;
 }
 
-/* Inner plate fill (Cut Top-Left 8px & Bottom-Right 8px, inset 2px creates uniform 2px black outline) */
+/* Inner plate fill (Cut Top-Left 11px & Bottom-Right 11px, inset 2.5px creates uniform 2.5px black outline) */
 .cloud-nav-btn::after,
 .manga-btn.cloud-nav-btn::after {
   content: '';
   position: absolute;
-  inset: 2px;
+  inset: 2.5px;
   background-color: #FF003C;
   clip-path: polygon(
-    8px 0%,
+    11px 0%,
     100% 0%,
-    100% calc(100% - 8px),
-    calc(100% - 8px) 100%,
+    100% calc(100% - 11px),
+    calc(100% - 11px) 100%,
     0% 100%,
-    0% 8px
+    0% 11px
   );
   z-index: 2;
   pointer-events: none;
@@ -340,11 +340,25 @@ body::before {
   z-index: 3;
   display: inline-flex;
   align-items: center;
-  gap: 5px;
+  gap: 6px;
   color: #FFFFFF;
   line-height: 1;
   transition: color 0.16s ease;
   pointer-events: none;
+}
+
+.cloud-nav-btn .nav-btn-icon,
+.manga-btn.cloud-nav-btn .nav-btn-icon {
+  font-size: 1.15rem;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+}
+
+.cloud-nav-btn .nav-btn-text,
+.manga-btn.cloud-nav-btn .nav-btn-text {
+  font-size: 1.02rem;
+  line-height: 1;
 }
 
 /* Hover & Focus-Visible State:
@@ -359,7 +373,7 @@ body::before {
   box-shadow: none !important;
   border: none !important;
   outline: none !important;
-  filter: drop-shadow(5px 5px 0px #FF003C);
+  filter: drop-shadow(6px 6px 0px #FF003C);
   transform: translate(-2px, -2px);
 }
 
@@ -1447,25 +1461,32 @@ body::before {
   );
 }
 
-/* Inner color plate fill (Cut Corner Kiri Atas 13px & Kanan Bawah 13px, inset 2.5px creates uniform 2.5px black outline) */
+/* Inner color plate fill (Cut Corner Kiri Atas 12.5px & Kanan Bawah 12.5px, inset 2.5px creates uniform 2.5px black outline) */
 .hub-btn-playstore .hub-btn-plate::before,
 .hub-btn-playstore.custom-shape-btn::before {
   content: '';
   position: absolute;
-  inset: 2.5px;
+  inset: 2.5px !important;
+  top: 2.5px !important;
+  left: 2.5px !important;
+  right: 2.5px !important;
+  bottom: 2.5px !important;
+  width: auto !important;
+  height: auto !important;
+  box-sizing: border-box !important;
   background-color: #00E5FF;
   clip-path: polygon(
-    13px 0%,
+    12.5px 0%,
     100% 0%,
-    100% calc(100% - 13px),
-    calc(100% - 13px) 100%,
+    100% calc(100% - 12.5px),
+    calc(100% - 12.5px) 100%,
     0% 100%,
-    0% 13px
+    0% 12.5px
   );
   z-index: 1;
   pointer-events: none;
   transition: background-color 0.18s ease;
-  transform: none;
+  transform: none !important;
 }
 
 .hub-btn-playstore .btn-text,
@@ -1573,25 +1594,32 @@ body::before {
   );
 }
 
-/* Inner color plate fill (Cut Corner Kiri Atas & Kanan Bawah 13px, inset 2.5px creates uniform 2.5px black outline) */
+/* Inner color plate fill (Cut Corner Kiri Atas & Kanan Bawah 12.5px, inset 2.5px creates uniform 2.5px black outline) */
 .hub-btn-fadhil .hub-btn-plate::before,
 .hub-btn-fadhil.custom-shape-btn::before {
   content: '';
   position: absolute;
-  inset: 2.5px;
+  inset: 2.5px !important;
+  top: 2.5px !important;
+  left: 2.5px !important;
+  right: 2.5px !important;
+  bottom: 2.5px !important;
+  width: auto !important;
+  height: auto !important;
+  box-sizing: border-box !important;
   background-color: #FF003C;
   clip-path: polygon(
-    13px 0%,
+    12.5px 0%,
     100% 0%,
-    100% calc(100% - 13px),
-    calc(100% - 13px) 100%,
+    100% calc(100% - 12.5px),
+    calc(100% - 12.5px) 100%,
     0% 100%,
-    0% 13px
+    0% 12.5px
   );
   z-index: 1;
   pointer-events: none;
   transition: background-color 0.18s ease;
-  transform: none;
+  transform: none !important;
 }
 
 .hub-btn-fadhil .btn-text,
@@ -1903,8 +1931,8 @@ body::before {
     font-size: 0.92rem;
   }
   .cloud-nav-btn {
-    font-size: 0.88rem;
-    padding: 6px 16px;
+    font-size: 1.15rem;
+    padding: 11px 24px;
   }
   .hub-btn-fadhil .btn-text,
   .hub-btn-playstore .btn-text {
@@ -1932,8 +1960,8 @@ body::before {
     font-size: 1.15rem;
   }
   .cloud-nav-btn {
-    font-size: 1.05rem;
-    padding: 8px 22px;
+    font-size: 1.35rem;
+    padding: 14px 30px;
   }
   .hub-btn-fadhil .btn-text,
   .hub-btn-playstore .btn-text {
