@@ -110,6 +110,11 @@ async function startServer() {
     res.redirect(302, '/intro/');
   });
 
+  // Fadhil portfolio subdirectory redirect handler
+  app.get('/fadhil', (req, res) => {
+    res.redirect(302, '/fadhil/');
+  });
+
   app.use((req, res, next) => {
     if (req.path === '/' || req.path === '/index.html') {
       if (isMobileClient(req)) {
@@ -186,6 +191,9 @@ async function startServer() {
     });
     app.get(['/note', '/note/'], (req, res) => {
       res.sendFile(path.join(distPath, 'note/index.html'));
+    });
+    app.get(['/fadhil', '/fadhil/'], (req, res) => {
+      res.sendFile(path.join(distPath, 'fadhil/index.html'));
     });
     app.get(['/components', '/components/'], (req, res) => {
       res.sendFile(path.join(distPath, 'components/index.html'));

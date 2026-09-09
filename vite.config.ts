@@ -40,6 +40,10 @@ export default defineConfig(() => {
                 res.writeHead(302, { Location: '/intro/' });
                 return res.end();
               }
+              if (req.url === '/fadhil') {
+                res.writeHead(302, { Location: '/fadhil/' });
+                return res.end();
+              }
               // Server-side mobile detection for dev
               if (req.url === '/' || req.url === '/index.html') {
                 const ua = req.headers['user-agent'] || '';
@@ -89,7 +93,8 @@ export default defineConfig(() => {
           cloudMobile: path.resolve(__dirname, 'cloud/mobile/index.html'),
           note: path.resolve(__dirname, 'note/index.html'),
           introlab: path.resolve(__dirname, 'introlab/index.html'),
-          c360: path.resolve(__dirname, '360/index.html')
+          c360: path.resolve(__dirname, '360/index.html'),
+          fadhil: path.resolve(__dirname, 'fadhil/index.html')
         },
         output: {
           manualChunks(id) {
