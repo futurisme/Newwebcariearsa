@@ -8,8 +8,8 @@ import { FileData, FileCategory, SortField } from './types';
 import { cleanDisplayName, getFileCategory, getFileExtension, formatFileSize, isVideoFile, isAudioFile, isImageFile } from './utils/fileHelpers';
 
 // Initialize direct Supabase client for resilient fallback
-const SUPABASE_URL = (import.meta as any).env?.VITE_SUPABASE_URL || 'https://gnhkhnmvggltqszbhfev.supabase.co';
-const SUPABASE_KEY = (import.meta as any).env?.VITE_SUPABASE_ANON_KEY || 'sb_secret_E7C1i2kfhrHHBdbrCbIfZA_5I12RT6C';
+const SUPABASE_URL = (import.meta as any).env?.VITE_SUPABASE_URL || 'https://skxsvioheebxidqafmoo.supabase.co';
+const SUPABASE_KEY = (import.meta as any).env?.VITE_SUPABASE_ANON_KEY || 'sb_publishable_3RFdAZVw-8qqJiWgQpEpwQ_Q_peRYlq';
 const BUCKET_NAME = 'vault_files';
 const supabaseClient = createClient(SUPABASE_URL, SUPABASE_KEY);
 

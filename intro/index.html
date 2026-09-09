@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CARIEARSA // UNIVERSAL 3D ANIME INTRO</title>
+  <!-- Strict Isolation: Never index, crawl, or rank this secret subdirectory -->
+  <meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
+  <meta name="googlebot" content="noindex, nofollow, noarchive, nosnippet">
+
+  <link rel="stylesheet" href="/src/style.css">
+  <link rel="stylesheet" href="/src/animeIntro.css">
+  <!-- Prioritized Caching & Instant Preload for 12s Anime Cinematic Intro Assets -->
+  <link rel="preload" href="/assets/girl.avif" as="image" type="image/avif" fetchpriority="high">
+  <link rel="modulepreload" href="/src/animeIntro.js">
+</head>
+<body class="manga-body">
+  <div id="manga-wrapper">
+    <header class="manga-header">
+      <div class="top-billboard-wrapper" aria-label="Cyberpunk Billboard Running Text">
+        <div class="top-billboard-track">
+          <span class="billboard-item neon-white">CARIEARSA.COM</span>
+          <span class="billboard-item neon-yellow jp-font">ファディル</span>
+          <span class="billboard-item neon-ruby">PORTFOLIOS</span>
+          <span class="billboard-item neon-yellow jp-font">ポートフォリオ</span>
+          <span class="billboard-item neon-white">FADHIL.DEV</span>
+          <span class="billboard-item neon-yellow jp-font">キャリーアルサ</span>
+          <span class="billboard-item neon-white">CARIEARSA.COM</span>
+          <span class="billboard-item neon-yellow jp-font">ファディル</span>
+          <span class="billboard-item neon-ruby">PORTFOLIOS</span>
+          <span class="billboard-item neon-yellow jp-font">ポートフォリオ</span>
+        </div>
+      </div>
+
+      <nav class="manga-nav">
+        <div class="header-main-group">
+          <div class="logo-frame">
+            <div class="logo">
+              <h1 class="logo-cyber" aria-label="CARIEARSA">
+                <span class="logo-slash slash-sky" aria-hidden="true">/</span><span class="logo-slash slash-pink" aria-hidden="true">/</span><span class="logo-c">C</span><span class="logo-a">A</span><span class="logo-ri">RI</span><span class="logo-ea">EA</span><span class="logo-rsa">RSA</span>
+              </h1>
+            </div>
+          </div>
+          <div class="header-action-group">
+            <a href="/cloud/" class="manga-btn cloud-nav-btn" title="CARIEARSA Cloud Database">
+              <span class="nav-btn-icon">☁</span>
+              <span class="nav-btn-text">CLOUD DATABASE</span>
+            </a>
+            <button type="button" id="replay-cinematic-btn" class="manga-btn replay-btn" title="Replay Anime Cinematic Opening" aria-label="Replay anime cinematic opening">
+              <span class="nav-btn-icon">▶</span>
+              <span class="nav-btn-text">REPLAY INTRO</span>
+            </button>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="manga-grid">
+      <!-- Hero (8x4) with Responsive Video Screen Embed - Cyber Cut Corner (Bottom-Right) -->
+      <div class="cyber-card-frame hero-frame">
+        <div class="cyber-border-layer hero-border-layer">
+          <section id="intro" class="panel hero-panel" aria-label="Enter the Cariearsa Banner">
+            <!-- Responsive Background Video Layer -->
+            <div class="hero-video-wrap" id="hero-video-wrap">
+              <iframe 
+                id="hero-yt-player"
+                class="hero-video-embed"
+                src="https://www.youtube.com/embed/0opyaQPK6bY?si=GT5XogXThZ0yy2ga&amp;enablejsapi=1&amp;autoplay=1&amp;mute=0&amp;controls=0&amp;start=178&amp;loop=1&amp;playlist=0opyaQPK6bY&amp;playsinline=1&amp;rel=0&amp;modestbranding=1&amp;iv_load_policy=3" 
+                title="YouTube video player" 
+                frameborder="0" 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                referrerpolicy="strict-origin-when-cross-origin" 
+                allowfullscreen>
+              </iframe>
+              <div class="hero-video-tint"></div>
+            </div>
+
+            <!-- Manga Speed Lines Overlay -->
+            <div class="speed-lines-bg"></div>
+
+            <!-- Hero Content Overlay -->
+            <div class="hero-content">
+              <h2 class="hero-title">
+                <span class="hero-brand-name">Cariearsa.com</span>
+                <span class="hero-brand-sep"><span class="hero-neon-x">x</span></span>
+                <span class="hero-brand-owner">Fadhil.dev</span>
+              </h2>
+              <div class="hero-cyber-badge-wrap">
+                <div class="hero-cyber-badge" id="hero-personal-website-badge">
+                  <span class="badge-text-personal">PERSONAL</span>
+                  <span class="badge-text-website">WEBSITE</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Cyber Audio Indicator & Sound Controller -->
+            <button type="button" id="hero-sound-toggle" class="hero-sound-badge" title="Klik untuk mengaktifkan audio 100% jernih">
+              <span class="sound-icon">🔊</span>
+              <span class="sound-text">AUDIO ACTIVE</span>
+            </button>
+          </section>
+        </div>
+      </div>
+
+      <!-- About Panel (4x2) -->
+      <div class="cyber-card-frame about-frame">
+        <div class="cyber-border-layer about-border-layer">
+          <section class="panel info-panel text-panel" id="about-panel">
+            <div class="about-header-row">
+              <div class="panel-header cyber-textbox" id="about-header">ABOUT:</div>
+              <div class="lang-flags-group" role="group" aria-label="Language Selector">
+                <button type="button" class="lang-flag-btn" data-lang="id" title="Bahasa Indonesia" aria-label="Ganti bahasa ke Indonesia">
+                  <svg class="flag-icon" viewBox="0 0 24 16" width="18" height="12" aria-hidden="true">
+                    <rect width="24" height="8" fill="#E70011"/>
+                    <rect y="8" width="24" height="8" fill="#FFFFFF"/>
+                    <rect width="24" height="16" fill="none" stroke="#000000" stroke-width="1"/>
+                  </svg>
+                  <span class="flag-code">ID</span>
+                </button>
+                <button type="button" class="lang-flag-btn active" data-lang="en" title="English" aria-label="Switch language to English">
+                  <svg class="flag-icon" viewBox="0 0 60 40" width="18" height="12" aria-hidden="true">
+                    <clipPath id="uk-flag-clip-intro">
+                      <rect width="60" height="40"/>
+                    </clipPath>
+                    <g clip-path="url(#uk-flag-clip-intro)">
+                      <rect width="60" height="40" fill="#012169"/>
+                      <path d="M0,0 L60,40 M60,0 L0,40" stroke="#fff" stroke-width="8"/>
+                      <path d="M0,0 L60,40 M60,0 L0,40" stroke="#C8102E" stroke-width="4"/>
+                      <path d="M30,0 v40 M0,20 h60" stroke="#fff" stroke-width="12"/>
+                      <path d="M30,0 v40 M0,20 h60" stroke="#C8102E" stroke-width="7"/>
+                      <rect width="60" height="40" fill="none" stroke="#000000" stroke-width="2"/>
+                    </g>
+                  </svg>
+                  <span class="flag-code">EN</span>
+                </button>
+                <button type="button" class="lang-flag-btn" data-lang="jp" title="日本語 (Japanese)" aria-label="言語を日本語に変更">
+                  <svg class="flag-icon" viewBox="0 0 24 16" width="18" height="12" aria-hidden="true">
+                    <rect width="24" height="16" fill="#FFFFFF"/>
+                    <circle cx="12" cy="8" r="4.8" fill="#BC002D"/>
+                    <rect width="24" height="16" fill="none" stroke="#000000" stroke-width="1"/>
+                  </svg>
+                  <span class="flag-code">JP</span>
+                </button>
+              </div>
+            </div>
+            <p class="about-text" id="about-description">
+              <span id="about-text-content">A collection of digital assets and portfolios under personal ownership.</span>
+              <span class="about-owned-wrap">
+                <span class="about-owned-badge" id="about-owned-badge">
+                  <span class="owned-label">OWNED BY</span>
+                  <a href="https://fadhil.dev" target="_blank" rel="noopener noreferrer" class="owned-link" title="fadhil.dev official website">FADHIL.DEV</a>
+                </span>
+              </span>
+            </p>
+          </section>
+        </div>
+      </div>
+
+      <!-- Portrait Panel -->
+      <div class="cyber-card-frame portrait-frame">
+        <div class="cyber-border-layer portrait-border-layer">
+          <section class="panel portrait-panel">
+            <img src="/assets/image4.avif" alt="Character Portrait" class="manga-img" width="923" height="923" loading="lazy" decoding="async" onerror="if(this.src.indexOf('public/assets/image4.avif') === -1) this.src='/public/assets/image4.avif'; else if(this.src.indexOf('assets/image4.avif') === -1) this.src='assets/image4.avif';">
+            <div class="sfx">ドンッ!!</div>
+          </section>
+        </div>
+      </div>
+
+      <!-- Gallery 1 -->
+      <div class="cyber-card-frame gallery-1-frame">
+        <div class="cyber-border-layer gallery-1-border-layer">
+          <section class="panel gallery-panel gallery-1">
+            <img src="/assets/image1.avif" alt="Gallery Scene 1" class="manga-img" width="1080" height="537" loading="lazy" decoding="async" onerror="if(this.src.indexOf('public/assets/image1.avif') === -1) this.src='/public/assets/image1.avif'; else if(this.src.indexOf('assets/image1.avif') === -1) this.src='assets/image1.avif';">
+          </section>
+        </div>
+      </div>
+      
+      <!-- Gallery 2 -->
+      <div class="cyber-card-frame gallery-2-frame">
+        <div class="cyber-border-layer gallery-2-border-layer">
+          <section class="panel gallery-panel gallery-2">
+            <img src="/assets/image2.avif" alt="Gallery Scene 2" class="manga-img" width="1080" height="754" loading="lazy" decoding="async" onerror="if(this.src.indexOf('public/assets/image2.avif') === -1) this.src='/public/assets/image2.avif'; else if(this.src.indexOf('assets/image2.avif') === -1) this.src='assets/image2.avif';">
+          </section>
+        </div>
+      </div>
+
+      <!-- Gallery 3 -->
+      <div class="cyber-card-frame gallery-3-frame">
+        <div class="cyber-border-layer gallery-3-border-layer">
+          <section class="panel gallery-panel gallery-3">
+            <img src="/assets/image3.avif" alt="Gallery Panorama" class="manga-img" width="2400" height="1080" loading="lazy" decoding="async" onerror="if(this.src.indexOf('public/assets/image3.avif') === -1) this.src='/public/assets/image3.avif'; else if(this.src.indexOf('assets/image3.avif') === -1) this.src='assets/image3.avif';">
+            <div class="sfx-lg">ゴゴゴゴ</div>
+          </section>
+        </div>
+      </div>
+
+      <!-- Hub (4x2) -->
+      <div class="cyber-card-frame hub-frame">
+        <div class="cyber-border-layer hub-border-layer">
+          <section id="hub" class="panel hub-panel">
+            <header class="hub-sticky-header">
+              <h2>RELATED FEATURED WEBSITES</h2>
+              <span class="status">ACTIVE</span>
+            </header>
+            <div class="hub-links">
+              <a href="javascript:void(0)" class="hub-btn-anchor hub-btn-playstore coming-soon-btn" role="button" tabindex="0" title="Coming Soon (Dekorasi)" onclick="event.preventDefault()">
+                <span class="custom-shape-btn slash-btn hub-btn-plate">
+                  <span class="btn-text">COMING SOON!</span>
+                  <span class="btn-jp">近日公開 // SOON</span>
+                </span>
+              </a>
+              <a href="https://fadhil.dev" target="_blank" rel="noopener noreferrer" class="hub-btn-anchor hub-btn-fadhil" title="Official Website of Fadhil.dev">
+                <span class="custom-shape-btn slash-btn hub-btn-plate">
+                  <span class="btn-text">FADHIL.DEV</span>
+                  <span class="btn-jp">公式サイト // DEV</span>
+                </span>
+              </a>
+            </div>
+          </section>
+        </div>
+      </div>
+    </main>
+    
+    <footer class="manga-footer">
+      <p>&copy; 2026 CARIEARSA | Some Rights Reserved.</p>
+    </footer>
+  </div><!-- /#manga-wrapper -->
+
+  <script src="https://www.youtube.com/iframe_api"></script>
+  <script type="module" src="/src/animeIntro.js"></script>
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

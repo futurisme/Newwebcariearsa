@@ -24,6 +24,14 @@ import { initPlayStoreIntro, replayPlayStoreIntro, skipPlayStoreIntro } from './
   if (window.__cariearsa_anime_intro_initialized) return;
   window.__cariearsa_anime_intro_initialized = true;
 
+  // STRICT ISOLATION: The universal intro ONLY executes when accessing the /intro subdirectory!
+  // All other URLs (root, /mobile, /hub, /japan, /aniwatch, etc.) are strictly exempted with zero overhead.
+  const currentPath = window.location.pathname.toLowerCase();
+  const isIntroPage = currentPath === '/intro' || currentPath.startsWith('/intro/') || currentPath.includes('/intro');
+  if (!isIntroPage) {
+    return;
+  }
+
   // Prioritized Cache Engine & Asset Preloader (2026 Web Engineering)
   const prioritizeIntroCache = () => {
     try {

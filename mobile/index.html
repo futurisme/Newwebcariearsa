@@ -48,10 +48,6 @@
   </script>
 
   <link rel="stylesheet" href="/src/mobile.css">
-  <link rel="stylesheet" href="/src/animeIntro.css">
-  <!-- Prioritized Caching & Instant Preload for 12s Anime Cinematic Intro Assets -->
-  <link rel="preload" href="/assets/girl.avif" as="image" type="image/avif" fetchpriority="high">
-  <link rel="modulepreload" href="/src/animeIntro.js">
   <script>
     if ('serviceWorker' in navigator) {
       const registerSW = () => {
@@ -126,10 +122,6 @@
           <span>☁</span>
           <span>CLOUD DATABASE</span>
         </a>
-        <button type="button" id="replay-cinematic-btn" class="mobile-nav-btn replay-btn" title="Replay Anime Cinematic Opening" aria-label="Replay anime cinematic opening">
-          <span>▶</span>
-          <span>REPLAY INTRO</span>
-        </button>
       </div>
     </nav>
 
@@ -300,7 +292,6 @@
   </div><!-- /.mobile-wrapper -->
 
   <script src="https://www.youtube.com/iframe_api"></script>
-  <script type="module" src="/src/animeIntro.js"></script>
   <script type="module" src="/src/main.js"></script>
 </body>
 </html>

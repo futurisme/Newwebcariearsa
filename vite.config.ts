@@ -36,6 +36,10 @@ export default defineConfig(() => {
                 res.writeHead(302, { Location: '/mobile/' });
                 return res.end();
               }
+              if (req.url === '/intro') {
+                res.writeHead(302, { Location: '/intro/' });
+                return res.end();
+              }
               // Server-side mobile detection for dev
               if (req.url === '/' || req.url === '/index.html') {
                 const ua = req.headers['user-agent'] || '';
@@ -73,6 +77,7 @@ export default defineConfig(() => {
       rollupOptions: {
         input: {
           main: path.resolve(__dirname, 'index.html'),
+          intro: path.resolve(__dirname, 'intro/index.html'),
           mobile: path.resolve(__dirname, 'mobile/index.html'),
           hub: path.resolve(__dirname, 'hub/index.html'),
           japan: path.resolve(__dirname, 'japan/index.html'),

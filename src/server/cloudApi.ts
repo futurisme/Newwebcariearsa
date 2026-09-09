@@ -6,13 +6,13 @@ import path from 'path';
 
 const upload = multer({ storage: multer.memoryStorage() });
 
-const supabaseUrl = process.env.SUPABASE_URL || 'https://gnhkhnmvggltqszbhfev.supabase.co';
+const supabaseUrl = process.env.SUPABASE_URL || '';
 const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_KEY || '';
 const BUCKET_NAME = 'vault_files';
 
-// A key is only a valid Supabase JWT if it starts with 'eyJ'
-const isSupabaseJwtValid = typeof supabaseKey === 'string' && supabaseKey.startsWith('eyJ');
-const supabase = isSupabaseJwtValid ? createClient(supabaseUrl, supabaseKey) : null;
+// Key is valid if it starts with 'sb_', 'eyJ', or has valid key length
+const isSupabaseKeyValid = typeof supabaseKey === 'string' && (supabaseKey.startsWith('sb_') || supabaseKey.startsWith('eyJ') || supabaseKey.length > 20);
+const supabase = isSupabaseKeyValid ? createClient(supabaseUrl, supabaseKey) : null;
 
 // Persistent server fallback storage
 const VAULT_DIR = path.join(process.cwd(), '.vault_storage');
@@ -128,16 +128,24 @@ async function handleUpload(req: any, res: any) {
     // 1. Try Supabase if available
     if (supabase) {
       try {
-        const { data, error } = await supabase.storage.from(BUCKET_NAME).upload(fileName, req.file.buffer, {
+        let uploadResult = await supabase.storage.from(BUCKET_NAME).upload(fileName, req.file.buffer, {
           contentType: mimetype,
           upsert: true,
         });
 
-        if (!error) {
+        if (uploadResult.error && (uploadResult.error as any)?.message?.toLowerCase().includes('bucket not found')) {
+          await supabase.storage.createBucket(BUCKET_NAME, { public: true, fileSizeLimit: 52428800 });
+          uploadResult = await supabase.storage.from(BUCKET_NAME).upload(fileName, req.file.buffer, {
+            contentType: mimetype,
+            upsert: true,
+          });
+        }
+
+        if (!uploadResult.error) {
           const { data: urlData } = supabase.storage.from(BUCKET_NAME).getPublicUrl(fileName);
           return res.json({
             success: true,
-            file: { name: fileName, publicUrl: urlData.publicUrl, data },
+            file: { name: fileName, publicUrl: urlData.publicUrl, data: uploadResult.data },
             source: 'supabase'
           });
         }

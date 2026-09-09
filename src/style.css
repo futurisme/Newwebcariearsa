@@ -264,46 +264,119 @@ body::before {
   );
 }
 
-/* CLOUD DATABASE Button - Cyber High-Contrast Blue */
-.cloud-nav-btn {
-  background: #0284c7;
-  color: #FFFFFF;
-  border: 2px solid var(--ink-true-black);
-  box-shadow: 3px 3px 0px var(--ink-true-black);
+/* CLOUD DATABASE Button - Cyber Chamfer Shape (Cut Top-Left 9px & Bottom-Right 9px) with Solid Black Outline */
+.cloud-nav-btn,
+.manga-btn.cloud-nav-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  background: transparent;
+  border: none;
   font-family: var(--font-display, 'Oswald', sans-serif);
   font-weight: 800;
   letter-spacing: 1.2px;
   font-size: 0.82rem;
-  padding: 5px 14px;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
   text-decoration: none;
-  transform: skew(-6deg);
-  transition: transform 0.16s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.16s ease, color 0.16s ease, box-shadow 0.16s ease;
   cursor: pointer;
   user-select: none;
   white-space: nowrap;
+  /* Shadow conforms to cut cyber polygon via drop-shadow on the element */
+  filter: drop-shadow(3px 3px 0px #00E5FF);
+  transition: transform 0.16s cubic-bezier(0.16, 1, 0.3, 1), filter 0.16s ease;
+  will-change: transform, filter;
 }
 
-.cloud-nav-btn > * {
-  transform: skew(6deg);
+/* Outer black cyber border layer (Cut Top-Left 9px & Bottom-Right 9px) */
+.cloud-nav-btn::before,
+.manga-btn.cloud-nav-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-color: #000000;
+  clip-path: polygon(
+    9px 0%,
+    100% 0%,
+    100% calc(100% - 9px),
+    calc(100% - 9px) 100%,
+    0% 100%,
+    0% 9px
+  );
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Inner plate fill (Cut Top-Left 8px & Bottom-Right 8px, inset 2px creates uniform 2px black outline) */
+.cloud-nav-btn::after,
+.manga-btn.cloud-nav-btn::after {
+  content: '';
+  position: absolute;
+  inset: 2px;
+  background-color: #FF003C;
+  clip-path: polygon(
+    8px 0%,
+    100% 0%,
+    100% calc(100% - 8px),
+    calc(100% - 8px) 100%,
+    0% 100%,
+    0% 8px
+  );
+  z-index: 1;
+  pointer-events: none;
+  transition: background-color 0.16s ease;
+}
+
+.cloud-nav-btn > *,
+.manga-btn.cloud-nav-btn > * {
+  position: relative;
+  z-index: 2;
   display: inline-flex;
   align-items: center;
   gap: 5px;
+  color: #FFFFFF;
+  transition: color 0.16s ease;
+  pointer-events: none;
 }
 
-.cloud-nav-btn:hover {
-  background: #00E5FF;
+/* Hover & Focus-Visible State */
+.cloud-nav-btn:hover,
+.cloud-nav-btn:focus-visible,
+.manga-btn.cloud-nav-btn:hover,
+.manga-btn.cloud-nav-btn:focus-visible {
+  filter: drop-shadow(4px 4px 0px #FF003C);
+  transform: translate(-2px, -2px);
+}
+
+.cloud-nav-btn:hover::after,
+.cloud-nav-btn:focus-visible::after,
+.manga-btn.cloud-nav-btn:hover::after,
+.manga-btn.cloud-nav-btn:focus-visible::after {
+  background-color: #00E5FF;
+}
+
+.cloud-nav-btn:hover > *,
+.cloud-nav-btn:focus-visible > *,
+.manga-btn.cloud-nav-btn:hover > *,
+.manga-btn.cloud-nav-btn:focus-visible > * {
   color: #000000;
-  border-color: #000000;
-  box-shadow: 4px 4px 0px var(--ink-true-black);
-  transform: skew(-6deg) translate(-2px, -2px);
 }
 
-.cloud-nav-btn:active {
-  transform: skew(-6deg) translate(1px, 1px);
-  box-shadow: 2px 2px 0px var(--ink-true-black);
+/* Active State (Click) */
+.cloud-nav-btn:active,
+.manga-btn.cloud-nav-btn:active {
+  filter: drop-shadow(1px 1px 0px #FF003C);
+  transform: translate(1px, 1px);
+}
+
+.cloud-nav-btn:active::after,
+.manga-btn.cloud-nav-btn:active::after {
+  background-color: #00E5FF;
+}
+
+.cloud-nav-btn:active > *,
+.manga-btn.cloud-nav-btn:active > * {
+  color: #000000;
 }
 
 /* REPLAY INTRO Button - Cyber Yellow & Ink Black */
@@ -1301,13 +1374,13 @@ body::before {
   100% { left: 160%; }
 }
 
-/* Diagonal Parallelogram Cyber Slash */
+/* Diagonal Cyber Shape (Upright cyber chamfer geometry matching panels) */
 .slash-btn { 
-  transform: skew(-12deg); 
+  transform: none; 
 }
 
 .slash-btn > * { 
-  transform: skew(12deg);
+  transform: none;
   position: relative;
   z-index: 2;
   pointer-events: none;
@@ -1315,34 +1388,68 @@ body::before {
 }
 
 /* -------------------------------------------------------------
-   1. BUTTON: PLAY STORE (hub-btn-playstore)
-   Default:
-     - inner-fill: #00E5FF (biru langit cyber terang)
-     - outline: #000000 (hitam)
-     - bayangan: #FF003C (merah ruby terang)
-     - teks: #000000 (hitam)
-   Hover / Click (Active):
-     - inner-fill: #FF003C (merah ruby terang)
-     - outline: #000000 (hitam)
-     - bayangan: #00E5FF (biru langit terang)
-     - teks: #FFFFFF (putih bersih / terang)
+   1. BUTTON: PLAY STORE / COMING SOON (hub-btn-playstore)
+   - Cyber cut corner: kanan bawah (14px cut)
+   - Solid outline: 2.5px solid #000000
+   - Bayangan: #FF003C (default), #00E5FF (hover/active)
+   - Inner-fill: #00E5FF (default), #FF003C (hover/active)
+   - Teks: #000000 (default), #FFFFFF (hover/active)
    ------------------------------------------------------------- */
+.hub-btn-playstore {
+  filter: drop-shadow(4px 4px 0px #FF003C);
+  transition: filter 0.18s ease;
+}
+
+.hub-btn-playstore:hover,
+.hub-btn-playstore:focus-visible {
+  filter: drop-shadow(6px 6px 0px #00E5FF);
+}
+
+.hub-btn-playstore:active {
+  filter: drop-shadow(2px 2px 0px #00E5FF);
+}
+
+/* Outer black cyber border layer (Cut Corner Kanan Bawah 14px) */
 .hub-btn-playstore .hub-btn-plate,
 .hub-btn-playstore.custom-shape-btn {
+  background-color: #000000;
+  border: none;
+  box-shadow: none;
+  clip-path: polygon(
+    0% 0%,
+    100% 0%,
+    100% calc(100% - 14px),
+    calc(100% - 14px) 100%,
+    0% 100%
+  );
+}
+
+/* Inner color plate fill (Cut Corner Kanan Bawah 13px, inset 2.5px creates uniform 2.5px black outline) */
+.hub-btn-playstore .hub-btn-plate::before,
+.hub-btn-playstore.custom-shape-btn::before {
+  content: '';
+  position: absolute;
+  inset: 2.5px;
   background-color: #00E5FF;
-  border-color: #000000;
-  box-shadow: 4px 4px 0px 0px #FF003C;
-  color: #000000;
+  clip-path: polygon(
+    0% 0%,
+    100% 0%,
+    100% calc(100% - 13px),
+    calc(100% - 13px) 100%,
+    0% 100%
+  );
+  z-index: 1;
+  pointer-events: none;
+  transition: background-color 0.18s ease;
+  transform: none;
 }
 
 .hub-btn-playstore .btn-text,
 .hub-btn-playstore .btn-jp {
   color: #000000;
-}
-
-.hub-btn-playstore .hub-btn-plate::before,
-.hub-btn-playstore.custom-shape-btn::before {
-  background-color: #FF003C; /* Merah ruby terang */
+  position: relative;
+  z-index: 2;
+  transition: color 0.18s ease;
 }
 
 /* Hover & Focus State */
@@ -1350,11 +1457,14 @@ body::before {
 .hub-btn-playstore:focus-visible .hub-btn-plate,
 .hub-btn-playstore.custom-shape-btn:hover,
 .hub-btn-playstore.custom-shape-btn:focus-visible {
-  transform: skew(-12deg) translate(-3px, -3px);
+  transform: translate(-3px, -3px);
+}
+
+.hub-btn-playstore:hover .hub-btn-plate::before,
+.hub-btn-playstore:focus-visible .hub-btn-plate::before,
+.hub-btn-playstore.custom-shape-btn:hover::before,
+.hub-btn-playstore.custom-shape-btn:focus-visible::before {
   background-color: #FF003C;
-  border-color: #000000;
-  box-shadow: 6px 6px 0px 0px #00E5FF;
-  color: #FFFFFF;
 }
 
 .hub-btn-playstore:hover .btn-text,
@@ -1368,21 +1478,15 @@ body::before {
   color: #FFFFFF;
 }
 
-.hub-btn-playstore:hover .hub-btn-plate::before,
-.hub-btn-playstore:focus-visible .hub-btn-plate::before,
-.hub-btn-playstore.custom-shape-btn:hover::before,
-.hub-btn-playstore.custom-shape-btn:focus-visible::before {
-  transform: scaleX(1);
-}
-
 /* Active (Click) State */
 .hub-btn-playstore:active .hub-btn-plate,
 .hub-btn-playstore.custom-shape-btn:active {
-  transform: skew(-12deg) translate(2px, 2px);
+  transform: translate(2px, 2px);
+}
+
+.hub-btn-playstore:active .hub-btn-plate::before,
+.hub-btn-playstore.custom-shape-btn:active::before {
   background-color: #FF003C;
-  border-color: #000000;
-  box-shadow: 2px 2px 0px 0px #00E5FF;
-  color: #FFFFFF;
 }
 
 .hub-btn-playstore:active .btn-text,
@@ -1390,11 +1494,6 @@ body::before {
 .hub-btn-playstore.custom-shape-btn:active .btn-text,
 .hub-btn-playstore.custom-shape-btn:active .btn-jp {
   color: #FFFFFF;
-}
-
-.hub-btn-playstore:active .hub-btn-plate::before,
-.hub-btn-playstore.custom-shape-btn:active::before {
-  transform: scaleX(1);
 }
 
 .hub-btn-playstore .btn-text {
@@ -1414,33 +1513,69 @@ body::before {
 
 /* -------------------------------------------------------------
    2. BUTTON: FADHIL.DEV (hub-btn-fadhil)
-   Default:
-     - inner-fill: #000000 (hitam)
-     - outline: #FFD000 (kuning/bronze terang)
-     - bayangan: #00E5FF (biru langit terang)
-     - teks: #FFD000 (kuning terang)
-   Hover / Click (Active):
-     - inner-fill: #FFD000 (kuning/bronze terang)
-     - outline: #000000 (hitam)
-     - bayangan: #FF003C (merah ruby terang)
-     - teks: #000000 (hitam)
+   - Cyber cut corner: kiri atas dan kanan bawah (14px cut)
+   - Solid outline: 2.5px solid #000000
+   - Bayangan: #00E5FF (default), #FF003C (hover/active)
+   - Inner-fill: #FF003C (default), #00E5FF (hover/active)
+   - Teks: #FFFFFF (default), #000000 (hover/active)
    ------------------------------------------------------------- */
+.hub-btn-fadhil {
+  filter: drop-shadow(4px 4px 0px #00E5FF);
+  transition: filter 0.18s ease;
+}
+
+.hub-btn-fadhil:hover,
+.hub-btn-fadhil:focus-visible {
+  filter: drop-shadow(6px 6px 0px #FF003C);
+}
+
+.hub-btn-fadhil:active {
+  filter: drop-shadow(2px 2px 0px #FF003C);
+}
+
+/* Outer black cyber border layer (Cut Corner Kiri Atas & Kanan Bawah 14px) */
 .hub-btn-fadhil .hub-btn-plate,
 .hub-btn-fadhil.custom-shape-btn {
   background-color: #000000;
-  border-color: #FFD000;
-  box-shadow: 4px 4px 0px 0px #00E5FF;
-  color: #FFD000;
+  border: none;
+  box-shadow: none;
+  clip-path: polygon(
+    14px 0%,
+    100% 0%,
+    100% calc(100% - 14px),
+    calc(100% - 14px) 100%,
+    0% 100%,
+    0% 14px
+  );
+}
+
+/* Inner color plate fill (Cut Corner Kiri Atas & Kanan Bawah 13px, inset 2.5px creates uniform 2.5px black outline) */
+.hub-btn-fadhil .hub-btn-plate::before,
+.hub-btn-fadhil.custom-shape-btn::before {
+  content: '';
+  position: absolute;
+  inset: 2.5px;
+  background-color: #FF003C;
+  clip-path: polygon(
+    13px 0%,
+    100% 0%,
+    100% calc(100% - 13px),
+    calc(100% - 13px) 100%,
+    0% 100%,
+    0% 13px
+  );
+  z-index: 1;
+  pointer-events: none;
+  transition: background-color 0.18s ease;
+  transform: none;
 }
 
 .hub-btn-fadhil .btn-text,
 .hub-btn-fadhil .btn-jp {
-  color: #FFD000;
-}
-
-.hub-btn-fadhil .hub-btn-plate::before,
-.hub-btn-fadhil.custom-shape-btn::before {
-  background-color: #FFD000; /* Kuning / bronze terang */
+  color: #FFFFFF;
+  position: relative;
+  z-index: 2;
+  transition: color 0.18s ease;
 }
 
 /* Hover & Focus State */
@@ -1448,11 +1583,14 @@ body::before {
 .hub-btn-fadhil:focus-visible .hub-btn-plate,
 .hub-btn-fadhil.custom-shape-btn:hover,
 .hub-btn-fadhil.custom-shape-btn:focus-visible {
-  transform: skew(-12deg) translate(-3px, -3px);
-  background-color: #FFD000;
-  border-color: #000000;
-  box-shadow: 6px 6px 0px 0px #FF003C;
-  color: #000000;
+  transform: translate(-3px, -3px);
+}
+
+.hub-btn-fadhil:hover .hub-btn-plate::before,
+.hub-btn-fadhil:focus-visible .hub-btn-plate::before,
+.hub-btn-fadhil.custom-shape-btn:hover::before,
+.hub-btn-fadhil.custom-shape-btn:focus-visible::before {
+  background-color: #00E5FF;
 }
 
 .hub-btn-fadhil:hover .btn-text,
@@ -1466,21 +1604,15 @@ body::before {
   color: #000000;
 }
 
-.hub-btn-fadhil:hover .hub-btn-plate::before,
-.hub-btn-fadhil:focus-visible .hub-btn-plate::before,
-.hub-btn-fadhil.custom-shape-btn:hover::before,
-.hub-btn-fadhil.custom-shape-btn:focus-visible::before {
-  transform: scaleX(1);
-}
-
 /* Active (Click) State */
 .hub-btn-fadhil:active .hub-btn-plate,
 .hub-btn-fadhil.custom-shape-btn:active {
-  transform: skew(-12deg) translate(2px, 2px);
-  background-color: #FFD000;
-  border-color: #000000;
-  box-shadow: 2px 2px 0px 0px #FF003C;
-  color: #000000;
+  transform: translate(2px, 2px);
+}
+
+.hub-btn-fadhil:active .hub-btn-plate::before,
+.hub-btn-fadhil.custom-shape-btn:active::before {
+  background-color: #00E5FF;
 }
 
 .hub-btn-fadhil:active .btn-text,
@@ -1488,11 +1620,6 @@ body::before {
 .hub-btn-fadhil.custom-shape-btn:active .btn-text,
 .hub-btn-fadhil.custom-shape-btn:active .btn-jp {
   color: #000000;
-}
-
-.hub-btn-fadhil:active .hub-btn-plate::before,
-.hub-btn-fadhil.custom-shape-btn:active::before {
-  transform: scaleX(1);
 }
 
 .hub-btn-fadhil .btn-text {
@@ -1708,4 +1835,98 @@ body::before {
     border: none;
   }
 }
+
+/* ==========================================================================
+   SMART TV & WIDESCREEN (16:9+) ULTRA DISPLAY COMPATIBILITY
+   Matematika Layout & Kalkulasi Viewport:
+   - Native 16:9 & Ultrawide Display Expansion (1080p, 1440p, 4K UHD)
+   - Eliminasi ruang kosong berlebih di monitor lebar / Smart TV 16:9
+   - Dukungan TV Safe Area (Overscan Protection) & 10-Foot UI Viewing Distance
+   - Dukungan Navigasi Remote D-Pad / Keyboard Focus Indicator
+   ========================================================================== */
+@media screen and (min-width: 1440px) {
+  .manga-wrapper {
+    max-width: min(1560px, 94vw);
+    padding-top: calc(34px + env(safe-area-inset-top, 0px));
+    padding-left: calc(16px + env(safe-area-inset-left, 0px));
+    padding-right: calc(16px + env(safe-area-inset-right, 0px));
+  }
+  .manga-grid {
+    gap: 10px;
+    padding: 0 16px;
+  }
+}
+
+@media screen and (min-width: 1720px) and (min-aspect-ratio: 16/10) {
+  /* 1080p Full HD Smart TV, 1440p QHD Monitors */
+  .manga-wrapper {
+    max-width: min(1820px, 95vw);
+    padding-top: calc(38px + env(safe-area-inset-top, 0px));
+    padding-bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+    padding-left: calc(20px + env(safe-area-inset-left, 0px));
+    padding-right: calc(20px + env(safe-area-inset-right, 0px));
+  }
+  .manga-grid {
+    gap: 12px;
+    padding: 0 20px;
+  }
+  .logo h1,
+  .logo h1.logo-cyber {
+    font-size: 2.6rem;
+  }
+  .billboard-item {
+    margin: 0 34px;
+    font-size: 0.92rem;
+  }
+  .cloud-nav-btn {
+    font-size: 0.88rem;
+    padding: 6px 16px;
+  }
+  .hub-btn-fadhil .btn-text,
+  .hub-btn-playstore .btn-text {
+    font-size: 1.15rem;
+  }
+}
+
+@media screen and (min-width: 2200px) and (min-aspect-ratio: 16/10) {
+  /* 4K UHD Smart TV (3840x2160) & Ultra-wide Cinema Displays */
+  .manga-wrapper {
+    max-width: min(2380px, 95vw);
+    padding-top: calc(46px + env(safe-area-inset-top, 0px));
+    padding-bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+  }
+  .manga-grid {
+    gap: 16px;
+    padding: 0 24px;
+  }
+  .logo h1,
+  .logo h1.logo-cyber {
+    font-size: 3.2rem;
+  }
+  .billboard-item {
+    margin: 0 44px;
+    font-size: 1.15rem;
+  }
+  .cloud-nav-btn {
+    font-size: 1.05rem;
+    padding: 8px 22px;
+  }
+  .hub-btn-fadhil .btn-text,
+  .hub-btn-playstore .btn-text {
+    font-size: 1.3rem;
+  }
+  .hub-btn-fadhil .btn-jp,
+  .hub-btn-playstore .btn-jp {
+    font-size: 0.75rem;
+  }
+}
+
+/* Smart TV D-pad / Keyboard Accessibility Remote Focus Indicator */
+a:focus-visible,
+button:focus-visible,
+[tabindex="0"]:focus-visible {
+  outline: 3px solid #00E5FF !important;
+  outline-offset: 3px !important;
+}
+
 

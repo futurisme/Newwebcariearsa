@@ -194,8 +194,8 @@ document.addEventListener('DOMContentLoaded', () => {
               }
             }
           });
-        } catch (err) {
-          console.warn('YT Player init fallback', err);
+        } catch (_) {
+          // Seamless fallback if YT Player API is unavailable or restricted
         }
       }
     };

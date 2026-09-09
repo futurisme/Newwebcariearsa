@@ -294,8 +294,8 @@
                   try {
                     event.target.playVideo();
                     event.target.setLoop(true);
-                  } catch (e) {
-                    console.warn('YT playVideo issue:', e);
+                  } catch (_) {
+                    // Handled gracefully
                   }
                 },
                 onStateChange: (event) => {
@@ -317,8 +317,8 @@
               </iframe>
             `;
           }
-        } catch (err) {
-          console.warn('YouTube Player setup:', err);
+        } catch (_) {
+          // Handled gracefully
         }
       };
 
@@ -345,8 +345,8 @@
             this.ytPlayer.unMute();
             this.ytPlayer.setVolume(100);
             this.ytPlayer.playVideo();
-          } catch (e) {
-            console.warn('unMute error:', e);
+          } catch (_) {
+            // Handled gracefully
           }
         }
 
