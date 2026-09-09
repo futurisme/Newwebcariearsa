@@ -1,13 +1,4 @@
-export interface ThemeVariant {
-  id: string;
-  name: string;
-  tag: string;
-  primaryColor: string;
-  secondaryColor: string;
-  bgColor: string;
-}
-
-export const THEME_VARIANTS: ThemeVariant[] = [
+export const THEME_VARIANTS = [
   {
     id: 'neo-tokyo',
     name: 'Neo Tokyo',
@@ -58,7 +49,7 @@ export const THEME_VARIANTS: ThemeVariant[] = [
   },
 ];
 
-export function renderSettingsModal(state: any): string {
+export function renderSettingsModal(state) {
   const currentTheme = state.theme || 'neo-tokyo';
   const hasScanlines = state.scanlinesEnabled;
   const isCompact = state.compactGrid;

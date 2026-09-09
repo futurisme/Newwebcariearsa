@@ -14,23 +14,7 @@ try {
   console.error('Failed to create NOTES_DIR:', e);
 }
 
-interface NotePayload {
-  title?: string;
-  body?: string;
-}
-
-interface StoredNote {
-  docKey: string;
-  note: {
-    title: string;
-    body: string;
-  };
-  version: number;
-  updatedAt: number;
-  clientId?: string;
-}
-
-function normalizeDocKey(raw: any): string {
+function normalizeDocKey(raw) {
   const clean = String(raw || 'main')
     .toLowerCase()
     .replace(/[^a-z0-9_-]+/g, '-')
@@ -39,11 +23,11 @@ function normalizeDocKey(raw: any): string {
   return clean || 'main';
 }
 
-function getNotePath(docKey: string): string {
+function getNotePath(docKey) {
   return path.join(NOTES_DIR, `${docKey}.json`);
 }
 
-function readNote(docKey: string): StoredNote {
+function readNote(docKey) {
   const filePath = getNotePath(docKey);
   if (fs.existsSync(filePath)) {
     try {
@@ -66,7 +50,7 @@ function readNote(docKey: string): StoredNote {
     }
   }
 
-  // Default empty note (e.g. for "supa" or "main" when clean)
+  // Default empty note
   return {
     docKey,
     note: {
@@ -78,11 +62,11 @@ function readNote(docKey: string): StoredNote {
   };
 }
 
-function writeNote(docKey: string, noteData: NotePayload, expectedVersion?: number, clientId?: string): StoredNote {
+function writeNote(docKey, noteData, expectedVersion, clientId) {
   const current = readNote(docKey);
   const nextVersion = (current.version || 0) + 1;
 
-  const stored: StoredNote = {
+  const stored = {
     docKey,
     note: {
       title: String(noteData?.title || '').slice(0, 120),
@@ -105,7 +89,7 @@ function writeNote(docKey: string, noteData: NotePayload, expectedVersion?: numb
   return stored;
 }
 
-// Enable CORS for external fadhil.dev or local testing
+// Enable CORS
 noteRouter.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, OPTIONS, DELETE');
@@ -128,7 +112,7 @@ noteRouter.get('/', (req, res) => {
       version: stored.version,
       updatedAt: stored.updatedAt
     });
-  } catch (err: any) {
+  } catch (err) {
     console.error('Note GET error:', err);
     res.json({
       ok: true,
@@ -155,7 +139,7 @@ noteRouter.put('/', (req, res) => {
       version: stored.version,
       updatedAt: stored.updatedAt
     });
-  } catch (err: any) {
+  } catch (err) {
     console.error('Note PUT error:', err);
     res.status(500).json({ ok: false, error: err?.message || 'Failed to save note' });
   }
@@ -177,7 +161,7 @@ noteRouter.post('/', (req, res) => {
       version: stored.version,
       updatedAt: stored.updatedAt
     });
-  } catch (err: any) {
+  } catch (err) {
     console.error('Note POST error:', err);
     res.status(500).json({ ok: false, error: err?.message || 'Failed to save note' });
   }

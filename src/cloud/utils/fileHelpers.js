@@ -1,12 +1,12 @@
-import { FileCategory } from '../types';
-
-export function getFileExtension(filename: string): string {
+export function getFileExtension(filename) {
+  if (!filename || typeof filename !== 'string') return '';
   const parts = filename.split('.');
   if (parts.length <= 1) return '';
   return parts[parts.length - 1].toLowerCase();
 }
 
-export function cleanDisplayName(filename: string): string {
+export function cleanDisplayName(filename) {
+  if (!filename || typeof filename !== 'string') return '';
   // If it starts with timestamp (e.g. 1725450000000_name.ext), extract the real name
   const match = filename.match(/^\d+_(.+)$/);
   if (match && match[1]) {
@@ -15,7 +15,7 @@ export function cleanDisplayName(filename: string): string {
   return filename;
 }
 
-export function getFileCategory(filename: string): FileCategory {
+export function getFileCategory(filename) {
   const ext = getFileExtension(filename);
   
   if (['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg', 'bmp', 'avif', 'ico'].includes(ext)) {
@@ -33,39 +33,31 @@ export function getFileCategory(filename: string): FileCategory {
   return 'other';
 }
 
-export function isAudioFile(filename: string): boolean {
+export function isAudioFile(filename) {
   const ext = getFileExtension(filename);
   return ['mp3', 'wav', 'flac', 'ogg', 'm4a', 'aac', 'opus', 'wma'].includes(ext);
 }
 
-export function isImageFile(filename: string): boolean {
+export function isImageFile(filename) {
   const ext = getFileExtension(filename);
   return ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg', 'bmp', 'avif'].includes(ext);
 }
 
-export function isVideoFile(filename: string): boolean {
+export function isVideoFile(filename) {
   const ext = getFileExtension(filename);
   return ['mp4', 'webm', 'mkv', 'mov', 'avi', 'm4v'].includes(ext);
 }
 
-export function isPdfFile(filename: string): boolean {
+export function isPdfFile(filename) {
   return getFileExtension(filename) === 'pdf';
 }
 
-export function isWordFile(filename: string): boolean {
+export function isWordFile(filename) {
   const ext = getFileExtension(filename);
   return ['doc', 'docx', 'odt', 'rtf'].includes(ext);
 }
 
-export interface FileTypeBadgeInfo {
-  tag: string;
-  badgeBg: string;
-  badgeText: string;
-  borderColor: string;
-  iconType: 'image' | 'video' | 'audio' | 'pdf' | 'word' | 'sheet' | 'code' | 'archive' | 'file';
-}
-
-export function getFileTypeBadge(filename: string): FileTypeBadgeInfo {
+export function getFileTypeBadge(filename) {
   const ext = getFileExtension(filename);
 
   if (isImageFile(filename)) {
@@ -157,14 +149,14 @@ export function getFileTypeBadge(filename: string): FileTypeBadgeInfo {
   };
 }
 
-export function formatFileSize(bytes?: number): string {
-  if (!bytes || bytes <= 0) return '0 B';
+export function formatFileSize(bytes) {
+  if (!bytes || bytes <= 0 || isNaN(bytes)) return '0 B';
   const units = ['B', 'KB', 'MB', 'GB', 'TB'];
   const i = Math.floor(Math.log(bytes) / Math.log(1024));
   return `${(bytes / Math.pow(1024, i)).toFixed(i === 0 ? 0 : 1)} ${units[i]}`;
 }
 
-export function formatTimestamp(dateStr: string): string {
+export function formatTimestamp(dateStr) {
   if (!dateStr) return '';
   const d = new Date(dateStr);
   return d.toLocaleDateString(undefined, {
@@ -174,7 +166,7 @@ export function formatTimestamp(dateStr: string): string {
   });
 }
 
-export function formatTime(seconds: number): string {
+export function formatTime(seconds) {
   if (isNaN(seconds) || seconds < 0) return '0:00';
   const mins = Math.floor(seconds / 60);
   const secs = Math.floor(seconds % 60);

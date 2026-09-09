@@ -1,6 +1,6 @@
-import { renderStorageIndicator, renderCategoryDropdown, renderSortDropdown } from './ui-layout-1';
+import { renderStorageIndicator, renderCategoryDropdown, renderSortDropdown } from './ui-layout-1.js';
 
-export function renderHeaderControls(state: any, totalBytes: number, totalFiles: number, categoryCounts: any) {
+export function renderHeaderControls(state, totalBytes, totalFiles, categoryCounts) {
   const selectedCount = state.selectedFileNames?.size || 0;
 
   return `
@@ -83,7 +83,7 @@ export function renderHeaderControls(state: any, totalBytes: number, totalFiles:
   `;
 }
 
-export function renderSidebar(state: any, categoryCounts: any, totalBytes: number, totalFiles: number) {
+export function renderSidebar(state, categoryCounts, totalBytes, totalFiles) {
   const cats = [
     { id: 'all', icon: 'folder', label: 'Semua File', count: categoryCounts.all, color: 'text-[var(--c-accent)]' },
     { id: 'image', icon: 'image', label: 'Foto / Gambar', count: categoryCounts.image, color: 'text-emerald-400' },
@@ -139,4 +139,3 @@ export function renderSidebar(state: any, categoryCounts: any, totalBytes: numbe
     </div>
   `;
 }
-

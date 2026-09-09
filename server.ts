@@ -1,8 +1,8 @@
 import express from 'express';
 import path from 'path';
 import { createClient } from '@supabase/supabase-js';
-import { cloudRouter } from './src/server/cloudApi.ts';
-import { noteRouter } from './src/server/noteApi.ts';
+import { cloudRouter } from './src/server/cloudApi.js';
+import { noteRouter } from './src/server/noteApi.js';
 
 const getDirname = () => {
   if (typeof __dirname !== 'undefined') return __dirname;

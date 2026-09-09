@@ -6,7 +6,7 @@
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     
-    <!-- Hyper-fast Desktop Detection (Redirect to /cloud/ if desktop/laptop) -->
+    <!-- Accurate Desktop Detection (Redirect to /cloud/ if desktop/laptop) -->
     <script>
       (function() {
         try {
@@ -14,13 +14,19 @@
           if (params.get('view') === 'mobile' || sessionStorage.getItem('cariearsa_cloud_force') === 'mobile') {
             return;
           }
-          var isMobileUA = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|Tablet|Silk|Kindle|PlayBook/i.test(navigator.userAgent || '');
-          var isCoarse = window.matchMedia && (window.matchMedia('(pointer: coarse)').matches || window.matchMedia('(hover: none)').matches);
-          var hasTouch = (navigator.maxTouchPoints && navigator.maxTouchPoints > 0) || ('ontouchstart' in window);
-          var isLargeScreen = window.innerWidth > 1024 && (window.screen && Math.min(window.screen.width, window.screen.height) > 768);
+          var ua = navigator.userAgent || '';
+          var platform = navigator.platform || '';
 
-          // If on a desktop/laptop without touch screen or mobile user agent
-          if (isLargeScreen && !isMobileUA && !isCoarse && !hasTouch) {
+          // Check if desktop OS
+          var isWindows = /Windows NT|Win64|WOW64|Win32/i.test(ua) || platform.indexOf('Win') !== -1;
+          var isMac = /Macintosh|MacIntel|MacPPC|Mac68K/i.test(ua) && !/iPhone|iPad|iPod/i.test(ua);
+          var isLinuxDesktop = /Linux/i.test(ua) && !/Android/i.test(ua);
+          var isCrOS = /CrOS/i.test(ua);
+          var isDesktopOS = isWindows || isMac || isLinuxDesktop || isCrOS;
+          var isLargeScreen = window.innerWidth >= 1024 || (window.screen && Math.min(window.screen.width, window.screen.height) >= 900);
+
+          // If desktop or laptop, redirect to /cloud (desktop version)
+          if (isDesktopOS || isLargeScreen) {
             var target = '/cloud/' + window.location.search + window.location.hash;
             window.location.replace(target);
           }
@@ -284,6 +290,6 @@
     <audio id="mobile-audio" class="hidden"></audio>
     <input type="file" id="mobile-hidden-file-input" multiple class="hidden" />
 
-    <script type="module" src="/src/cloud/mobile/main.ts"></script>
+    <script type="module" src="/src/cloud/mobile/main.js"></script>
   </body>
 </html>

@@ -17,8 +17,8 @@ export default defineConfig(() => {
         async configureServer(server: any) {
           try {
             const express = (await import('express')).default;
-            const { cloudRouter } = await import('./src/server/cloudApi.ts');
-            const { noteRouter } = await import('./src/server/noteApi.ts');
+            const { cloudRouter } = await import('./src/server/cloudApi.js');
+            const { noteRouter } = await import('./src/server/noteApi.js');
             const apiApp = express();
             apiApp.use(express.json());
             apiApp.use('/api', cloudRouter);

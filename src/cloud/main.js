@@ -1,26 +1,64 @@
 import { createIcons, icons } from 'lucide';
 import { createClient } from '@supabase/supabase-js';
-import { renderHeaderControls, renderSidebar } from './ui-layout-2';
-import { renderFileCard } from './ui-card';
-import { renderStorageIndicator } from './ui-layout-1';
-import { renderSettingsModal, THEME_VARIANTS } from './ui-settings';
-import { FileData, FileCategory, SortField } from './types';
-import { cleanDisplayName, getFileCategory, getFileExtension, formatFileSize, isVideoFile, isAudioFile, isImageFile } from './utils/fileHelpers';
+import { 
+  cleanDisplayName, 
+  getFileCategory, 
+  getFileExtension, 
+  formatFileSize, 
+  isVideoFile, 
+  isAudioFile, 
+  isImageFile, 
+  getFileTypeBadge 
+} from './utils/fileHelpers.js';
+import { THEME_VARIANTS, renderSettingsModal } from './ui-settings.js';
+import { renderFileCard } from './ui-card.js';
+import { renderHeaderControls, renderSidebar } from './ui-layout-2.js';
 
-// Initialize direct Supabase client for resilient fallback
-const SUPABASE_URL = (import.meta as any).env?.VITE_SUPABASE_URL || 'https://skxsvioheebxidqafmoo.supabase.co';
-const SUPABASE_KEY = (import.meta as any).env?.VITE_SUPABASE_ANON_KEY || 'sb_publishable_3RFdAZVw-8qqJiWgQpEpwQ_Q_peRYlq';
+// Device classification: True desktop/laptop detection
+export function checkIsDesktopOrLaptop() {
+  try {
+    const ua = navigator.userAgent || '';
+    const platform = navigator.platform || '';
+
+    // Check for desktop operating systems
+    const isWindows = /Windows NT|Win64|WOW64|Win32/i.test(ua) || platform.indexOf('Win') !== -1;
+    const isMac = /Macintosh|MacIntel|MacPPC|Mac68K/i.test(ua) && !/iPhone|iPad|iPod/i.test(ua);
+    const isLinuxDesktop = /Linux/i.test(ua) && !/Android/i.test(ua);
+    const isCrOS = /CrOS/i.test(ua);
+    const isDesktopOS = isWindows || isMac || isLinuxDesktop || isCrOS;
+
+    // Viewport width check (typical desktop or laptop viewport)
+    const isLargeScreen = window.innerWidth >= 1024 || (window.screen && Math.min(window.screen.width, window.screen.height) >= 900);
+
+    return isDesktopOS || isLargeScreen;
+  } catch (_) {
+    return true;
+  }
+}
+
+// Initialize direct Supabase client
+const SUPABASE_URL = (import.meta.env && import.meta.env.VITE_SUPABASE_URL) || 'https://skxsvioheebxidqafmoo.supabase.co';
+const SUPABASE_KEY = (import.meta.env && import.meta.env.VITE_SUPABASE_ANON_KEY) || 'sb_publishable_3RFdAZVw-8qqJiWgQpEpwQ_Q_peRYlq';
 const BUCKET_NAME = 'vault_files';
-const supabaseClient = createClient(SUPABASE_URL, SUPABASE_KEY);
+const isSupabaseConfigured = typeof SUPABASE_KEY === 'string' && (SUPABASE_KEY.startsWith('sb_') || SUPABASE_KEY.startsWith('eyJ') || SUPABASE_KEY.length > 20);
 
-const initialTheme = localStorage.getItem('cariearsa_cloud_theme') || 'neo-tokyo';
-const savedScanlines = localStorage.getItem('cariearsa_cloud_scanlines');
-const initialScanlines = savedScanlines === null ? true : savedScanlines === 'true';
-const initialCompact = localStorage.getItem('cariearsa_cloud_compact') === 'true';
+export const supabaseClient = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-// Instant Cache Retrieval (Ultra-fast 0ms load)
+// Storage Cache Keys
 const CACHE_KEY = 'cariearsa_cloud_cache_v2';
-let cachedFiles: FileData[] = [];
+const THEME_KEY = 'cariearsa_cloud_theme';
+const SCANLINES_KEY = 'cariearsa_cloud_scanlines';
+const COMPACT_KEY = 'cariearsa_cloud_compact';
+
+// Read persistent preferences
+const initialTheme = localStorage.getItem(THEME_KEY) || 'neo-tokyo';
+const savedScanlines = localStorage.getItem(SCANLINES_KEY);
+const initialScanlines = savedScanlines === null ? true : savedScanlines === 'true';
+const savedCompact = localStorage.getItem(COMPACT_KEY);
+const initialCompact = savedCompact === 'true';
+
+// Instant Cache Retrieval
+let cachedFiles = [];
 try {
   const raw = localStorage.getItem(CACHE_KEY);
   if (raw) {
@@ -31,54 +69,50 @@ try {
   }
 } catch (_) {}
 
-// Apply theme to document element immediately
-document.documentElement.dataset.theme = initialTheme;
-if (document.body) {
-  document.body.dataset.theme = initialTheme;
-  if (initialScanlines) document.body.classList.add('cyber-scanlines');
-}
-
+// Application State
 const state = {
   files: cachedFiles,
   loading: cachedFiles.length === 0,
-  uploadProgress: null as { current: number, total: number } | null,
-  currentSort: 'date_desc' as SortField,
-  selectedCategory: 'all' as FileCategory,
+  uploadProgress: null,
+  currentSort: 'date_desc',
+  selectedCategory: 'all',
   searchQuery: '',
-  activeAudioFile: null as FileData | null,
+  selectedFileNames: new Set(),
   isSelectionMode: false,
-  selectedFileNames: new Set<string>(),
+  isCategoryMenuOpen: false,
+  isSortMenuOpen: false,
+  activeAudioFile: null,
+  fileToRename: null,
+  filesToDelete: null,
+  previewFile: null,
   isDeletingBulk: false,
-  fileToRename: null as FileData | null,
-  filesToDelete: null as string[] | null,
-  previewFile: null as FileData | null,
-  previewBg: 'checker' as 'checker' | 'light' | 'dark',
-  previewZoom: 1, // 1 = fit, 100 = 1:1, 2 = 2x, etc.
-  previewPixelated: false,
-  previewDimensions: null as { width: number, height: number } | null,
   theme: initialTheme,
   scanlinesEnabled: initialScanlines,
   compactGrid: initialCompact,
   isSettingsOpen: false,
-  isCategoryMenuOpen: false,
-  isSortMenuOpen: false,
   isMobileSearchOpen: false,
+  previewBg: 'checker',
+  previewZoom: 1,
+  previewPixelated: false,
+  previewDimensions: null,
 };
 
-// Derived getters
 function getFilteredAndSorted() {
   let result = [...state.files];
+
   if (state.selectedCategory !== 'all') {
     result = result.filter(f => getFileCategory(f.name) === state.selectedCategory);
   }
+
   if (state.searchQuery.trim()) {
     const q = state.searchQuery.toLowerCase().trim();
-    result = result.filter(f => cleanDisplayName(f.name).toLowerCase().includes(q));
+    result = result.filter(f => f.name.toLowerCase().includes(q));
   }
+
   result.sort((a, b) => {
     switch (state.currentSort) {
-      case 'date_desc': return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
-      case 'date_asc': return new Date(a.created_at).getTime() - new Date(b.created_at).getTime();
+      case 'date_desc': return new Date(b.created_at || b.updated_at).getTime() - new Date(a.created_at || a.updated_at).getTime();
+      case 'date_asc': return new Date(a.created_at || a.updated_at).getTime() - new Date(b.created_at || b.updated_at).getTime();
       case 'name_asc': return cleanDisplayName(a.name).localeCompare(cleanDisplayName(b.name));
       case 'name_desc': return cleanDisplayName(b.name).localeCompare(cleanDisplayName(a.name));
       case 'size_desc': return (b.metadata?.size || 0) - (a.metadata?.size || 0);
@@ -93,7 +127,7 @@ function getCategoryCounts() {
   const counts = { all: state.files.length, image: 0, video: 0, audio: 0, document: 0, other: 0 };
   state.files.forEach(f => {
     const cat = getFileCategory(f.name);
-    if (cat in counts) (counts as any)[cat]++;
+    if (cat in counts) counts[cat]++;
   });
   return counts;
 }
@@ -434,7 +468,7 @@ function updateDOM() {
 
       if (isImg) {
         setTimeout(() => {
-          const imgEl = document.getElementById('preview-active-image') as HTMLImageElement;
+          const imgEl = document.getElementById('preview-active-image');
           if (imgEl) {
             const checkDimensions = () => {
               if (imgEl.naturalWidth && imgEl.naturalHeight) {
@@ -482,7 +516,7 @@ function updateDOM() {
           <div class="flex-1 flex flex-col items-center justify-center w-full max-w-2xl gap-2">
             <div class="flex items-center gap-4">
               <button id="player-play-pause" class="w-9 h-9 rounded-full bg-[var(--c-accent)] hover:brightness-110 text-slate-950 flex items-center justify-center shadow-[0_0_12px_var(--c-accent-glow)] transition-transform active:scale-95">
-                 <i data-lucide="${(window as any).isAudioPlaying ? 'pause' : 'play'}" class="w-4 h-4 fill-slate-950"></i>
+                 <i data-lucide="${window.isAudioPlaying ? 'pause' : 'play'}" class="w-4 h-4 fill-slate-950"></i>
               </button>
             </div>
             <div class="w-full flex items-center gap-2 text-[10px] text-[var(--c-text-muted)] font-mono">
@@ -517,7 +551,7 @@ function updateDOM() {
   createIcons({ icons });
 
   // Seek video thumbnails to second 1
-  document.querySelectorAll<HTMLVideoElement>('video.video-preview-thumb').forEach((video) => {
+  document.querySelectorAll('video.video-preview-thumb').forEach((video) => {
     const setTime = () => {
       try {
         if (Math.abs(video.currentTime - 1) > 0.1) {
@@ -533,14 +567,14 @@ function updateDOM() {
     }
 
     video.addEventListener('seeked', () => {
-      const fallback = video.parentElement?.querySelector('.video-fallback-icon') as HTMLElement;
+      const fallback = video.parentElement?.querySelector('.video-fallback-icon');
       if (fallback) fallback.style.display = 'none';
     }, { once: true });
   });
 }
 
 // Helper: Show Toast
-function showToast(text: string, type: 'success' | 'error' = 'success') {
+function showToast(text, type = 'success') {
   const toast = document.getElementById('toast');
   if (!toast) return;
   toast.className = `fixed top-4 right-4 z-50 flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-medium shadow-2xl backdrop-blur-md border animate-toast ${type === 'error' ? 'bg-rose-950/90 text-rose-200 border-rose-800' : 'bg-emerald-950/90 text-emerald-200 border-emerald-800'}`;
@@ -550,117 +584,20 @@ function showToast(text: string, type: 'success' | 'error' = 'success') {
   setTimeout(() => toast.classList.add('hidden'), 3500);
 }
 
-// Synchronize Dropdown Menus without full-page DOM recreation
-function syncDropdowns() {
-  const catMenu = document.getElementById('category-dropdown-menu');
-  const catBtn = document.getElementById('category-menu-button');
-  if (catMenu && catBtn) {
-    if (state.isCategoryMenuOpen) {
-      catMenu.classList.remove('hidden');
-      catMenu.classList.add('block');
-      catBtn.classList.add('cyber-btn-solid-accent', 'ring-2', 'ring-white/40');
-      catBtn.classList.remove('cyber-btn-solid-surface');
-      const chev = catBtn.querySelector('.category-btn-chevron, [data-lucide="chevron-down"], svg.lucide-chevron-down');
-      if (chev) {
-        chev.classList.add('rotate-180', 'text-slate-950');
-        chev.classList.remove('text-[var(--c-text-muted)]');
-      }
-      const icon = catBtn.querySelector('.category-btn-icon, [data-lucide="filter"], svg.lucide-filter');
-      if (icon) {
-        icon.classList.add('text-slate-950');
-        icon.classList.remove('text-[var(--c-accent)]');
-      }
-      const label = catBtn.querySelector('.category-btn-label');
-      if (label) {
-        label.classList.add('text-slate-950', 'font-black');
-        label.classList.remove('text-[var(--c-text-main)]');
-      }
-    } else {
-      catMenu.classList.add('hidden');
-      catMenu.classList.remove('block');
-      catBtn.classList.remove('cyber-btn-solid-accent', 'ring-2', 'ring-white/40');
-      if (state.selectedCategory === 'all') {
-        catBtn.classList.add('cyber-btn-solid-surface');
-      }
-      const chev = catBtn.querySelector('.category-btn-chevron, [data-lucide="chevron-down"], svg.lucide-chevron-down');
-      if (chev) {
-        chev.classList.remove('rotate-180', 'text-slate-950');
-        chev.classList.add('text-[var(--c-text-muted)]');
-      }
-      const icon = catBtn.querySelector('.category-btn-icon, [data-lucide="filter"], svg.lucide-filter');
-      if (icon) {
-        icon.classList.remove('text-slate-950');
-        icon.classList.add('text-[var(--c-accent)]');
-      }
-      const label = catBtn.querySelector('.category-btn-label');
-      if (label) {
-        label.classList.remove('text-slate-950', 'font-black');
-        label.classList.add('text-[var(--c-text-main)]');
-      }
-    }
-  }
-
-  const sortMenu = document.getElementById('sort-dropdown-menu');
-  const sortBtn = document.getElementById('sort-menu-button');
-  if (sortMenu && sortBtn) {
-    if (state.isSortMenuOpen) {
-      sortMenu.classList.remove('hidden');
-      sortMenu.classList.add('block');
-      sortBtn.classList.add('cyber-btn-solid-accent', 'ring-2', 'ring-white/40');
-      sortBtn.classList.remove('cyber-btn-solid-surface');
-      const chev = sortBtn.querySelector('.sort-btn-chevron, [data-lucide="chevron-down"], svg.lucide-chevron-down');
-      if (chev) {
-        chev.classList.add('rotate-180', 'text-slate-950');
-        chev.classList.remove('text-[var(--c-text-muted)]');
-      }
-      const icon = sortBtn.querySelector('.sort-btn-icon, [data-lucide="arrow-up-down"], svg.lucide-arrow-up-down');
-      if (icon) {
-        icon.classList.add('text-slate-950');
-        icon.classList.remove('text-[var(--c-accent)]');
-      }
-      const label = sortBtn.querySelector('.sort-btn-label');
-      if (label) {
-        label.classList.add('text-slate-950', 'font-black');
-        label.classList.remove('text-[var(--c-text-main)]');
-      }
-    } else {
-      sortMenu.classList.add('hidden');
-      sortMenu.classList.remove('block');
-      sortBtn.classList.remove('cyber-btn-solid-accent', 'ring-2', 'ring-white/40');
-      sortBtn.classList.add('cyber-btn-solid-surface');
-      const chev = sortBtn.querySelector('.sort-btn-chevron, [data-lucide="chevron-down"], svg.lucide-chevron-down');
-      if (chev) {
-        chev.classList.remove('rotate-180', 'text-slate-950');
-        chev.classList.add('text-[var(--c-text-muted)]');
-      }
-      const icon = sortBtn.querySelector('.sort-btn-icon, [data-lucide="arrow-up-down"], svg.lucide-arrow-up-down');
-      if (icon) {
-        icon.classList.remove('text-slate-950');
-        icon.classList.add('text-[var(--c-accent)]');
-      }
-      const label = sortBtn.querySelector('.sort-btn-label');
-      if (label) {
-        label.classList.remove('text-slate-950', 'font-black');
-        label.classList.add('text-[var(--c-text-main)]');
-      }
-    }
-  }
-}
-
 // Setup App Events
 let hasSetupEvents = false;
 function setupEvents() {
   if (hasSetupEvents) return;
   hasSetupEvents = true;
-  const globalAudio = document.getElementById('global-audio') as HTMLAudioElement;
+  const globalAudio = document.getElementById('global-audio');
 
   // Search input delegation
   document.body.addEventListener('input', (e) => {
-    const target = e.target as HTMLElement;
+    const target = e.target;
     if (target.id === 'search-input-desktop' || target.id === 'search-input-mobile') {
-      state.searchQuery = (target as HTMLInputElement).value;
+      state.searchQuery = target.value;
       const otherId = target.id === 'search-input-desktop' ? 'search-input-mobile' : 'search-input-desktop';
-      const other = document.getElementById(otherId) as HTMLInputElement;
+      const other = document.getElementById(otherId);
       if (other && other.value !== state.searchQuery) other.value = state.searchQuery;
       updateDOM();
     }
@@ -668,15 +605,15 @@ function setupEvents() {
 
   // Event Delegation for clicks
   document.body.addEventListener('click', async (e) => {
-    const target = e.target as HTMLElement;
+    const target = e.target;
 
     // 1. CLEAR SEARCH
     if (target.closest('#clear-search-desktop') || target.closest('#clear-search-mobile')) {
       e.preventDefault(); e.stopPropagation();
       state.searchQuery = '';
-      const d = document.getElementById('search-input-desktop') as HTMLInputElement;
+      const d = document.getElementById('search-input-desktop');
       if (d) d.value = '';
-      const m = document.getElementById('search-input-mobile') as HTMLInputElement;
+      const m = document.getElementById('search-input-mobile');
       if (m) m.value = '';
       updateDOM();
       return;
@@ -719,13 +656,13 @@ function setupEvents() {
     }
 
     // THEME VARIANT SELECTION
-    const themeBtn = target.closest('.theme-select-btn') as HTMLElement;
+    const themeBtn = target.closest('.theme-select-btn');
     if (themeBtn) {
       e.preventDefault(); e.stopPropagation();
       const themeId = themeBtn.dataset.themeId;
       if (themeId) {
         state.theme = themeId;
-        localStorage.setItem('cariearsa_cloud_theme', themeId);
+        localStorage.setItem(THEME_KEY, themeId);
         const themeObj = THEME_VARIANTS.find(t => t.id === themeId);
         showToast(`Tema diaktifkan: ${themeObj?.name || themeId}`, 'success');
         updateDOM();
@@ -737,7 +674,7 @@ function setupEvents() {
     if (target.closest('#toggle-scanlines-btn')) {
       e.preventDefault(); e.stopPropagation();
       state.scanlinesEnabled = !state.scanlinesEnabled;
-      localStorage.setItem('cariearsa_cloud_scanlines', String(state.scanlinesEnabled));
+      localStorage.setItem(SCANLINES_KEY, String(state.scanlinesEnabled));
       updateDOM();
       return;
     }
@@ -746,7 +683,7 @@ function setupEvents() {
     if (target.closest('#toggle-compact-btn')) {
       e.preventDefault(); e.stopPropagation();
       state.compactGrid = !state.compactGrid;
-      localStorage.setItem('cariearsa_cloud_compact', String(state.compactGrid));
+      localStorage.setItem(COMPACT_KEY, String(state.compactGrid));
       updateDOM();
       return;
     }
@@ -772,10 +709,10 @@ function setupEvents() {
     }
 
     // Preview Background Switcher
-    const bgBtn = target.closest('[data-preview-bg]') as HTMLElement;
+    const bgBtn = target.closest('[data-preview-bg]');
     if (bgBtn) {
       e.preventDefault(); e.stopPropagation();
-      state.previewBg = bgBtn.dataset.previewBg as any;
+      state.previewBg = bgBtn.dataset.previewBg;
       updateDOM();
       return;
     }
@@ -834,12 +771,12 @@ function setupEvents() {
       e.preventDefault(); e.stopPropagation();
       globalAudio.pause();
       state.activeAudioFile = null;
-      (window as any).isAudioPlaying = false;
+      window.isAudioPlaying = false;
       updateDOM();
       return;
     }
 
-    // 4. CONFIRM DELETE ACTION
+    // CONFIRM DELETE ACTION
     if (target.closest('#confirm-delete-modal-btn')) {
       e.preventDefault(); e.stopPropagation();
       if (state.filesToDelete && state.filesToDelete.length > 0) {
@@ -848,55 +785,172 @@ function setupEvents() {
       return;
     }
 
-    // 5. BULK DELETE TRIGGER
-    if (target.closest('#bulk-delete-btn') && !state.isDeletingBulk) {
+    // TOGGLE CATEGORY DROPDOWN MENU
+    if (target.closest('#category-menu-button')) {
       e.preventDefault(); e.stopPropagation();
-      if (state.selectedFileNames.size > 0) {
-        state.filesToDelete = Array.from(state.selectedFileNames);
+      state.isCategoryMenuOpen = !state.isCategoryMenuOpen;
+      state.isSortMenuOpen = false;
+      updateDOM();
+      return;
+    }
+
+    // SELECT CATEGORY FROM DROPDOWN
+    const catOptionBtn = target.closest('.category-option-btn');
+    if (catOptionBtn) {
+      e.preventDefault(); e.stopPropagation();
+      const cat = catOptionBtn.dataset.category;
+      if (cat) {
+        state.selectedCategory = cat;
+        state.isCategoryMenuOpen = false;
         updateDOM();
       }
       return;
     }
 
-    // Download button click - stop propagation
-    if (target.closest('.download-btn')) {
-      e.stopPropagation();
-      return;
-    }
-
-    // 6. CARD ACTION BUTTONS
-    const delBtn = target.closest('.delete-btn');
-    if (delBtn) {
+    // SELECT CATEGORY FROM SIDEBAR
+    const sideCatBtn = target.closest('.sidebar-category-btn');
+    if (sideCatBtn) {
       e.preventDefault(); e.stopPropagation();
-      const card = delBtn.closest('.file-card') as HTMLElement;
-      const name = card?.dataset.name;
-      if (name) {
-        state.filesToDelete = [name];
+      const cat = sideCatBtn.dataset.category;
+      if (cat) {
+        state.selectedCategory = cat;
+        state.isCategoryMenuOpen = false;
         updateDOM();
       }
       return;
     }
 
-    const renBtn = target.closest('.rename-btn');
-    if (renBtn) {
+    // TOGGLE SORT DROPDOWN MENU
+    if (target.closest('#sort-menu-button')) {
       e.preventDefault(); e.stopPropagation();
-      const card = renBtn.closest('.file-card') as HTMLElement;
-      const name = card?.dataset.name;
-      if (name) {
-        state.fileToRename = state.files.find(f => f.name === name) || null;
+      state.isSortMenuOpen = !state.isSortMenuOpen;
+      state.isCategoryMenuOpen = false;
+      updateDOM();
+      return;
+    }
+
+    // SELECT SORT OPTION
+    const sortOptionBtn = target.closest('.sort-option-btn');
+    if (sortOptionBtn) {
+      e.preventDefault(); e.stopPropagation();
+      const sort = sortOptionBtn.dataset.sort;
+      if (sort) {
+        state.currentSort = sort;
+        state.isSortMenuOpen = false;
         updateDOM();
       }
       return;
     }
 
-    const prevVidBtn = target.closest('.preview-video-btn');
-    if (prevVidBtn) {
+    // CLOSE MENUS WHEN CLICKING OUTSIDE
+    if (state.isCategoryMenuOpen && !target.closest('#category-dropdown-container')) {
+      state.isCategoryMenuOpen = false;
+      updateDOM();
+    }
+    if (state.isSortMenuOpen && !target.closest('#sort-dropdown-container')) {
+      state.isSortMenuOpen = false;
+      updateDOM();
+    }
+
+    // TOGGLE SELECTION ON FILE CARD CHECKBOX
+    const checkbox = target.closest('.select-checkbox');
+    if (checkbox) {
       e.preventDefault(); e.stopPropagation();
-      const card = prevVidBtn.closest('.file-card') as HTMLElement;
-      const name = card?.dataset.name;
+      const name = checkbox.dataset.select;
       if (name) {
-        const file = state.files.find(f => f.name === name);
-        if (file) {
+        state.isSelectionMode = true;
+        if (state.selectedFileNames.has(name)) {
+          state.selectedFileNames.delete(name);
+        } else {
+          state.selectedFileNames.add(name);
+        }
+        updateDOM();
+      }
+      return;
+    }
+
+    // CARD ACTION BUTTONS
+    const cardAction = target.closest('.card-action-btn');
+    if (cardAction) {
+      e.preventDefault(); e.stopPropagation();
+      const action = cardAction.dataset.action;
+      const name = cardAction.dataset.name;
+      const file = state.files.find(f => f.name === name);
+      if (!file) return;
+
+      if (action === 'preview') {
+        if (isAudioFile(file.name)) {
+          if (state.activeAudioFile?.name === file.name) {
+            if (globalAudio.paused) {
+              globalAudio.play();
+              window.isAudioPlaying = true;
+            } else {
+              globalAudio.pause();
+              window.isAudioPlaying = false;
+            }
+          } else {
+            state.activeAudioFile = file;
+            globalAudio.src = file.publicUrl;
+            globalAudio.play();
+            window.isAudioPlaying = true;
+          }
+          updateDOM();
+        } else {
+          state.previewFile = file;
+          state.previewZoom = 1;
+          state.previewDimensions = null;
+          updateDOM();
+        }
+      } else if (action === 'download') {
+        const a = document.createElement('a');
+        a.href = file.publicUrl || `/api/files/download?name=${encodeURIComponent(file.name)}`;
+        a.download = cleanDisplayName(file.name);
+        a.target = '_blank';
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+      } else if (action === 'rename') {
+        state.fileToRename = file;
+        updateDOM();
+      } else if (action === 'delete') {
+        state.filesToDelete = [file.name];
+        updateDOM();
+      }
+      return;
+    }
+
+    // FILE CARD CLICK
+    const fileCard = target.closest('.file-card');
+    if (fileCard) {
+      const name = fileCard.dataset.name;
+      const file = state.files.find(f => f.name === name);
+      if (!file) return;
+
+      if (state.isSelectionMode) {
+        if (state.selectedFileNames.has(name)) {
+          state.selectedFileNames.delete(name);
+        } else {
+          state.selectedFileNames.add(name);
+        }
+        updateDOM();
+      } else {
+        if (isAudioFile(file.name)) {
+          if (state.activeAudioFile?.name === file.name) {
+            if (globalAudio.paused) {
+              globalAudio.play();
+              window.isAudioPlaying = true;
+            } else {
+              globalAudio.pause();
+              window.isAudioPlaying = false;
+            }
+          } else {
+            state.activeAudioFile = file;
+            globalAudio.src = file.publicUrl;
+            globalAudio.play();
+            window.isAudioPlaying = true;
+          }
+          updateDOM();
+        } else {
           state.previewFile = file;
           state.previewZoom = 1;
           state.previewDimensions = null;
@@ -906,147 +960,17 @@ function setupEvents() {
       return;
     }
 
-    const playBtn = target.closest('.play-btn');
-    if (playBtn) {
-      e.preventDefault(); e.stopPropagation();
-      const card = playBtn.closest('.file-card') as HTMLElement;
-      const name = card?.dataset.name;
-      if (name) {
-        if (state.activeAudioFile?.name === name) {
-          if (!globalAudio.paused) { globalAudio.pause(); (window as any).isAudioPlaying = false; }
-          else { globalAudio.play(); (window as any).isAudioPlaying = true; }
-        } else {
-          const file = state.files.find(f => f.name === name);
-          state.activeAudioFile = file || null;
-          if (file) { globalAudio.src = file.publicUrl; globalAudio.play(); (window as any).isAudioPlaying = true; }
-        }
-        updateDOM();
-      }
-      return;
-    }
-
-    // Checkbox in selection mode
-    const chk = target.closest('.select-checkbox');
-    if (chk) {
-      e.preventDefault(); e.stopPropagation();
-      const card = chk.closest('.file-card') as HTMLElement;
-      const name = card?.dataset.name;
-      if (name) {
-        if (state.selectedFileNames.has(name)) state.selectedFileNames.delete(name);
-        else state.selectedFileNames.add(name);
-        updateDOM();
-      }
-      return;
-    }
-
-    // 7. WHOLE FILE CARD CLICK
-    const card = target.closest('.file-card') as HTMLElement;
-    if (card) {
-      const name = card.dataset.name!;
-
-      if (justTriggeredLongPress) {
-        e.preventDefault();
-        e.stopPropagation();
-        justTriggeredLongPress = false;
-        return;
-      }
-
-      if (state.isSelectionMode) {
-        e.preventDefault();
-        if (state.selectedFileNames.has(name)) state.selectedFileNames.delete(name);
-        else state.selectedFileNames.add(name);
-        updateDOM();
-        return;
-      }
-
-      if (!state.isSelectionMode) {
-        const file = state.files.find(f => f.name === name);
-        if (file) {
-          if (isVideoFile(file.name) || isImageFile(file.name) || getFileExtension(file.name).toLowerCase() === 'pdf') {
-            e.preventDefault();
-            state.previewFile = file;
-            state.previewZoom = 1;
-            state.previewDimensions = null;
-            updateDOM();
-            return;
-          } else if (isAudioFile(file.name)) {
-            e.preventDefault();
-            if (state.activeAudioFile?.name === name) {
-              if (!globalAudio.paused) { globalAudio.pause(); (window as any).isAudioPlaying = false; }
-              else { globalAudio.play(); (window as any).isAudioPlaying = true; }
-            } else {
-              state.activeAudioFile = file;
-              globalAudio.src = file.publicUrl;
-              globalAudio.play();
-              (window as any).isAudioPlaying = true;
-            }
-            updateDOM();
-            return;
-          }
-        }
-      }
-    }
-
-    // 8. DROPDOWNS & MENUS
-    if (target.closest('#category-menu-button')) {
-      e.preventDefault(); e.stopPropagation();
-      state.isCategoryMenuOpen = !state.isCategoryMenuOpen;
-      state.isSortMenuOpen = false;
-      syncDropdowns();
-      return;
-    }
-    if (target.closest('#sort-menu-button')) {
-      e.preventDefault(); e.stopPropagation();
-      state.isSortMenuOpen = !state.isSortMenuOpen;
-      state.isCategoryMenuOpen = false;
-      syncDropdowns();
-      return;
-    }
-
-    // Close open menus when clicking outside
-    if (state.isCategoryMenuOpen && !target.closest('#category-dropdown-container')) {
-      state.isCategoryMenuOpen = false;
-      syncDropdowns();
-    }
-    if (state.isSortMenuOpen && !target.closest('#sort-dropdown-container')) {
-      state.isSortMenuOpen = false;
-      syncDropdowns();
-    }
-
-    // Category selection (dropdown options, sidebar buttons, and mobile pills)
-    const catBtn = target.closest('.category-option-btn, .sidebar-category-btn') as HTMLElement;
-    if (catBtn) {
-      e.preventDefault(); e.stopPropagation();
-      state.selectedCategory = catBtn.dataset.category as any;
-      state.isCategoryMenuOpen = false;
-      state.isSortMenuOpen = false;
-      updateDOM();
-      return;
-    }
-
-    // Sort selection
-    const sortBtn = target.closest('.sort-option-btn') as HTMLElement;
-    if (sortBtn) {
-      e.preventDefault(); e.stopPropagation();
-      state.currentSort = sortBtn.dataset.sort as any;
-      state.isSortMenuOpen = false;
-      state.isCategoryMenuOpen = false;
-      updateDOM();
-      return;
-    }
-
-    // Mobile Search Bar Toggle & Close
+    // BULK ACTIONS
     if (target.closest('#mobile-search-toggle')) {
       e.preventDefault(); e.stopPropagation();
       state.isMobileSearchOpen = !state.isMobileSearchOpen;
       updateDOM();
       if (state.isMobileSearchOpen) {
-        setTimeout(() => {
-          (document.getElementById('search-input-mobile') as HTMLInputElement)?.focus();
-        }, 60);
+        setTimeout(() => { document.getElementById('search-input-mobile')?.focus(); }, 60);
       }
       return;
     }
+
     if (target.closest('#close-mobile-search')) {
       e.preventDefault(); e.stopPropagation();
       state.isMobileSearchOpen = false;
@@ -1054,7 +978,6 @@ function setupEvents() {
       return;
     }
 
-    // 9. TOOLBAR & MULTI-SELECT CONTROLS
     if (target.closest('#toggle-selection-btn')) {
       e.preventDefault(); e.stopPropagation();
       state.isSelectionMode = !state.isSelectionMode;
@@ -1085,6 +1008,7 @@ function setupEvents() {
       updateDOM();
       return;
     }
+
     if (target.closest('#deselect-all-btn')) {
       e.preventDefault(); e.stopPropagation();
       state.selectedFileNames.clear();
@@ -1092,16 +1016,15 @@ function setupEvents() {
       return;
     }
 
-    // Bulk Download
     if (target.closest('#bulk-download-btn')) {
       e.preventDefault(); e.stopPropagation();
-      const filesToDl = state.files.filter(f => state.selectedFileNames.has(f.name));
-      if (filesToDl.length === 0) return;
-      showToast(`Mengunduh ${filesToDl.length} berkas terpilih...`, 'success');
-      filesToDl.forEach((f, idx) => {
+      const filesToDownload = state.files.filter(f => state.selectedFileNames.has(f.name));
+      if (filesToDownload.length === 0) return;
+      showToast(`Mengunduh ${filesToDownload.length} berkas terpilih...`, 'success');
+      filesToDownload.forEach((f, idx) => {
         setTimeout(() => {
           const a = document.createElement('a');
-          a.href = `/api/files/download?name=${encodeURIComponent(f.name)}`;
+          a.href = f.publicUrl || `/api/files/download?name=${encodeURIComponent(f.name)}`;
           a.download = cleanDisplayName(f.name);
           document.body.appendChild(a);
           a.click();
@@ -1111,114 +1034,116 @@ function setupEvents() {
       return;
     }
 
-    // 10. AUDIO PLAYER BAR CONTROLS
-    if (target.closest('#player-play-pause')) {
+    if (target.closest('#bulk-delete-btn')) {
       e.preventDefault(); e.stopPropagation();
-      if (globalAudio.paused) { globalAudio.play(); (window as any).isAudioPlaying = true; }
-      else { globalAudio.pause(); (window as any).isAudioPlaying = false; }
+      const names = Array.from(state.selectedFileNames);
+      if (names.length === 0) return;
+      state.filesToDelete = names;
       updateDOM();
       return;
     }
+
+    // PLAYER CONTROLS
+    if (target.closest('#player-play-pause')) {
+      e.preventDefault(); e.stopPropagation();
+      if (globalAudio.paused) {
+        globalAudio.play();
+        window.isAudioPlaying = true;
+      } else {
+        globalAudio.pause();
+        window.isAudioPlaying = false;
+      }
+      updateDOM();
+      return;
+    }
+
     if (target.closest('#audio-progress-bar')) {
-      const bar = target.closest('#audio-progress-bar') as HTMLElement;
-      const rect = bar.getBoundingClientRect();
+      const rect = target.closest('#audio-progress-bar').getBoundingClientRect();
       const pos = (e.clientX - rect.left) / rect.width;
       globalAudio.currentTime = Math.max(0, Math.min(1, pos)) * (globalAudio.duration || 0);
       return;
     }
   });
 
-  // Rename Submit Form
+  // Rename Form Submit
   document.body.addEventListener('submit', async (e) => {
-    const form = e.target as HTMLFormElement;
-    if (form.id === 'rename-form') {
+    if (e.target.id === 'rename-form') {
       e.preventDefault();
-      const input = document.getElementById('rename-input') as HTMLInputElement;
-      const newName = input.value.trim();
-      if (!newName || !state.fileToRename) return;
+      const input = document.getElementById('rename-input');
+      const newBase = input.value.trim();
+      if (!newBase || !state.fileToRename) return;
+
       const oldName = state.fileToRename.name;
       const ext = getFileExtension(oldName);
-      let targetName = newName.replace(/[/\\?%*:|"<>]/g, '_');
-      if (ext && !targetName.toLowerCase().endsWith('.'+ext.toLowerCase())) targetName += `.${ext}`;
-      const prefix = oldName.match(/^(\d+_)/)?.[1] || '';
-      targetName = prefix + targetName;
+      let newName = newBase.replace(/[/\\?%*:|"<>]/g, '_');
+      if (ext && !newName.toLowerCase().endsWith('.' + ext.toLowerCase())) {
+        newName += `.${ext}`;
+      }
       
-      if (targetName !== oldName) {
-        await renameFile(oldName, targetName);
+      const prefixMatch = oldName.match(/^(\d+_)/);
+      if (prefixMatch && prefixMatch[1]) {
+        newName = prefixMatch[1] + newName;
+      }
+
+      if (newName !== oldName) {
+        await renameFile(oldName, newName);
       }
       state.fileToRename = null;
       updateDOM();
     }
   });
 
-  // Long-press / Hold gesture for multi-select
-  let pressTimer: any = null;
+  // Long press detection for selection
+  let pressTimer = null;
   let startCoords = { x: 0, y: 0 };
-  let justTriggeredLongPress = false;
-  let activePressCard: HTMLElement | null = null;
+  let isLongPress = false;
+  let pressedCard = null;
 
   const cancelPress = () => {
-    if (pressTimer) {
-      clearTimeout(pressTimer);
-      pressTimer = null;
-    }
-    if (activePressCard) {
-      activePressCard.classList.remove('touch-press-active');
-      activePressCard = null;
-    }
+    if (pressTimer) { clearTimeout(pressTimer); pressTimer = null; }
+    if (pressedCard) { pressedCard.classList.remove('touch-press-active'); pressedCard = null; }
   };
 
   document.body.addEventListener('pointerdown', (e) => {
     if (e.button !== 0) return;
-    const target = e.target as HTMLElement;
-    // Don't trigger long press if interacting with buttons, modals, form inputs, or checkbox
-    if (target.closest('button, a, input, select, textarea, #rename-modal, #delete-modal, #preview-modal, .select-checkbox, #audio-player-bar, #settings-modal')) {
-      return;
-    }
-    const card = target.closest('.file-card') as HTMLElement;
+    const target = e.target;
+    if (target.closest('button, a, input, select, textarea, #rename-modal, #delete-modal, #preview-modal, .select-checkbox, #audio-player-bar, #settings-modal')) return;
+    const card = target.closest('.file-card');
     if (!card) return;
 
     cancelPress();
     startCoords = { x: e.clientX, y: e.clientY };
-    activePressCard = card;
+    pressedCard = card;
     card.classList.add('touch-press-active');
 
     pressTimer = setTimeout(() => {
-      justTriggeredLongPress = true;
+      isLongPress = true;
       cancelPress();
-      if (navigator.vibrate) {
-        try { navigator.vibrate(40); } catch (_) {}
-      }
+      if (navigator.vibrate) try { navigator.vibrate(40); } catch (_) {}
       state.isSelectionMode = true;
-      const name = card.dataset.name!;
+      const name = card.dataset.name;
       state.selectedFileNames.add(name);
       updateDOM();
-
-      // Suppress immediate card click handling
-      setTimeout(() => {
-        justTriggeredLongPress = false;
-      }, 350);
+      setTimeout(() => { isLongPress = false; }, 350);
     }, 320);
   });
 
   document.body.addEventListener('pointermove', (e) => {
-    if (pressTimer) {
-      if (Math.hypot(e.clientX - startCoords.x, e.clientY - startCoords.y) > 12) {
-        cancelPress();
-      }
+    if (pressTimer && Math.hypot(e.clientX - startCoords.x, e.clientY - startCoords.y) > 12) {
+      cancelPress();
     }
   });
 
   document.body.addEventListener('pointerup', () => { cancelPress(); });
   document.body.addEventListener('pointercancel', () => { cancelPress(); });
 
-  // Desktop context menu toggle selection mode
+  // Context menu selection
   document.body.addEventListener('contextmenu', (e) => {
-    const card = (e.target as HTMLElement).closest('.file-card') as HTMLElement;
+    const card = e.target.closest('.file-card');
     if (card) {
       e.preventDefault();
       state.isSelectionMode = true;
-      const name = card.dataset.name!;
+      const name = card.dataset.name;
       if (state.selectedFileNames.has(name)) {
         state.selectedFileNames.delete(name);
       } else {
@@ -1228,7 +1153,7 @@ function setupEvents() {
     }
   });
 
-  // Global Keyboard Shortcuts (Escape)
+  // Keyboard Shortcuts (Escape)
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
       if (state.isSettingsOpen) {
@@ -1260,52 +1185,36 @@ function setupEvents() {
     }
   });
 
-  // Global Audio Time Update
+  // Audio Time Update
   globalAudio.addEventListener('timeupdate', () => {
     const timeDisplay = document.getElementById('audio-time');
     const prog = document.getElementById('audio-progress');
-    const fmt = (t:number) => `${Math.floor(t/60)}:${Math.floor(t%60).toString().padStart(2, '0')}`;
+    const fmt = (t) => `${Math.floor(t/60)}:${Math.floor(t%60).toString().padStart(2, '0')}`;
     if (timeDisplay) timeDisplay.innerText = `${fmt(globalAudio.currentTime)} / ${fmt(globalAudio.duration || 0)}`;
     if (prog && globalAudio.duration) prog.style.width = `${(globalAudio.currentTime/globalAudio.duration)*100}%`;
   });
-  globalAudio.addEventListener('ended', () => { (window as any).isAudioPlaying = false; updateDOM(); });
+  globalAudio.addEventListener('ended', () => { window.isAudioPlaying = false; updateDOM(); });
 
   // Drag and drop overlay
   let dragCount = 0;
-  const overlay = document.getElementById('drop-overlay')!;
-  document.body.addEventListener('dragenter', e => { e.preventDefault(); dragCount++; if(e.dataTransfer?.items.length) overlay.classList.remove('hidden', 'pointer-events-none'); });
-  document.body.addEventListener('dragleave', e => { e.preventDefault(); dragCount--; if(dragCount===0) overlay.classList.add('hidden', 'pointer-events-none'); });
+  const overlay = document.getElementById('drop-overlay');
+  document.body.addEventListener('dragenter', e => { e.preventDefault(); dragCount++; if(e.dataTransfer?.items.length && overlay) overlay.classList.remove('hidden', 'pointer-events-none'); });
+  document.body.addEventListener('dragleave', e => { e.preventDefault(); dragCount--; if(dragCount===0 && overlay) overlay.classList.add('hidden', 'pointer-events-none'); });
   document.body.addEventListener('dragover', e => e.preventDefault());
-  document.body.addEventListener('drop', e => { e.preventDefault(); dragCount=0; overlay.classList.add('hidden', 'pointer-events-none'); if(e.dataTransfer?.files.length) uploadFiles(Array.from(e.dataTransfer.files)); });
+  document.body.addEventListener('drop', e => { e.preventDefault(); dragCount=0; if (overlay) overlay.classList.add('hidden', 'pointer-events-none'); if(e.dataTransfer?.files.length) uploadFiles(Array.from(e.dataTransfer.files)); });
 }
 
-// Global upload handler for the file input
-(window as any).handleUploadInput = (e: any) => { if(e.target.files?.length) uploadFiles(Array.from(e.target.files)); };
+window.handleUploadInput = (e) => { if(e.target.files?.length) uploadFiles(Array.from(e.target.files)); };
 
-// Resilient API Functions with Direct Supabase Fallback
+// Resilient API Functions with Direct Supabase Primary/Fallback
 async function fetchFiles(showLoading = true) {
   if (showLoading) {
     state.loading = true;
     updateDOM();
   }
 
-  // 1. Try server API
-  try {
-    const res = await fetch('/api/files');
-    if (res.ok) {
-      const data = await res.json();
-      state.files = data.files || [];
-      try {
-        localStorage.setItem(CACHE_KEY, JSON.stringify(state.files));
-      } catch (_) {}
-      state.loading = false;
-      updateDOM();
-      return;
-    }
-  } catch (_) {}
-
-  // 2. Direct Supabase Storage fallback if valid JWT
-  if (typeof SUPABASE_KEY === 'string' && SUPABASE_KEY.startsWith('eyJ')) {
+  // 1. Primary: Direct Supabase Storage connection (real-time, zero 405 error)
+  if (isSupabaseConfigured) {
     try {
       const { data, error } = await supabaseClient.storage.from(BUCKET_NAME).list('', {
         limit: 1000,
@@ -1325,21 +1234,36 @@ async function fetchFiles(showLoading = true) {
         try {
           localStorage.setItem(CACHE_KEY, JSON.stringify(state.files));
         } catch (_) {}
-      } else if (state.files.length === 0) {
-        showToast('Gagal memuat file', 'error');
+        state.loading = false;
+        updateDOM();
+        return;
       }
-    } catch(e) {
-      if (state.files.length === 0) {
-        showToast('Gagal memuat file', 'error');
-      }
-    }
+    } catch (_) {}
   }
 
+  // 2. Secondary fallback: Local Server API
+  try {
+    const res = await fetch('/api/files');
+    if (res.ok) {
+      const data = await res.json();
+      state.files = data.files || [];
+      try {
+        localStorage.setItem(CACHE_KEY, JSON.stringify(state.files));
+      } catch (_) {}
+      state.loading = false;
+      updateDOM();
+      return;
+    }
+  } catch (_) {}
+
+  if (state.files.length === 0) {
+    showToast('Gagal memuat file', 'error');
+  }
   state.loading = false;
   updateDOM();
 }
 
-async function uploadFiles(files: File[]) {
+async function uploadFiles(files) {
   if (!files.length) return;
   state.uploadProgress = { current: 0, total: files.length };
   updateDOM();
@@ -1349,21 +1273,10 @@ async function uploadFiles(files: File[]) {
     state.uploadProgress.current = i + 1;
     updateDOM();
     const file = files[i];
-
-    // Try server API first
     let uploaded = false;
-    try {
-      const fd = new FormData();
-      fd.append('file', file);
-      const res = await fetch('/api/upload', { method: 'POST', body: fd });
-      if (res.ok) {
-        successCount++;
-        uploaded = true;
-      }
-    } catch (_) {}
 
-    // If server upload failed, fallback to direct Supabase upload
-    if (!uploaded) {
+    // 1. Direct Supabase upload first (avoids static server 405 error entirely)
+    if (isSupabaseConfigured) {
       try {
         const fileName = `${Date.now()}_${file.name.replace(/[^a-zA-Z0-9.-]/g, '_')}`;
         const { error } = await supabaseClient.storage.from(BUCKET_NAME).upload(fileName, file, {
@@ -1372,6 +1285,20 @@ async function uploadFiles(files: File[]) {
         });
         if (!error) {
           successCount++;
+          uploaded = true;
+        }
+      } catch (_) {}
+    }
+
+    // 2. Fallback to server API if Supabase direct upload didn't succeed
+    if (!uploaded) {
+      try {
+        const fd = new FormData();
+        fd.append('file', file);
+        const res = await fetch('/api/upload', { method: 'POST', body: fd });
+        if (res.ok) {
+          successCount++;
+          uploaded = true;
         }
       } catch (_) {}
     }
@@ -1387,7 +1314,7 @@ async function uploadFiles(files: File[]) {
   }
 }
 
-async function deleteFiles(filenames: string[]) {
+async function deleteFiles(filenames) {
   if (!filenames.length) return;
   state.isDeletingBulk = true;
   state.filesToDelete = null;
@@ -1398,7 +1325,7 @@ async function deleteFiles(filenames: string[]) {
   filenames.forEach(fn => state.selectedFileNames.delete(fn));
   if (state.activeAudioFile && deleteSet.has(state.activeAudioFile.name)) {
     state.activeAudioFile = null;
-    const globalAudio = document.getElementById('global-audio') as HTMLAudioElement;
+    const globalAudio = document.getElementById('global-audio');
     if (globalAudio) globalAudio.pause();
   }
   if (state.selectedFileNames.size === 0) {
@@ -1406,24 +1333,27 @@ async function deleteFiles(filenames: string[]) {
   }
   updateDOM();
 
-  // Try server delete
   let deleted = false;
-  try {
-    const res = await fetch('/api/files/delete', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ filenames })
-    });
-    if (res.ok) {
-      deleted = true;
-    }
-  } catch (_) {}
 
-  // Direct Supabase fallback
-  if (!deleted) {
+  // 1. Direct Supabase Storage deletion
+  if (isSupabaseConfigured) {
     try {
       const { error } = await supabaseClient.storage.from(BUCKET_NAME).remove(filenames);
       if (!error) {
+        deleted = true;
+      }
+    } catch (_) {}
+  }
+
+  // 2. Server API deletion fallback
+  if (!deleted) {
+    try {
+      const res = await fetch('/api/files/delete', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ filenames })
+      });
+      if (res.ok) {
         deleted = true;
       }
     } catch (_) {}
@@ -1439,23 +1369,28 @@ async function deleteFiles(filenames: string[]) {
   }
 }
 
-async function renameFile(oldFilename: string, newFilename: string) {
+async function renameFile(oldFilename, newFilename) {
   let renamed = false;
-  try {
-    const res = await fetch('/api/files/rename', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ oldFilename, newFilename })
-    });
-    if (res.ok) {
-      renamed = true;
-    }
-  } catch (_) {}
 
-  if (!renamed) {
+  // 1. Direct Supabase Storage move/rename
+  if (isSupabaseConfigured) {
     try {
       const { error } = await supabaseClient.storage.from(BUCKET_NAME).move(oldFilename, newFilename);
       if (!error) {
+        renamed = true;
+      }
+    } catch (_) {}
+  }
+
+  // 2. Server API rename fallback
+  if (!renamed) {
+    try {
+      const res = await fetch('/api/files/rename', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ oldFilename, newFilename })
+      });
+      if (res.ok) {
         renamed = true;
       }
     } catch (_) {}
@@ -1469,16 +1404,14 @@ async function renameFile(oldFilename: string, newFilename: string) {
   }
 }
 
-// Initial boot (guaranteed single run)
+// Initial Boot
 let hasBooted = false;
 function bootApp() {
   if (hasBooted) return;
   hasBooted = true;
   setupEvents();
   if (state.files.length > 0) {
-    // Render cached items instantly (0ms load)
     updateDOM();
-    // Silently revalidate fresh files in background
     fetchFiles(false);
   } else {
     updateDOM();
@@ -1492,19 +1425,22 @@ if (document.readyState === 'loading') {
   bootApp();
 }
 
-// Responsive redirection on viewport resize
-let resizeTimer: any = null;
+// Responsive redirection: ONLY redirect to mobile if genuine mobile phone OS with narrow screen!
+let resizeTimer = null;
 window.addEventListener('resize', () => {
   clearTimeout(resizeTimer);
   resizeTimer = setTimeout(() => {
     try {
-      const isMobileUA = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|Tablet|Silk|Kindle|PlayBook/i.test(navigator.userAgent || '');
-      const isTouch = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
-      const isCoarse = window.matchMedia && (window.matchMedia('(pointer: coarse)').matches || window.matchMedia('(hover: none)').matches);
-      const isSmallOrTablet = window.innerWidth <= 1024 || (window.screen && Math.min(window.screen.width, window.screen.height) <= 1024);
-      if (isMobileUA || isTouch || isCoarse || isSmallOrTablet) {
+      // If user explicitly requests desktop or is on desktop OS, NEVER redirect!
+      if (sessionStorage.getItem('cariearsa_cloud_force') === 'desktop') return;
+      const isDesktopOrLaptop = checkIsDesktopOrLaptop();
+      if (isDesktopOrLaptop) return;
+
+      const ua = navigator.userAgent || '';
+      const isMobilePhoneUA = /Android.*Mobile|iPhone|iPod|BlackBerry|IEMobile|Opera Mini/i.test(ua);
+      if (isMobilePhoneUA && window.innerWidth < 768) {
         window.location.replace('/cloud/mobile/' + window.location.search + window.location.hash);
       }
     } catch (_) {}
-  }, 250);
+  }, 350);
 });

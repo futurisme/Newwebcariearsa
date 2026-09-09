@@ -1,8 +1,8 @@
-import { formatFileSize } from './utils/fileHelpers';
+import { formatFileSize } from './utils/fileHelpers.js';
 
 const MAX_STORAGE_BYTES = 1 * 1024 * 1024 * 1024;
 
-export function renderStorageIndicator(totalBytes: number, totalFiles: number, compact = false) {
+export function renderStorageIndicator(totalBytes, totalFiles, compact = false) {
   const percentage = Math.min((totalBytes / MAX_STORAGE_BYTES) * 100, 100);
   const formattedUsed = formatFileSize(totalBytes);
   const formattedPercentage = percentage < 0.1 && totalBytes > 0 ? '<0.1%' : `${percentage.toFixed(1)}%`;
@@ -42,7 +42,7 @@ export function renderStorageIndicator(totalBytes: number, totalFiles: number, c
   `;
 }
 
-export function renderCategoryDropdown(selectedCategory: string, categoryCounts: Record<string, number>, isOpen = false) {
+export function renderCategoryDropdown(selectedCategory, categoryCounts, isOpen = false) {
   const options = [
     { id: 'all', label: 'Semua File', icon: 'folder', color: 'text-[var(--c-accent)]' },
     { id: 'image', label: 'Foto / Gambar', icon: 'image', color: 'text-emerald-400' },
@@ -114,7 +114,7 @@ export function renderCategoryDropdown(selectedCategory: string, categoryCounts:
   `;
 }
 
-export function renderSortDropdown(currentSort: string, isOpen = false) {
+export function renderSortDropdown(currentSort, isOpen = false) {
   const options = [
     { id: 'date_desc', label: 'Terbaru lebih dulu' },
     { id: 'date_asc', label: 'Terlama lebih dulu' },

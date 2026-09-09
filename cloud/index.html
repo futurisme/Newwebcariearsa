@@ -6,13 +6,32 @@
     <script>
       (function() {
         try {
-          var isMobileUA = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|Tablet|Silk|Kindle|PlayBook/i.test(navigator.userAgent || '');
-          var isCoarse = window.matchMedia && (window.matchMedia('(pointer: coarse)').matches || window.matchMedia('(hover: none)').matches);
-          var hasTouch = (navigator.maxTouchPoints && navigator.maxTouchPoints > 0) || ('ontouchstart' in window);
-          var isSmallOrTabletScreen = window.innerWidth <= 1024 || (window.screen && Math.min(window.screen.width, window.screen.height) <= 1024);
+          // If forced to desktop, stay on desktop
+          if (sessionStorage.getItem('cariearsa_cloud_force') === 'desktop') return;
+          var params = new URLSearchParams(window.location.search);
+          if (params.get('view') === 'desktop') {
+            sessionStorage.setItem('cariearsa_cloud_force', 'desktop');
+            return;
+          }
 
-          // Strictly stay on mobile for tablet and mobile+ devices
-          if (isMobileUA || isCoarse || hasTouch || isSmallOrTabletScreen) {
+          var ua = navigator.userAgent || '';
+          var platform = navigator.platform || '';
+
+          // Check if desktop OS
+          var isWindows = /Windows NT|Win64|WOW64|Win32/i.test(ua) || platform.indexOf('Win') !== -1;
+          var isMac = /Macintosh|MacIntel|MacPPC|Mac68K/i.test(ua) && !/iPhone|iPad|iPod/i.test(ua);
+          var isLinuxDesktop = /Linux/i.test(ua) && !/Android/i.test(ua);
+          var isCrOS = /CrOS/i.test(ua);
+          var isDesktopOS = isWindows || isMac || isLinuxDesktop || isCrOS;
+
+          // If desktop or laptop (wide screen or desktop OS), NEVER redirect to mobile!
+          if (isDesktopOS || window.innerWidth >= 1024) {
+            return;
+          }
+
+          // ONLY redirect genuine mobile phone devices with narrow screens
+          var isMobilePhoneUA = /Android.*Mobile|iPhone|iPod|BlackBerry|IEMobile|Opera Mini/i.test(ua);
+          if (isMobilePhoneUA && window.innerWidth < 768) {
             var target = '/cloud/mobile/' + window.location.search + window.location.hash;
             window.location.replace(target);
           }
@@ -123,6 +142,6 @@
     <audio id="global-audio" class="hidden"></audio>
     <input type="file" id="hidden-file-input" multiple class="hidden" onchange="handleUploadInput(event)" />
 
-    <script type="module" src="/src/cloud/main.ts"></script>
+    <script type="module" src="/src/cloud/main.js"></script>
   </body>
 </html>
