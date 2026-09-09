@@ -285,20 +285,17 @@ body::before {
 /* CLOUD DATABASE BTN - Cyber Chamfer (Top-Left 9px & Bottom-Right 9px Cut) with Solid Black Outline */
 .cloud-nav-btn {
   position: relative;
-  background: transparent !important;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 6px 14px;
+  background-color: #000000 !important;
+  background: #000000 !important;
   border: none !important;
   box-shadow: none !important;
+  outline: none !important;
   transform: none !important;
-  filter: drop-shadow(3px 3px 0px #00E5FF);
-  transition: transform 0.16s cubic-bezier(0.16, 1, 0.3, 1), filter 0.16s ease;
-  will-change: transform, filter;
-}
-
-.cloud-nav-btn::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background-color: #000000;
   clip-path: polygon(
     9px 0%,
     100% 0%,
@@ -307,11 +304,12 @@ body::before {
     0% 100%,
     0% 9px
   );
-  z-index: 0;
-  pointer-events: none;
+  filter: drop-shadow(3px 3px 0px #00E5FF);
+  transition: transform 0.16s cubic-bezier(0.16, 1, 0.3, 1), filter 0.16s ease;
+  will-change: transform, filter;
 }
 
-.cloud-nav-btn::after {
+.cloud-nav-btn::before {
   content: '';
   position: absolute;
   inset: 2px;
@@ -329,11 +327,17 @@ body::before {
   transition: background-color 0.16s ease;
 }
 
+.cloud-nav-btn::after {
+  content: none !important;
+  display: none !important;
+}
+
 .cloud-nav-btn > * {
   transform: none !important;
   position: relative;
   z-index: 2;
   color: #FFFFFF;
+  line-height: 1;
   transition: color 0.16s ease;
 }
 
@@ -343,8 +347,8 @@ body::before {
   transform: translate(-2px, -2px) !important;
 }
 
-.cloud-nav-btn:hover::after,
-.cloud-nav-btn:focus-visible::after {
+.cloud-nav-btn:hover::before,
+.cloud-nav-btn:focus-visible::before {
   background-color: #00E5FF;
 }
 
@@ -358,7 +362,7 @@ body::before {
   transform: translate(1px, 1px) !important;
 }
 
-.cloud-nav-btn:active::after {
+.cloud-nav-btn:active::before {
   background-color: #00E5FF;
 }
 
@@ -1143,33 +1147,35 @@ body::before {
   filter: drop-shadow(2px 2px 0px #00E5FF);
 }
 
-/* Outer black cyber border layer (Cut Corner Kanan Bawah 14px) */
+/* Outer black cyber border layer (Cut Corner Kiri Atas 14px & Kanan Bawah 14px) */
 .hub-btn-playstore .hub-btn-plate {
   background-color: #000000 !important;
   border: none !important;
   box-shadow: none !important;
   transform: none !important;
   clip-path: polygon(
-    0% 0%,
+    14px 0%,
     100% 0%,
     100% calc(100% - 14px),
     calc(100% - 14px) 100%,
-    0% 100%
+    0% 100%,
+    0% 14px
   );
 }
 
-/* Inner color plate fill (Cut Corner Kanan Bawah 13px, inset 2.5px creates uniform 2.5px black outline) */
+/* Inner color plate fill (Cut Corner Kiri Atas 13px & Kanan Bawah 13px, inset 2.5px creates uniform 2.5px black outline) */
 .hub-btn-playstore .hub-btn-plate::before {
   content: '';
   position: absolute;
   inset: 2.5px;
   background-color: #00E5FF;
   clip-path: polygon(
-    0% 0%,
+    13px 0%,
     100% 0%,
     100% calc(100% - 13px),
     calc(100% - 13px) 100%,
-    0% 100%
+    0% 100%,
+    0% 13px
   );
   z-index: 1;
   pointer-events: none;
