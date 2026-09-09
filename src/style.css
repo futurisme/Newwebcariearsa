@@ -273,11 +273,13 @@ body::before {
   justify-content: center;
   gap: 6px;
   padding: 6px 14px;
-  background-color: #000000 !important;
-  background: #000000 !important;
+  background-color: transparent !important;
+  background: transparent !important;
   border: none !important;
   box-shadow: none !important;
   outline: none !important;
+  overflow: visible !important;
+  clip-path: none !important;
   font-family: var(--font-display, 'Oswald', sans-serif);
   font-weight: 800;
   letter-spacing: 1.2px;
@@ -287,7 +289,19 @@ body::before {
   cursor: pointer;
   user-select: none;
   white-space: nowrap;
-  /* Outer black cyber border layer via direct element polygon */
+  /* Outer Drop-shadow adheres accurately to the cut-corner polygon of the inner black layer */
+  filter: drop-shadow(3.5px 3.5px 0px #00E5FF);
+  transition: transform 0.16s cubic-bezier(0.16, 1, 0.3, 1), filter 0.16s ease;
+  will-change: transform, filter;
+}
+
+/* Outer black cyber border layer (Cut Top-Left 9px & Bottom-Right 9px) */
+.cloud-nav-btn::before,
+.manga-btn.cloud-nav-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-color: #000000;
   clip-path: polygon(
     9px 0%,
     100% 0%,
@@ -296,15 +310,13 @@ body::before {
     0% 100%,
     0% 9px
   );
-  /* Shadow conforms to cut cyber polygon via drop-shadow on the element */
-  filter: drop-shadow(3px 3px 0px #00E5FF);
-  transition: transform 0.16s cubic-bezier(0.16, 1, 0.3, 1), filter 0.16s ease;
-  will-change: transform, filter;
+  z-index: 1;
+  pointer-events: none;
 }
 
 /* Inner plate fill (Cut Top-Left 8px & Bottom-Right 8px, inset 2px creates uniform 2px black outline) */
-.cloud-nav-btn::before,
-.manga-btn.cloud-nav-btn::before {
+.cloud-nav-btn::after,
+.manga-btn.cloud-nav-btn::after {
   content: '';
   position: absolute;
   inset: 2px;
@@ -317,22 +329,15 @@ body::before {
     0% 100%,
     0% 8px
   );
-  z-index: 1;
+  z-index: 2;
   pointer-events: none;
   transition: background-color 0.16s ease;
-}
-
-/* Remove ::after to prevent outline conflict or double-layer glitches */
-.cloud-nav-btn::after,
-.manga-btn.cloud-nav-btn::after {
-  content: none !important;
-  display: none !important;
 }
 
 .cloud-nav-btn > *,
 .manga-btn.cloud-nav-btn > * {
   position: relative;
-  z-index: 2;
+  z-index: 3;
   display: inline-flex;
   align-items: center;
   gap: 5px;
@@ -342,19 +347,26 @@ body::before {
   pointer-events: none;
 }
 
-/* Hover & Focus-Visible State */
+/* Hover & Focus-Visible State:
+   - Outer drop-shadow switches to vibrant ruby red (#FF003C)
+   - Inner-plate switches to bright sky blue (#00E5FF)
+   - Text & icon invert to sharp solid black (#000000) for pristine readability
+*/
 .cloud-nav-btn:hover,
 .cloud-nav-btn:focus-visible,
 .manga-btn.cloud-nav-btn:hover,
 .manga-btn.cloud-nav-btn:focus-visible {
-  filter: drop-shadow(4px 4px 0px #FF003C);
+  box-shadow: none !important;
+  border: none !important;
+  outline: none !important;
+  filter: drop-shadow(5px 5px 0px #FF003C);
   transform: translate(-2px, -2px);
 }
 
-.cloud-nav-btn:hover::before,
-.cloud-nav-btn:focus-visible::before,
-.manga-btn.cloud-nav-btn:hover::before,
-.manga-btn.cloud-nav-btn:focus-visible::before {
+.cloud-nav-btn:hover::after,
+.cloud-nav-btn:focus-visible::after,
+.manga-btn.cloud-nav-btn:hover::after,
+.manga-btn.cloud-nav-btn:focus-visible::after {
   background-color: #00E5FF;
 }
 
@@ -365,15 +377,22 @@ body::before {
   color: #000000;
 }
 
-/* Active State (Click) */
+/* Active State (Click):
+   - Outer drop-shadow stays ruby red (#FF003C) with compact pressed offset
+   - Inner-plate stays bright sky blue (#00E5FF)
+   - Text & icon stay sharp solid black (#000000)
+*/
 .cloud-nav-btn:active,
 .manga-btn.cloud-nav-btn:active {
-  filter: drop-shadow(1px 1px 0px #FF003C);
+  box-shadow: none !important;
+  border: none !important;
+  outline: none !important;
+  filter: drop-shadow(1.5px 1.5px 0px #FF003C);
   transform: translate(1px, 1px);
 }
 
-.cloud-nav-btn:active::before,
-.manga-btn.cloud-nav-btn:active::before {
+.cloud-nav-btn:active::after,
+.manga-btn.cloud-nav-btn:active::after {
   background-color: #00E5FF;
 }
 

@@ -283,19 +283,42 @@ body::before {
 }
 
 /* CLOUD DATABASE BTN - Cyber Chamfer (Top-Left 9px & Bottom-Right 9px Cut) with Solid Black Outline */
-.cloud-nav-btn {
+.cloud-nav-btn,
+.mobile-nav-btn.cloud-nav-btn {
   position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 6px;
   padding: 6px 14px;
-  background-color: #000000 !important;
-  background: #000000 !important;
+  background-color: transparent !important;
+  background: transparent !important;
   border: none !important;
   box-shadow: none !important;
   outline: none !important;
+  overflow: visible !important;
+  clip-path: none !important;
   transform: none !important;
+  font-family: var(--font-display, 'Oswald', sans-serif);
+  font-weight: 800;
+  letter-spacing: 1.1px;
+  font-size: 0.82rem;
+  line-height: 1.1;
+  text-decoration: none;
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+  filter: drop-shadow(3.5px 3.5px 0px #00E5FF);
+  transition: transform 0.16s cubic-bezier(0.16, 1, 0.3, 1), filter 0.16s ease;
+  will-change: transform, filter;
+}
+
+.cloud-nav-btn::before,
+.mobile-nav-btn.cloud-nav-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-color: #000000;
   clip-path: polygon(
     9px 0%,
     100% 0%,
@@ -304,12 +327,12 @@ body::before {
     0% 100%,
     0% 9px
   );
-  filter: drop-shadow(3px 3px 0px #00E5FF);
-  transition: transform 0.16s cubic-bezier(0.16, 1, 0.3, 1), filter 0.16s ease;
-  will-change: transform, filter;
+  z-index: 1;
+  pointer-events: none;
 }
 
-.cloud-nav-btn::before {
+.cloud-nav-btn::after,
+.mobile-nav-btn.cloud-nav-btn::after {
   content: '';
   position: absolute;
   inset: 2px;
@@ -322,51 +345,66 @@ body::before {
     0% 100%,
     0% 8px
   );
-  z-index: 1;
+  z-index: 2;
   pointer-events: none;
   transition: background-color 0.16s ease;
 }
 
-.cloud-nav-btn::after {
-  content: none !important;
-  display: none !important;
-}
-
-.cloud-nav-btn > * {
+.cloud-nav-btn > *,
+.mobile-nav-btn.cloud-nav-btn > * {
   transform: none !important;
   position: relative;
-  z-index: 2;
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
   color: #FFFFFF;
   line-height: 1;
   transition: color 0.16s ease;
+  pointer-events: none;
 }
 
 .cloud-nav-btn:hover,
-.cloud-nav-btn:focus-visible {
-  filter: drop-shadow(4px 4px 0px #FF003C);
+.cloud-nav-btn:focus-visible,
+.mobile-nav-btn.cloud-nav-btn:hover,
+.mobile-nav-btn.cloud-nav-btn:focus-visible {
+  box-shadow: none !important;
+  border: none !important;
+  outline: none !important;
+  filter: drop-shadow(5px 5px 0px #FF003C);
   transform: translate(-2px, -2px) !important;
 }
 
-.cloud-nav-btn:hover::before,
-.cloud-nav-btn:focus-visible::before {
+.cloud-nav-btn:hover::after,
+.cloud-nav-btn:focus-visible::after,
+.mobile-nav-btn.cloud-nav-btn:hover::after,
+.mobile-nav-btn.cloud-nav-btn:focus-visible::after {
   background-color: #00E5FF;
 }
 
 .cloud-nav-btn:hover > *,
-.cloud-nav-btn:focus-visible > * {
+.cloud-nav-btn:focus-visible > *,
+.mobile-nav-btn.cloud-nav-btn:hover > *,
+.mobile-nav-btn.cloud-nav-btn:focus-visible > * {
   color: #000000;
 }
 
-.cloud-nav-btn:active {
-  filter: drop-shadow(1px 1px 0px #FF003C);
+.cloud-nav-btn:active,
+.mobile-nav-btn.cloud-nav-btn:active {
+  box-shadow: none !important;
+  border: none !important;
+  outline: none !important;
+  filter: drop-shadow(1.5px 1.5px 0px #FF003C);
   transform: translate(1px, 1px) !important;
 }
 
-.cloud-nav-btn:active::before {
+.cloud-nav-btn:active::after,
+.mobile-nav-btn.cloud-nav-btn:active::after {
   background-color: #00E5FF;
 }
 
-.cloud-nav-btn:active > * {
+.cloud-nav-btn:active > *,
+.mobile-nav-btn.cloud-nav-btn:active > * {
   color: #000000;
 }
 
