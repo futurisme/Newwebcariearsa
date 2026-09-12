@@ -202,17 +202,23 @@ body::before {
 .cyber-logo-badge {
   display: inline-flex;
   align-items: center;
-  filter: drop-shadow(3px 3px 0px var(--manga-red));
   text-decoration: none;
+  position: relative;
 }
 
-.logo-inner-plate {
-  background: #000000;
-  border-left: 5px solid var(--manga-accent);
-  padding: 6px 18px 6px 12px;
+.logo-box-wrapper {
+  position: relative;
   display: inline-flex;
-  align-items: baseline;
-  gap: 4px;
+  align-items: center;
+  filter: drop-shadow(3.5px 3.5px 0px #00FF66);
+}
+
+/* 1. Outline Kuning Cerah Terang: urutan index 1 (dibawah bayangan hijau terang cerah)
+   Warna kuning cerah terang (#FFE600), outline jelas mengikuti bentuk polygon & tak terpotong */
+.logo-outline-layer {
+  position: absolute;
+  inset: 0;
+  background: var(--manga-yellow, #FFE600);
   clip-path: polygon(
     0% 0%,
     100% 0%,
@@ -220,6 +226,83 @@ body::before {
     calc(100% - 12px) 100%,
     0% 100%
   );
+  -webkit-clip-path: polygon(
+    0% 0%,
+    100% 0%,
+    100% calc(100% - 12px),
+    calc(100% - 12px) 100%,
+    0% 100%
+  );
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* 2. Bayangan Hijau Terang Cerah: urutan index 2 (dibawah garis tegak biru langit, diatas outline kuning cerah)
+   Warna hijau terang cerah (#00FF66) */
+.logo-green-shadow-layer,
+.logo-ruby-shadow-layer {
+  position: absolute;
+  inset: 0;
+  transform: translate(3.5px, 3.5px);
+  background: #00FF66;
+  clip-path: polygon(
+    0% 0%,
+    100% 0%,
+    100% calc(100% - 12px),
+    calc(100% - 12px) 100%,
+    0% 100%
+  );
+  -webkit-clip-path: polygon(
+    0% 0%,
+    100% 0%,
+    100% calc(100% - 12px),
+    calc(100% - 12px) 100%,
+    0% 100%
+  );
+  z-index: 2;
+  pointer-events: none;
+  opacity: 0.95;
+}
+
+/* Inner Plate Hitam Inti: urutan index 3 */
+.logo-inner-plate {
+  position: relative;
+  z-index: 3;
+  margin: 2.5px;
+  background: #000000;
+  padding: 4px 18px 4px 14px;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0;
+  clip-path: polygon(
+    0% 0%,
+    100% 0%,
+    100% calc(100% - 10px),
+    calc(100% - 10px) 100%,
+    0% 100%
+  );
+  -webkit-clip-path: polygon(
+    0% 0%,
+    100% 0%,
+    100% calc(100% - 10px),
+    calc(100% - 10px) 100%,
+    0% 100%
+  );
+  box-shadow: 0 0 0 1.5px rgba(255, 230, 0, 0.95);
+}
+
+/* 3. Garis Tegak Biru Langit Cerah: diawal textbox judul, urutan index 10 (diatas outline kuning & bayangan hijau)
+   Warna biru langit terang cerah (#00E5FF) */
+.logo-vertical-blue-bar {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 5px;
+  background: var(--manga-accent, #00E5FF);
+  box-shadow: 0 0 8px rgba(0, 229, 255, 0.85);
+  z-index: 10;
+  pointer-events: none;
 }
 
 .cyber-logo-title {
@@ -236,44 +319,134 @@ body::before {
   white-space: nowrap;
 }
 
-.logo-slash {
+/* Character Color Specifications for <FADHIL.DEV>:
+   < and > : Hijau terang cerah (#00FF66)
+   FA : Putih bersih terang cerah (#FFFFFF)
+   DH : Pink jepang terang cerah (#FF007F)
+   IL : Biru langit terang cerah (#00E5FF)
+   .DEV : Kuning terang cerah (#FFE600)
+*/
+.logo-bracket {
+  color: #00FF66;
+  text-shadow: 0 0 6px rgba(0, 255, 102, 0.75);
   font-weight: 900;
-  font-style: italic;
   display: inline-block;
+}
+
+.bracket-open {
+  margin-right: 1px;
+}
+
+.bracket-close {
+  margin-left: 1px;
+}
+
+.logo-part-white {
+  color: #FFFFFF;
+  text-shadow: 0 0 4px rgba(255, 255, 255, 0.7);
+  font-weight: 800;
+  display: inline-block;
+}
+
+.logo-part-pink {
+  color: var(--manga-pink, #FF007F);
+  text-shadow: 0 0 6px rgba(255, 0, 127, 0.75);
+  font-weight: 800;
+  display: inline-block;
+}
+
+.logo-part-sky {
+  color: var(--manga-accent, #00E5FF);
+  text-shadow: 0 0 6px rgba(0, 229, 255, 0.75);
+  font-weight: 800;
+  display: inline-block;
+}
+
+.logo-part-yellow {
+  color: var(--manga-yellow, #FFE600);
+  text-shadow: 0 0 6px rgba(255, 230, 0, 0.75);
+  font-weight: 800;
+  display: inline-block;
+}
+
+/* Direct Button CARIEARSA.COM
+   - Bentuk Default: Parallelogram (Jajar Genjang) dengan corner kanan bawah dipotong (Style Cyber)
+   - Ukuran (Width/Panjang): Disesuaikan simetris dan sama persis dengan panjang textbox <FADHIL.DEV>
+   - Ukuran Teks: Disesuaikan proporsional (1.68rem) agar fit rapi tanpa meluber
+   - Outline Textbox: Solid Black (#000000) 2.5px mengelilingi seluruh kontur bentuk tanpa terpotong
+   - Bayangan: Hijau Terang Cerah (#00FF66) mengikuti bentuk polygon jajar genjang & chamfer cut
+   - Inner Plate: Kuning Cerah Terang (#FFE600)
+   - Teks: Hitam (#000000) Cyber Bold Italic
+*/
+.cyber-cariearsa-tag-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  background: #000000;
+  padding: 2.5px;
+  clip-path: polygon(
+    16px 0%,
+    100% 0%,
+    calc(100% - 11px) calc(100% - 12px),
+    calc(100% - 26px) 100%,
+    0% 100%
+  );
+  -webkit-clip-path: polygon(
+    16px 0%,
+    100% 0%,
+    calc(100% - 11px) calc(100% - 12px),
+    calc(100% - 26px) 100%,
+    0% 100%
+  );
+  filter: drop-shadow(3.5px 3.5px 0px #00FF66);
+  cursor: pointer;
+  user-select: none;
   line-height: 1;
+  transition: transform 0.16s cubic-bezier(0.16, 1, 0.3, 1), filter 0.16s ease;
 }
 
-.slash-sky {
-  color: var(--manga-accent);
-  text-shadow: 0 0 4px rgba(0, 229, 255, 0.75);
+.cyber-cariearsa-tag-btn:hover {
+  transform: translate(-1.5px, -1.5px);
+  filter: drop-shadow(5px 5px 0px #00FF88);
 }
 
-.slash-pink {
-  color: var(--manga-pink);
-  margin-right: 4px;
-  text-shadow: 0 0 4px rgba(255, 0, 127, 0.75);
+.cyber-cariearsa-tag-btn:active {
+  transform: translate(1px, 1px);
+  filter: drop-shadow(2px 2px 0px #00FF66);
 }
 
-.logo-letter-white { color: #FFFFFF; }
-.logo-letter-pink { color: var(--manga-pink); text-shadow: 0 0 4px rgba(255, 0, 127, 0.6); }
-.logo-letter-sky { color: var(--manga-accent); text-shadow: 0 0 4px rgba(0, 229, 255, 0.6); }
-.logo-letter-yellow { color: var(--manga-yellow); text-shadow: 0 0 4px rgba(255, 230, 0, 0.6); }
+.cariearsa-btn-plate {
+  background: var(--manga-yellow, #FFE600);
+  padding: 4px 16px 4px 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  clip-path: polygon(
+    15px 0%,
+    100% 0%,
+    calc(100% - 11px) calc(100% - 10px),
+    calc(100% - 24px) 100%,
+    0% 100%
+  );
+  -webkit-clip-path: polygon(
+    15px 0%,
+    100% 0%,
+    calc(100% - 11px) calc(100% - 10px),
+    calc(100% - 24px) 100%,
+    0% 100%
+  );
+}
 
-.logo-subtag {
-  font-family: var(--font-jp);
-  font-size: 0.72rem;
-  font-weight: 900;
-  background: var(--manga-yellow);
+.cariearsa-btn-text {
+  font-family: var(--font-display);
+  font-size: 1.68rem;
+  font-weight: 800;
+  font-style: italic;
+  line-height: 1;
+  letter-spacing: 0.5px;
   color: #000000;
-  padding: 3px 8px;
-  letter-spacing: 1px;
-  transform: skew(-8deg);
-  border: 1.5px solid #000000;
-  box-shadow: 2px 2px 0px #000000;
-}
-
-.logo-subtag span {
-  transform: skew(8deg);
+  white-space: nowrap;
   display: inline-block;
 }
 
@@ -531,7 +704,8 @@ body::before {
   color: #FFFFFF;
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: 7px;
+  flex-wrap: nowrap;
 }
 
 .card-title-tag .accent-slash {
@@ -543,6 +717,64 @@ body::before {
   font-size: 0.76rem;
   color: var(--manga-yellow);
   font-weight: 700;
+}
+
+/* Cyber Title Box: Bright Yellow with Cyber Chamfered Top-Left & Bottom-Right Corners */
+.cyber-title-box {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  background: var(--manga-yellow, #FFE600);
+  color: #000000;
+  font-family: var(--font-display);
+  font-size: 0.96rem;
+  font-weight: 900;
+  letter-spacing: 0.9px;
+  text-transform: uppercase;
+  padding: 3.5px 12px;
+  line-height: 1.15;
+  white-space: nowrap;
+  user-select: none;
+  /* Precision Cyber Chamfer: Cut Top-Left (7px) and Bottom-Right (7px) */
+  clip-path: polygon(
+    7px 0%,
+    100% 0%,
+    100% calc(100% - 7px),
+    calc(100% - 7px) 100%,
+    0% 100%,
+    0% 7px
+  );
+  filter: drop-shadow(2px 2px 0px rgba(0, 0, 0, 0.95));
+  transition: transform 0.15s ease, filter 0.15s ease;
+}
+
+.cyber-title-box .title-slash {
+  color: #000000;
+  font-weight: 900;
+  opacity: 0.9;
+  letter-spacing: -0.5px;
+  margin-right: 1px;
+}
+
+/* Cyber Japanese Sub-Tag Box: Bright Pure Red with Symmetrical Rounded Corners */
+.cyber-jp-box {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #FF0022;
+  color: #FFFFFF;
+  font-family: var(--font-jp);
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  padding: 3px 8px;
+  line-height: 1.15;
+  white-space: nowrap;
+  user-select: none;
+  border-radius: 4px;
+  box-shadow: 1.5px 1.5px 0px rgba(0, 0, 0, 0.9);
+  transition: transform 0.15s ease;
 }
 
 .card-status-pill {
@@ -581,7 +813,20 @@ body::before {
   cursor: pointer;
 }
 
-.hero-picture-layer, .hero-picture-layer img {
+/* Picture Layer (Layer 2: Di atas video, selang-seling tampil 2s dan sembunyi 3s ketika video main) */
+.hero-picture-layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  opacity: 1;
+  pointer-events: none;
+  transition: opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: opacity;
+}
+
+.hero-picture-layer img {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -593,49 +838,43 @@ body::before {
   transform: scale(1.03);
 }
 
-/* YouTube Video Layer */
+/* Status Image Banner Utama: Tampil (2s) / Hide (3s) */
+.hero-picture-layer.is-hidden {
+  opacity: 0 !important;
+  pointer-events: none;
+}
+
+.hero-picture-layer.is-visible {
+  opacity: 1 !important;
+}
+
+/* YouTube Video Layer (Layer 1: Di bawah picture layer) */
 .hero-video-frame-layer {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
-  z-index: 4;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.3s ease;
-}
-
-.hero-video-frame-layer iframe {
-  width: 100%;
-  height: 100%;
-  border: none;
-}
-
-.hero-frame.is-video-active .hero-video-frame-layer {
+  z-index: 1;
   opacity: 1;
   pointer-events: auto;
 }
 
-.hero-frame.is-video-active .hero-picture-layer {
-  opacity: 0;
+.hero-video-frame-layer iframe,
+.hero-video-frame-layer .hero-yt-iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  display: block;
+  pointer-events: auto;
 }
 
-/* Speed lines & tint overlay */
+/* HAPUS SEMUA EFEK MENGGELAP DI BANNER UTAMA (100% Bersih & Terang) */
 .hero-speed-lines {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background: radial-gradient(circle at 50% 50%, transparent 40%, rgba(0, 0, 0, 0.7) 100%);
-  z-index: 2;
+  display: none !important;
 }
 
 .hero-media-wrap::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(180deg, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.85) 100%);
-  pointer-events: none;
-  z-index: 2;
+  display: none !important;
 }
 
 /* Hero Content Badges */
@@ -677,6 +916,27 @@ body::before {
   line-height: 1.3;
 }
 
+/* Zero-Bezel 100% Full-Bleed Banner Frame */
+.hero-banner-frame {
+  margin-bottom: 0;
+}
+
+.hero-banner-frame .hero-card-bleed {
+  margin: 0 !important;
+  height: 100% !important;
+  padding: 0 !important;
+  border: none !important;
+  background: #000000 !important;
+}
+
+.hero-banner-frame .hero-media-wrap {
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 16 / 9;
+  max-height: none;
+  display: block;
+}
+
 .hero-tech-strip {
   display: flex;
   align-items: center;
@@ -690,55 +950,63 @@ body::before {
   font-weight: 800;
   background: #000000;
   color: #FFFFFF;
-  border: 1px solid var(--manga-accent);
-  padding: 2px 7px;
+  border: 1.5px solid var(--manga-accent);
+  padding: 3px 8px;
   text-transform: uppercase;
   letter-spacing: 0.8px;
-  box-shadow: 2px 2px 0px rgba(0,0,0,0.8);
-}
-
-.hero-controls-bar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 8px 12px;
-  background: #000000;
-  border-top: 2px solid var(--manga-red);
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.hero-sound-btn {
+  box-shadow: 2px 2px 0px rgba(0,0,0,0.9);
+  line-height: 1;
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+}
+
+/* Sound 100% Pill Overlay (Placed symmetrical next to System Security) */
+.hero-sound-pill {
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  font-weight: 900;
+  background: #000000;
+  color: var(--manga-yellow);
+  border: 1.5px solid var(--manga-yellow);
+  padding: 3px 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  box-shadow: 2px 2px 0px rgba(0,0,0,0.9);
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  pointer-events: auto;
+  user-select: none;
+  border-radius: 0;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease, color 0.15s ease;
+}
+
+.hero-sound-pill .sound-icon {
+  display: inline-block;
+  font-size: 0.78rem;
+  line-height: 1;
+}
+
+.hero-sound-pill:hover {
+  background: var(--manga-yellow);
+  color: #000000;
+  border-color: #000000;
+  transform: translate(-1px, -1px);
+  box-shadow: 3px 3px 0px var(--manga-accent);
+}
+
+.hero-sound-pill:active {
+  transform: translate(1px, 1px);
+  box-shadow: 1px 1px 0px rgba(0,0,0,0.9);
+}
+
+.hero-sound-pill.is-active {
   background: var(--manga-accent);
   color: #000000;
-  border: 2px solid #000000;
-  font-family: var(--font-display);
-  font-weight: 900;
-  font-size: 0.84rem;
-  letter-spacing: 1px;
-  padding: 4px 12px;
-  cursor: pointer;
-  clip-path: polygon(6px 0%, 100% 0%, 100% calc(100% - 6px), calc(100% - 6px) 100%, 0% 100%, 0% 6px);
-  box-shadow: 2px 2px 0px var(--manga-red);
-  transition: all 0.15s ease;
-}
-
-.hero-sound-btn:hover {
-  background: var(--manga-yellow);
-  transform: translate(-1px, -1px);
-  box-shadow: 3px 3px 0px var(--manga-red);
-}
-
-.hero-shortcuts-hint {
-  font-size: 0.76rem;
-  color: #A0AAB5;
-  font-family: monospace;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
+  border-color: #000000;
+  box-shadow: 2px 2px 0px var(--ink-true-black);
 }
 
 .hero-shortcuts-hint kbd {
@@ -881,10 +1149,10 @@ body::before {
 
 /* About & Core Stack Card */
 .about-card-body {
-  padding: 12px 14px;
+  padding: 10px 14px 12px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 9px;
 }
 
 .about-lang-row {
@@ -892,6 +1160,52 @@ body::before {
   align-items: center;
   justify-content: space-between;
   gap: 10px;
+}
+
+.lang-flags-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.lang-flag-btn {
+  background: var(--paper-white, #FFFFFF);
+  border: 2px solid var(--ink-true-black, #000000);
+  box-shadow: 2px 2px 0px var(--ink-true-black, #000000);
+  padding: 2px 6px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  border-radius: 0;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease, color 0.15s ease;
+  font-family: var(--font-display, 'Oswald', sans-serif);
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: var(--ink-true-black, #000000);
+  line-height: 1;
+}
+
+.lang-flag-btn:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 3px 3px 0px var(--manga-pink, #FF0055);
+}
+
+.lang-flag-btn.active {
+  background: var(--ink-true-black, #000000);
+  color: #FFFFFF;
+  box-shadow: 2px 2px 0px var(--manga-accent, #00E5FF);
+}
+
+.flag-icon {
+  display: block;
+  flex-shrink: 0;
+  border-radius: 1px;
+}
+
+.flag-code {
+  font-weight: 900;
+  letter-spacing: 0.5px;
 }
 
 .lang-switch-group {
@@ -922,13 +1236,126 @@ body::before {
   color: #000000;
 }
 
+.about-author-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.about-author-title-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  flex-wrap: wrap;
+}
+
 .about-author-name {
   font-family: var(--font-display);
-  font-size: 1.25rem;
+  font-size: 1.15rem;
   font-weight: 900;
   letter-spacing: 0.5px;
   color: var(--manga-accent);
+  line-height: 1;
+  white-space: nowrap;
+}
+
+/* Cyber Badge: STUDENT
+   - Outline: Bright Yellow (#FFE600)
+   - Inner Fill: Bright Clean White (#FFFFFF)
+   - Text: Japanese Hinomaru Red (#BC002D)
+   - Shadow: Bright Sky Blue (#00E5FF)
+   - Cyber Chamfer: Bottom-Left Corner Cut (1 corner kiri bawah dipotong)
+   - Continuous vector-quality outline without cut-off borders
+*/
+.cyber-badge-student {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #FFE600;
+  padding: 1.5px;
+  clip-path: polygon(
+    0% 0%,
+    100% 0%,
+    100% 100%,
+    6px 100%,
+    0% calc(100% - 6px)
+  );
+  filter: drop-shadow(2px 2px 0px #00E5FF);
+  line-height: 1;
+  user-select: none;
+}
+
+.cyber-badge-student-inner {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #FFFFFF;
+  color: #BC002D;
+  font-family: var(--font-display);
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.8px;
+  padding: 1.5px 6px;
   line-height: 1.1;
+  white-space: nowrap;
+  clip-path: polygon(
+    0% 0%,
+    100% 0%,
+    100% 100%,
+    5px 100%,
+    0% calc(100% - 5px)
+  );
+}
+
+/* Cyber Badge: HOBBYIST
+   - Outline: Bright Sky Blue (#00E5FF)
+   - Inner Fill: True Black (#000000)
+   - Text: Manga Yellow (#FFE600)
+   - Shadow: Japanese Red (#FF0055)
+   - Cyber Chamfer: Bottom-Left Corner Cut (Matching Student)
+*/
+.cyber-badge-hobbyist {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #00E5FF;
+  padding: 1.5px;
+  clip-path: polygon(
+    0% 0%,
+    100% 0%,
+    100% 100%,
+    6px 100%,
+    0% calc(100% - 6px)
+  );
+  filter: drop-shadow(2px 2px 0px #FF0055);
+  line-height: 1;
+  user-select: none;
+}
+
+.cyber-badge-hobbyist-inner {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #000000;
+  color: #FFE600;
+  font-family: var(--font-display);
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.8px;
+  padding: 1.5px 6px;
+  line-height: 1.1;
+  white-space: nowrap;
+  clip-path: polygon(
+    0% 0%,
+    100% 0%,
+    100% 100%,
+    5px 100%,
+    0% calc(100% - 5px)
+  );
 }
 
 .about-quote-box {
@@ -937,11 +1364,24 @@ body::before {
   border-top: 1px solid rgba(255,255,255,0.05);
   border-right: 1px solid rgba(255,255,255,0.05);
   border-bottom: 1px solid rgba(255,255,255,0.05);
-  padding: 8px 10px;
+  padding: 7px 12px;
   font-size: 0.94rem;
-  line-height: 1.45;
+  line-height: 1.44;
   color: var(--text-main);
   box-shadow: inset 0 0 10px rgba(0,0,0,0.3);
+  min-height: 72px;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  transition: min-height 0.2s ease;
+}
+
+.about-quote-box p {
+  margin: 0;
+  width: 100%;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  letter-spacing: 0.15px;
 }
 
 .about-owned-tag {
@@ -950,12 +1390,16 @@ body::before {
   gap: 5px;
   background: #000000;
   border: 1px solid var(--manga-accent);
-  padding: 2px 8px;
+  padding: 2px 7px;
   font-family: var(--font-display);
   font-weight: 800;
-  font-size: 0.78rem;
+  font-size: 0.74rem;
   color: #FFFFFF;
-  margin-top: 4px;
+  margin-top: 0;
+  line-height: 1;
+  white-space: nowrap;
+  box-shadow: 1.5px 1.5px 0px rgba(0,0,0,0.85);
+  flex-shrink: 0;
 }
 
 .about-owned-tag a {
@@ -965,31 +1409,36 @@ body::before {
 
 /* Core 6 Language Icons Row */
 .core-lang-grid {
-  display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  gap: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
   list-style: none;
-  margin-top: 2px;
+  margin: 2px auto 0;
+  padding: 0;
+  width: 100%;
 }
 
 .core-lang-item {
   position: relative;
+  width: 50px;
+  height: 50px;
+  flex: 0 0 50px;
   background: #000000;
   border: 2px solid var(--manga-accent);
-  box-shadow: 2px 2px 0px rgba(0,0,0,0.8);
-  aspect-ratio: 1;
+  box-shadow: 2px 2px 0px rgba(0, 0, 0, 0.85);
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 4px;
+  padding: 5px;
   transition: all 0.16s ease;
   cursor: pointer;
 }
 
 .core-lang-item:hover {
   border-color: var(--manga-yellow);
-  transform: translate(-2px, -2px);
-  box-shadow: 4px 4px 0px var(--manga-red);
+  transform: translate(-1.5px, -1.5px);
+  box-shadow: 3px 3px 0px var(--manga-red);
   background: #141724;
 }
 
@@ -1002,28 +1451,32 @@ body::before {
 
 /* Active Social Profile Links (14 Clickable) */
 .socials-card-body {
-  padding: 10px 12px;
+  padding: 8px 12px 10px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 6px;
 }
 
 .socials-14-grid {
   display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: 6px;
+  grid-template-columns: repeat(7, 50px);
+  justify-content: center;
+  gap: 7px 8px;
   list-style: none;
+  margin: 0 auto;
+  padding: 0;
 }
 
 .social-slot-link {
   position: relative;
+  width: 50px;
+  height: 50px;
   display: flex;
   align-items: center;
   justify-content: center;
   background: #000000;
   border: 2px solid #333d59;
   box-shadow: 2px 2px 0px #000000;
-  aspect-ratio: 1;
   padding: 5px;
   text-decoration: none;
   transition: all 0.16s ease;
@@ -1031,8 +1484,8 @@ body::before {
 
 .social-slot-link:hover {
   border-color: var(--manga-accent);
-  transform: translate(-2px, -2px);
-  box-shadow: 4px 4px 0px var(--manga-pink);
+  transform: translate(-1.5px, -1.5px);
+  box-shadow: 3px 3px 0px var(--manga-pink);
   background: #151829;
 }
 
@@ -1046,36 +1499,41 @@ body::before {
 
 /* Development Tools & Platforms (10 Items) */
 .tools-card-body {
-  padding: 10px 12px;
+  padding: 8px 12px 10px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 6px;
 }
 
 .tools-10-grid {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 6px;
+  grid-template-columns: repeat(5, 50px);
+  justify-content: center;
+  gap: 7px 12px;
   list-style: none;
+  margin: 0 auto;
+  padding: 0;
 }
 
 .tool-slot-item {
   position: relative;
+  width: 50px;
+  height: 50px;
   display: flex;
   align-items: center;
   justify-content: center;
   background: #000000;
   border: 2px solid #2a3045;
   box-shadow: 2px 2px 0px #000000;
-  aspect-ratio: 1;
-  padding: 6px;
+  padding: 5px;
   transition: all 0.16s ease;
+  cursor: pointer;
 }
 
 .tool-slot-item:hover {
   border-color: var(--manga-yellow);
-  transform: translate(-2px, -2px);
-  box-shadow: 4px 4px 0px var(--manga-accent);
+  transform: translate(-1.5px, -1.5px);
+  box-shadow: 3px 3px 0px var(--manga-accent);
   background: #141724;
 }
 
@@ -1309,8 +1767,27 @@ body::before {
 
 @media (max-width: 768px) {
   .hero-subgrid { grid-template-columns: 1fr; }
-  .socials-14-grid { grid-template-columns: repeat(5, 1fr); }
-  .tools-10-grid { grid-template-columns: repeat(5, 1fr); }
+  .socials-14-grid { grid-template-columns: repeat(7, minmax(0, 50px)); justify-content: center; gap: 6px; }
+  .tools-10-grid { grid-template-columns: repeat(5, minmax(0, 50px)); justify-content: center; gap: 6px 10px; }
   .portfolios-grid-4 { grid-template-columns: 1fr; }
-  .fadhil-header { flex-direction: column; align-items: flex-start; }
+  .fadhil-header { flex-direction: column; align-items: flex-start; gap: 10px; }
+  .header-left { gap: 10px; }
+  .cyber-logo-title { font-size: 1.75rem; }
+  .cariearsa-btn-text { font-size: 1.38rem; }
+}
+
+@media (max-width: 480px) {
+  .cyber-logo-title { font-size: 1.35rem; }
+  .cariearsa-btn-text { font-size: 1.08rem; }
+  .cariearsa-btn-plate { padding: 4px 10px 4px 12px; }
+  .logo-inner-plate { padding: 4px 12px 4px 10px; }
+}
+
+@media (max-width: 440px) {
+  .socials-14-grid { grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px; }
+  .social-slot-link { width: 100%; height: auto; aspect-ratio: 1; max-width: 50px; padding: 3px; }
+  .core-lang-grid { gap: 5px; }
+  .core-lang-item { width: 100%; height: auto; aspect-ratio: 1; max-width: 50px; flex: 1 1 0; padding: 3px; }
+  .tools-10-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 5px; }
+  .tool-slot-item { width: 100%; height: auto; aspect-ratio: 1; max-width: 50px; padding: 3px; }
 }

@@ -111,166 +111,209 @@
     themeToggle.classList.remove("is-spinning");
   });
 
-  // 3. YouTube Multi-Video Manager (Shift+E: Video 1, Shift+S: Video 2)
+  // 3. YouTube Embed Controller & Cyclic Banner Image Overlay (2s Show / 3s Hide)
   const heroTrigger = document.querySelector(".hero-media-wrap");
   const soundToggleBtn = document.getElementById("hero-sound-btn");
+  const pictureLayer = document.querySelector(".hero-picture-layer");
+
   if (heroTrigger) {
-    const primaryVideoId = heroTrigger.dataset.youtubeVideoId || "9wp5jBgOcKo";
-    const secondaryVideoId = heroTrigger.dataset.youtubeSecondaryVideoId || "GzUa3kGo03A";
-    const layer = heroTrigger.querySelector(".hero-video-frame-layer");
+    const startTime = parseInt(heroTrigger.dataset.youtubeStart || "11", 10);
+    const iframe = document.getElementById("fadhil-hero-yt") || heroTrigger.querySelector("iframe");
     let ytPlayer = null;
-    let activeVideoId = null;
-    let pendingVideoId = null;
-    let playerReady = false;
+    let isAudioActive = false;
+    let isPlaying = false;
 
-    const loadYouTubeApi = () => {
-      if (window.YT?.Player) return Promise.resolve(window.YT);
-      return new Promise((resolve) => {
-        const prev = window.onYouTubeIframeAPIReady;
-        window.onYouTubeIframeAPIReady = () => {
-          prev?.();
-          resolve(window.YT);
-        };
-        if (!document.querySelector('script[src="https://www.youtube.com/iframe_api"]')) {
-          const script = document.createElement("script");
-          script.src = "https://www.youtube.com/iframe_api";
-          script.async = true;
-          document.head.append(script);
-        }
-      });
+    // Banner image alternating visibility timer (2s show / 3s hide)
+    let bannerCycleTimer = null;
+    let isCycling = false;
+
+    const startBannerCycle = () => {
+      if (isCycling) return;
+      isCycling = true;
+
+      const cycle = () => {
+        if (!isCycling || !pictureLayer) return;
+
+        // Fase 1: Image tampil selama 2 detik (menutupi video)
+        pictureLayer.classList.remove("is-hidden");
+        pictureLayer.classList.add("is-visible");
+
+        bannerCycleTimer = setTimeout(() => {
+          if (!isCycling || !pictureLayer) return;
+
+          // Fase 2: Image hide selama 3 detik (video kelihatan)
+          pictureLayer.classList.remove("is-visible");
+          pictureLayer.classList.add("is-hidden");
+
+          bannerCycleTimer = setTimeout(() => {
+            if (!isCycling) return;
+            // Berulang kembali ke fase 1
+            cycle();
+          }, 3000); // Hide selama 3 detik
+        }, 2000); // Tampil selama 2 detik
+      };
+
+      cycle();
     };
 
-    const buildEmbedUrl = (videoId) => {
-      const url = new URL(`https://www.youtube-nocookie.com/embed/${videoId}`);
-      url.search = new URLSearchParams({
-        autoplay: "1",
-        controls: "1",
-        enablejsapi: "1",
-        playsinline: "1",
-        rel: "0",
-        origin: window.location.origin,
-        mute: "0",
-        widget_referrer: window.location.href,
-      }).toString();
-      return url.toString();
-    };
-
-    const playLoud = () => {
-      if (!ytPlayer) return;
-      try {
-        ytPlayer.unMute?.();
-        ytPlayer.setVolume?.(100);
-        ytPlayer.playVideo?.();
-      } catch (_) {}
-      if (soundToggleBtn) {
-        soundToggleBtn.innerHTML = '<span>🔊</span><span>SOUND ON (100%)</span>';
+    const stopBannerCycle = () => {
+      isCycling = false;
+      if (bannerCycleTimer) {
+        clearTimeout(bannerCycleTimer);
+        bannerCycleTimer = null;
+      }
+      if (pictureLayer) {
+        pictureLayer.classList.remove("is-hidden");
+        pictureLayer.classList.add("is-visible");
       }
     };
 
-    const createPlayer = async (videoId) => {
-      if (!videoId || !layer || pendingVideoId === videoId) return;
-      pendingVideoId = videoId;
+    const sendYTCommand = (func, args = []) => {
+      if (iframe && iframe.contentWindow) {
+        iframe.contentWindow.postMessage(JSON.stringify({
+          event: "command",
+          func: func,
+          args: args
+        }), "*");
+      }
+    };
 
-      if (ytPlayer) {
+    const activateVideoAndAudio = () => {
+      isAudioActive = true;
+      isPlaying = true;
+
+      // 1. PostMessage immediate control (seek to 11s, unMute, 100% volume, play)
+      sendYTCommand("seekTo", [startTime, true]);
+      sendYTCommand("unMute");
+      sendYTCommand("setVolume", [100]);
+      sendYTCommand("playVideo");
+
+      // 2. YT.Player API control if initialized
+      if (ytPlayer && typeof ytPlayer.playVideo === "function") {
         try {
-          ytPlayer.stopVideo?.();
-          ytPlayer.destroy?.();
+          ytPlayer.unMute?.();
+          ytPlayer.setVolume?.(100);
+          ytPlayer.playVideo?.();
         } catch (_) {}
-        ytPlayer = null;
-        playerReady = false;
       }
 
-      const iframe = document.createElement("iframe");
-      iframe.src = buildEmbedUrl(videoId);
-      iframe.title = "YouTube Video Player";
-      iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
-      iframe.referrerPolicy = "strict-origin-when-cross-origin";
-      iframe.allowFullscreen = true;
-      layer.replaceChildren(iframe);
+      // Update sound indicator button
+      if (soundToggleBtn) {
+        soundToggleBtn.innerHTML = '<span class="sound-icon">🔊</span><span class="sound-label">SOUND 100%</span>';
+        soundToggleBtn.classList.add("is-active");
+      }
 
-      activeVideoId = videoId;
-      heroTrigger.classList.add("is-video-active");
+      // Start the 2s show / 3s hide image alternating cycle
+      startBannerCycle();
+    };
 
-      const YT = await loadYouTubeApi();
-      ytPlayer = new YT.Player(iframe, {
-        events: {
-          onReady: (event) => {
-            playerReady = true;
-            pendingVideoId = null;
-            try {
-              event.target.unMute();
-              event.target.setVolume(100);
-              event.target.playVideo();
-            } catch (_) {}
-            playLoud();
-          },
-          onStateChange: (event) => {
-            if (event.data === YT.PlayerState.PLAYING) {
-              playLoud();
+    // YouTube Iframe API Initialization
+    const initYT = () => {
+      if (window.YT && window.YT.Player && iframe && !ytPlayer) {
+        try {
+          ytPlayer = new window.YT.Player(iframe, {
+            events: {
+              onReady: (event) => {
+                event.target.seekTo(startTime, true);
+                event.target.setVolume(100);
+                if (isAudioActive) {
+                  try {
+                    event.target.unMute();
+                    event.target.playVideo();
+                  } catch (_) {}
+                }
+              },
+              onStateChange: (event) => {
+                // If ended (0), seamlessly loop back to 11s
+                if (event.data === 0) {
+                  event.target.seekTo(startTime, true);
+                  event.target.playVideo();
+                } else if (event.data === 1) { // PLAYING
+                  isPlaying = true;
+                  startBannerCycle();
+                  if (isAudioActive) {
+                    try {
+                      event.target.unMute();
+                      event.target.setVolume(100);
+                    } catch (_) {}
+                  }
+                }
+              }
             }
-          }
-        }
-      });
+          });
+        } catch (_) {}
+      }
     };
 
-    const switchVideo = (videoId) => {
-      if (!videoId) return;
-      heroTrigger.classList.add("is-video-active");
-      if (activeVideoId === videoId && playerReady) {
-        playLoud();
-        return;
+    if (window.YT && window.YT.Player) {
+      initYT();
+    } else {
+      const prevHook = window.onYouTubeIframeAPIReady;
+      window.onYouTubeIframeAPIReady = () => {
+        if (typeof prevHook === "function") prevHook();
+        initYT();
+      };
+      if (!document.querySelector('script[src="https://www.youtube.com/iframe_api"]')) {
+        const script = document.createElement("script");
+        script.src = "https://www.youtube.com/iframe_api";
+        script.async = true;
+        document.head.append(script);
       }
-      createPlayer(videoId);
-    };
+    }
 
-    heroTrigger.addEventListener("click", () => switchVideo(primaryVideoId));
-    soundToggleBtn?.addEventListener("click", (e) => {
-      e.stopPropagation();
-      if (!heroTrigger.classList.contains("is-video-active")) {
-        switchVideo(primaryVideoId);
-      } else {
-        playLoud();
-      }
+    // Response to user clicks/touches on the banner or sound button
+    heroTrigger.addEventListener("click", () => {
+      activateVideoAndAudio();
     });
 
-    // Keyboard controls (Shift+E, Shift+S)
+    soundToggleBtn?.addEventListener("click", (e) => {
+      e.stopPropagation();
+      activateVideoAndAudio();
+    });
+
+    // Merespon ketukan di mana saja pada document / window untuk memutar video dan mengaktifkan suara
+    const gestureEvents = ['click', 'pointerdown', 'keydown', 'touchstart'];
+    const handleUniversalGesture = () => {
+      activateVideoAndAudio();
+      gestureEvents.forEach(evt => window.removeEventListener(evt, handleUniversalGesture, { capture: true }));
+    };
+    gestureEvents.forEach(evt => window.addEventListener(evt, handleUniversalGesture, { capture: true, passive: true }));
+
+    // Keyboard shortcut Shift+E untuk memicu video dari detik 11
     window.addEventListener("keydown", (event) => {
       if (event.altKey || event.ctrlKey || event.metaKey || event.repeat) return;
       const key = event.key.toLowerCase();
-      if (event.shiftKey && key === "s") {
+      if (event.shiftKey && (key === "e" || key === "s")) {
         event.preventDefault();
-        switchVideo(secondaryVideoId);
-      } else if (event.shiftKey && key === "e") {
-        event.preventDefault();
-        switchVideo(primaryVideoId);
+        activateVideoAndAudio();
       }
     });
   }
 
-  // 4. Dynamic About Language Switcher (ID, EN, JP)
+  // 4. Dynamic About Language Switcher (ID, EN, JP Flag Icons)
   const initLanguageSwitcher = () => {
     const textElem = document.getElementById("about-desc-content");
-    const langBtns = document.querySelectorAll(".lang-btn");
+    const langBtns = document.querySelectorAll(".lang-flag-btn, .lang-btn");
     if (!textElem || !langBtns.length) return;
 
     const translations = {
-      en: "A trilingual hobbyist generalist in development, writing, cybersecurity, editing, and analysis.",
-      id: "Seorang generalis hobiis trilingual dalam pengembangan, penulisan, keamanan siber, penyuntingan, dan analisis.",
-      jp: "開発、執筆、サイバーセキュリティ、編集、分析を行うトライリンガルの趣味探求型ジェネラリスト。"
+      en: "A generalist hobbyist with interests in design, development, animation, cybersecurity, and 2D art (strictly as a hobby and personal interest, not pursued seriously).",
+      id: "Seorang generalis penikmat hobi dengan minat pada bidang desain, pengembangan, animasi, keamanan siber, dan seni 2D (murni sebagai hobi dan minat pribadi, tidak ditekuni secara profesional/serius).",
+      jp: "デザイン、開発、アニメーション、サイバーセキュリティ、2Dアートに関心を持つジェネラリスト愛好家です（純粋な趣味および個人的な関心として嗜んでおり、本業や専門的な追究ではありません）。"
     };
 
     const setLanguage = (lang) => {
-      if (!translations[lang]) return;
-      textElem.textContent = translations[lang];
+      const activeLang = translations[lang] ? lang : "en";
+      textElem.textContent = translations[activeLang];
 
       langBtns.forEach((btn) => {
-        const isActive = btn.dataset.lang === lang;
+        const isActive = btn.dataset.lang === activeLang;
         btn.classList.toggle("active", isActive);
         btn.setAttribute("aria-pressed", isActive ? "true" : "false");
       });
 
       try {
-        localStorage.setItem("cariearsa_fadhil_lang", lang);
+        localStorage.setItem("cariearsa_fadhil_lang", activeLang);
       } catch (_) {}
     };
 
@@ -287,8 +330,14 @@
 
     try {
       const saved = localStorage.getItem("cariearsa_fadhil_lang");
-      if (saved && translations[saved]) setLanguage(saved);
-    } catch (_) {}
+      if (saved && translations[saved]) {
+        setLanguage(saved);
+      } else {
+        setLanguage("en");
+      }
+    } catch (_) {
+      setLanguage("en");
+    }
   };
 
   initLanguageSwitcher();
