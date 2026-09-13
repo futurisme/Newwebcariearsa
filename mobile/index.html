@@ -48,10 +48,6 @@
   </script>
 
   <link rel="stylesheet" href="/src/mobile.css">
-  <link rel="stylesheet" href="/src/animeIntro.css">
-  <!-- Prioritized Caching & Instant Preload for 12s Anime Cinematic Intro Assets -->
-  <link rel="preload" href="/assets/girl.avif" as="image" type="image/avif" fetchpriority="high">
-  <link rel="modulepreload" href="/src/animeIntro.js">
   <script>
     if ('serviceWorker' in navigator) {
       const registerSW = () => {
@@ -126,10 +122,6 @@
           <span>☁</span>
           <span>CLOUD DATABASE</span>
         </a>
-        <button type="button" id="replay-cinematic-btn" class="mobile-nav-btn replay-btn" title="Replay Anime Cinematic Opening" aria-label="Replay anime cinematic opening">
-          <span>▶</span>
-          <span>REPLAY INTRO</span>
-        </button>
       </div>
     </nav>
 
@@ -143,10 +135,10 @@
               <iframe 
                 id="hero-yt-player"
                 class="hero-video-embed"
-                src="https://www.youtube.com/embed/0opyaQPK6bY?si=GT5XogXThZ0yy2ga&amp;enablejsapi=1&amp;autoplay=1&amp;mute=0&amp;controls=0&amp;start=178&amp;loop=1&amp;playlist=0opyaQPK6bY&amp;playsinline=1&amp;rel=0&amp;modestbranding=1&amp;iv_load_policy=3" 
+                src="https://www.youtube.com/embed/0opyaQPK6bY?si=GT5XogXThZ0yy2ga&amp;enablejsapi=1&amp;autoplay=1&amp;mute=1&amp;controls=0&amp;start=178&amp;loop=1&amp;playlist=0opyaQPK6bY&amp;playsinline=1&amp;rel=0&amp;modestbranding=1&amp;iv_load_policy=3" 
                 title="YouTube video player" 
                 frameborder="0" 
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; compute-pressure" 
                 referrerpolicy="strict-origin-when-cross-origin" 
                 allowfullscreen>
               </iframe>
@@ -300,7 +292,6 @@
   </div><!-- /.mobile-wrapper -->
 
   <script src="https://www.youtube.com/iframe_api"></script>
-  <script type="module" src="/src/animeIntro.js"></script>
   <script type="module" src="/src/main.js"></script>
 </body>
 </html>

@@ -11,10 +11,29 @@ import './playstoreIntro.css';
  */
 
 let psAudioCtx = null;
+let isPSAudioUnlocked = false;
+
+const unlockPSAudio = () => {
+  isPSAudioUnlocked = true;
+  if (psAudioCtx && psAudioCtx.state === 'suspended') {
+    psAudioCtx.resume().catch(() => {});
+  }
+};
+
+['click', 'pointerdown', 'keydown', 'touchstart'].forEach((evt) => {
+  window.addEventListener(evt, unlockPSAudio, { capture: true, passive: true });
+});
+
 const getPlaystoreAudioContext = () => {
+  const hasGesture = isPSAudioUnlocked || (typeof navigator !== 'undefined' && navigator.userActivation && navigator.userActivation.hasBeenActive);
+  if (!hasGesture) return null;
+
   if (!psAudioCtx) {
     const AudioContextClass = window.AudioContext || window.webkitAudioContext;
     if (AudioContextClass) psAudioCtx = new AudioContextClass();
+  }
+  if (psAudioCtx && psAudioCtx.state === 'suspended') {
+    psAudioCtx.resume().catch(() => {});
   }
   return psAudioCtx;
 };

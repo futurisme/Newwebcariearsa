@@ -5,9 +5,25 @@ document.addEventListener('DOMContentLoaded', () => {
     document.title = document.hidden ? '戻ってきて！ (SYSTEM STANDBY)' : originalTitle;
   });
 
-  // 2. Synthesized "Paper Flip / Turn" Sound (Lazy-initialized on user gesture)
+  // 2. Synthesized "Paper Flip / Turn" Sound (Lazy-initialized strictly on user gesture)
   let audioCtx = null;
+  let isAudioUnlocked = false;
+
+  const unlockAudio = () => {
+    isAudioUnlocked = true;
+    if (audioCtx && audioCtx.state === 'suspended') {
+      audioCtx.resume().catch(() => {});
+    }
+  };
+
+  ['click', 'pointerdown', 'keydown', 'touchstart'].forEach((evt) => {
+    window.addEventListener(evt, unlockAudio, { capture: true, passive: true });
+  });
+
   const getAudioContext = () => {
+    const hasGesture = isAudioUnlocked || (typeof navigator !== 'undefined' && navigator.userActivation && navigator.userActivation.hasBeenActive);
+    if (!hasGesture) return null;
+
     if (!audioCtx) {
       const AudioContextClass = window.AudioContext || window.webkitAudioContext;
       if (AudioContextClass) audioCtx = new AudioContextClass();
@@ -194,8 +210,8 @@ document.addEventListener('DOMContentLoaded', () => {
               }
             }
           });
-        } catch (err) {
-          console.warn('YT Player init fallback', err);
+        } catch (_) {
+          // Seamless fallback if YT Player API is unavailable or restricted
         }
       }
     };
@@ -210,11 +226,9 @@ document.addEventListener('DOMContentLoaded', () => {
       };
     }
 
-    // Instant trial on page load
+    // Ensure video starts playing smoothly on page load
     setTimeout(() => {
       sendYTCommand('seekTo', [178, true]);
-      sendYTCommand('setVolume', [100]);
-      sendYTCommand('unMute');
       sendYTCommand('playVideo');
     }, 400);
 

@@ -1,0 +1,971 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <script>
+      (function() {
+        try {
+          // Explicit view preference override (e.g., ?view=desktop or ?view=mobile)
+          var params = new URLSearchParams(window.location.search);
+          var viewParam = params.get('view');
+          if (viewParam === 'mobile') {
+            sessionStorage.setItem('cariearsa_fadhil_pref', 'mobile');
+            return;
+          }
+          if (viewParam === 'desktop') {
+            sessionStorage.setItem('cariearsa_fadhil_pref', 'desktop');
+            window.location.replace('/fadhil/' + window.location.search + window.location.hash);
+            return;
+          }
+          if (sessionStorage.getItem('cariearsa_fadhil_pref') === 'mobile') {
+            return;
+          }
+
+          var ua = navigator.userAgent || navigator.vendor || window.opera || '';
+          var platform = navigator.platform || '';
+
+          // 1. TV & Consoles (Always redirect to Desktop version /fadhil/)
+          var isTV = /SmartTV|HbbTV|BRAVIA|NetCast|Tizen|Viera|AppleTV|Xbox|PlayStation|Nintendo|Roku/i.test(ua);
+          if (isTV) {
+            window.location.replace('/fadhil/' + window.location.search + window.location.hash);
+            return;
+          }
+
+          // 2. Client Hints API check
+          var uaData = navigator.userAgentData;
+          if (uaData && uaData.mobile === true) {
+            // Confirmed mobile device -> stay on mobile version
+            return;
+          }
+
+          // 3. Mobile & Tablet User Agent matching
+          var isMobileUA = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|Tablet|Silk|Kindle|PlayBook|Nexus|SM-|Pixel|XiaoMi|Oppo|Vivo|Realme|HarmonyOS|Huawei/i.test(ua);
+          var isIPadOS = (platform === 'MacIntel' || ua.includes('Macintosh')) && (navigator.maxTouchPoints && navigator.maxTouchPoints > 1);
+
+          if (isMobileUA || isIPadOS) {
+            // Confirmed mobile or tablet -> stay on mobile version
+            return;
+          }
+
+          // 4. Desktop OS detection (Windows, macOS, Linux, ChromeOS)
+          var isWindows = /Windows NT|Win64|WOW64|Win32/i.test(ua) || platform.indexOf('Win') !== -1;
+          var isMacDesktop = (/Macintosh|MacIntel|MacPPC|Mac68K/i.test(ua) || platform.indexOf('Mac') !== -1) && !isIPadOS;
+          var isLinuxDesktop = /Linux x86_64|Linux i686/i.test(ua) && !/Android/i.test(ua);
+          var isCrOSDesktop = /CrOS x86_64/i.test(ua);
+          var isDesktopOS = isWindows || isMacDesktop || isLinuxDesktop || isCrOSDesktop;
+
+          var isFinePointer = window.matchMedia && window.matchMedia('(pointer: fine)').matches && window.matchMedia('(hover: hover)').matches;
+
+          // 5. Screen boundary check: Desktop/Laptop/Widescreen (screen width > 1024 or fine pointer desktop OS)
+          if (isDesktopOS || window.innerWidth > 1024 || (isFinePointer && window.innerWidth >= 768)) {
+            window.location.replace('/fadhil/' + window.location.search + window.location.hash);
+          }
+        } catch (e) {}
+      })();
+    </script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fadhil Akbar Cariearsa // Official Cyber Manga Portfolio 2026 (Mobile)</title>
+    <meta
+      name="description"
+      content="Official Mobile Cyber-Manga Portfolio of Fadhil Akbar Cariearsa (fadhil.dev / cariearsa.com) — Optimized for high-speed mobile touch devices, smartphones, and tablets."
+    />
+    <meta
+      name="keywords"
+      content="Fadhil Akbar Cariearsa, fadhil.dev, cariearsa.com, Cyberpunk Manga Portfolio, Mobile Portfolio, Full-Stack Developer, UI/UX Design, Cybersecurity, Web Apps 2026"
+    />
+    <meta name="author" content="Fadhil Akbar Cariearsa" />
+    <meta name="theme-color" content="#05060A" />
+
+    <!-- Open Graph / Meta -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://cariearsa.com/fadhil/mobile/" />
+    <meta property="og:title" content="Fadhil Akbar Cariearsa // Cyber Manga Portfolio (Mobile)" />
+    <meta property="og:description" content="Official personal portfolio with high-density cyber manga visuals, interactive video archive, core tech stack, active social channels, and live portfolio apps (Mobile Version)." />
+    <meta property="og:image" content="/fadhil/assets/images/portfolio-banner.avif" />
+
+    <link rel="canonical" href="https://cariearsa.com/fadhil/" />
+
+    <!-- Favicon & Touch Icons -->
+    <link rel="icon" type="image/svg+xml" href="/fadhil/favicon.svg" />
+    <link rel="apple-touch-icon" href="/fadhil/apple-touch-icon.png" />
+    <link rel="manifest" href="/fadhil/site.webmanifest" />
+
+    <!-- Fonts: Oswald, Bangers, Noto Sans JP -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bangers&family=Noto+Sans+JP:wght@400;700;900&family=Oswald:wght@500;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Preloaded Critical Visual Assets -->
+    <link rel="preload" as="image" href="/fadhil/assets/images/portfolio-banner.avif" type="image/avif" fetchpriority="high" />
+    <link rel="preload" as="image" href="/fadhil/assets/images/shareideas-banner.avif" type="image/avif" fetchpriority="low" />
+    <link rel="preload" as="image" href="/fadhil/assets/images/mindmapmaker-banner.avif" type="image/avif" fetchpriority="low" />
+    <link rel="preload" as="image" href="/fadhil/assets/images/theme.avif" type="image/avif" fetchpriority="high" />
+
+    <!-- Cyber Manga Style -->
+    <link rel="stylesheet" href="/fadhil/app/styles.css" />
+
+    <!-- Mobile Top Buttons Layout & Sizing Overrides -->
+    <style id="fadhil-mobile-header-styles">
+      .fadhil-mobile-header {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 8px !important;
+        padding: 4px 0 8px !important;
+        width: 100% !important;
+      }
+      .fadhil-mobile-top-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        gap: 8px;
+      }
+      .fadhil-mobile-brand-group {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex-wrap: nowrap;
+        min-width: 0;
+      }
+      .fadhil-mobile-brand-group .logo-box-wrapper {
+        filter: drop-shadow(2.5px 2.5px 0px #FF003C);
+      }
+      .fadhil-mobile-brand-group .cyber-logo-title {
+        font-size: clamp(1.10rem, 4.4vw, 1.40rem) !important;
+        letter-spacing: 0.5px;
+      }
+      .fadhil-mobile-brand-group .logo-inner-plate {
+        padding: 4px 10px 4px 8px !important;
+        min-height: 36px;
+        display: inline-flex;
+        align-items: center;
+      }
+      .fadhil-mobile-brand-group .cariearsa-btn-plate {
+        padding: 4px 12px 4px 14px !important;
+        min-height: 36px;
+        display: inline-flex;
+        align-items: center;
+      }
+      .fadhil-mobile-brand-group .cariearsa-btn-text {
+        font-size: clamp(0.88rem, 3.5vw, 1.08rem) !important;
+        letter-spacing: 0.6px;
+      }
+      .fadhil-mobile-theme-btn {
+        width: 36px !important;
+        height: 36px !important;
+        flex-shrink: 0;
+        display: inline-flex !important;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 2.5px 2.5px 0px var(--ink-true-black) !important;
+      }
+      .fadhil-mobile-actions-deck {
+        display: grid !important;
+        grid-template-columns: 1.12fr 1.32fr 1fr;
+        gap: 6px !important;
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+      }
+      .fadhil-mobile-actions-deck .fadhil-mobile-btn {
+        width: 100% !important;
+        min-width: 0 !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        text-align: center !important;
+        padding: 6px 4px !important;
+        min-height: 38px !important;
+        box-sizing: border-box;
+      }
+      .fadhil-mobile-actions-deck .cyber-action-btn.btn-cloud-db {
+        font-size: clamp(0.72rem, 2.5vw, 0.85rem) !important;
+        letter-spacing: 0.4px !important;
+        gap: 4px !important;
+        filter: drop-shadow(2.5px 2.5px 0px var(--manga-red)) !important;
+      }
+      .fadhil-mobile-actions-deck .cyber-action-btn.btn-cloud-db:hover,
+      .fadhil-mobile-actions-deck .cyber-action-btn.btn-cloud-db:active {
+        filter: drop-shadow(2.5px 2.5px 0px var(--manga-accent)) !important;
+      }
+      .fadhil-mobile-actions-deck .email-cyber-btn {
+        font-size: clamp(0.70rem, 2.4vw, 0.82rem) !important;
+        letter-spacing: 0.3px !important;
+        box-shadow: 2.5px 2.5px 0px var(--manga-red) !important;
+      }
+      .fadhil-mobile-actions-deck .email-cyber-btn:hover,
+      .fadhil-mobile-actions-deck .email-cyber-btn:active {
+        box-shadow: 2.5px 2.5px 0px var(--manga-accent) !important;
+      }
+      .fadhil-mobile-actions-deck .email-cyber-btn .email-user {
+        font-size: clamp(0.72rem, 2.5vw, 0.84rem);
+      }
+      .fadhil-mobile-actions-deck .email-cyber-btn .email-domain {
+        font-size: clamp(0.68rem, 2.3vw, 0.80rem);
+      }
+      .fadhil-mobile-actions-deck .cyber-action-btn:not(.btn-cloud-db) {
+        font-size: clamp(0.72rem, 2.5vw, 0.85rem) !important;
+        letter-spacing: 0.4px !important;
+        gap: 4px !important;
+        filter: drop-shadow(2.5px 2.5px 0px var(--manga-accent)) !important;
+      }
+      .fadhil-mobile-actions-deck .cyber-action-btn:not(.btn-cloud-db):hover,
+      .fadhil-mobile-actions-deck .cyber-action-btn:not(.btn-cloud-db):active {
+        filter: drop-shadow(2.5px 2.5px 0px var(--manga-red)) !important;
+      }
+      @media (min-width: 600px) {
+        .fadhil-mobile-actions-deck {
+          gap: 10px !important;
+        }
+        .fadhil-mobile-actions-deck .fadhil-mobile-btn {
+          padding: 8px 12px !important;
+          min-height: 42px !important;
+        }
+        .fadhil-mobile-actions-deck .cyber-action-btn.btn-cloud-db,
+        .fadhil-mobile-actions-deck .email-cyber-btn,
+        .fadhil-mobile-actions-deck .cyber-action-btn:not(.btn-cloud-db) {
+          font-size: 0.90rem !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Top Infinite Neon Billboard Runner (Matching /*) -->
+    <div class="cyber-marquee" aria-label="Cyber Billboard Ticker">
+      <div class="marquee-track">
+        <span class="marquee-node neon-white">FADHIL.DEV</span>
+        <span class="marquee-node neon-yellow jp-text">キャリーアルサ</span>
+        <span class="marquee-node neon-white">CARIEARSA.COM</span>
+        <span class="marquee-node neon-yellow jp-text">ファディル</span>
+        <span class="marquee-node neon-ruby">PORTFOLIOS</span>
+        <span class="marquee-node neon-yellow jp-text">ポートフォリオ</span>
+        <span class="marquee-node neon-white">CYBER ARCHIVE</span>
+        <span class="marquee-node neon-yellow jp-text">サイバー開発者</span>
+        <span class="marquee-node neon-ruby">DEFENSIVE SECURITY</span>
+        <span class="marquee-node neon-yellow jp-text">防御的セキュリティ</span>
+      </div>
+      <div class="marquee-track" aria-hidden="true">
+        <span class="marquee-node neon-white">FADHIL.DEV</span>
+        <span class="marquee-node neon-yellow jp-text">キャリーアルサ</span>
+        <span class="marquee-node neon-white">CARIEARSA.COM</span>
+        <span class="marquee-node neon-yellow jp-text">ファディル</span>
+        <span class="marquee-node neon-ruby">PORTFOLIOS</span>
+        <span class="marquee-node neon-yellow jp-text">ポートフォリオ</span>
+        <span class="marquee-node neon-white">CYBER ARCHIVE</span>
+        <span class="marquee-node neon-yellow jp-text">サイバー開発者</span>
+        <span class="marquee-node neon-ruby">DEFENSIVE SECURITY</span>
+        <span class="marquee-node neon-yellow jp-text">防御的セキュリティ</span>
+      </div>
+    </div>
+
+    <!-- Main High-Density Shell -->
+    <div class="fadhil-shell">
+      <!-- Mobile Cyber Header & Navigation Strip -->
+      <header class="fadhil-header fadhil-mobile-header" role="banner">
+        <!-- Row 1: Brand & Theme Row -->
+        <div class="fadhil-mobile-top-row">
+          <div class="header-left fadhil-mobile-brand-group">
+            <a href="/fadhil/mobile/" id="btn-cyber-logo" class="cyber-logo-badge" title="Fadhil Akbar Cariearsa Official Portfolio" aria-label="Fadhil Dev Home">
+              <div class="logo-box-wrapper" id="logo-fadhil-wrapper">
+                <!-- Outline Kuning Cerah Terang (#FFE600): membentuk batas luar polygon cut-corner -->
+                <div class="logo-outline-layer" aria-hidden="true"></div>
+                <!-- Inner Plate Hitam: urutan index 2 -->
+                <div class="logo-inner-plate" id="logo-inner-plate">
+                  <h1 class="cyber-logo-title" id="cyber-logo-heading">
+                    <span class="logo-bracket bracket-open">&lt;</span><span class="logo-part-white">FA</span><span class="logo-part-pink">DH</span><span class="logo-part-sky">IL</span><span class="logo-part-yellow">.DEV</span><span class="logo-bracket bracket-close">&gt;</span>
+                  </h1>
+                </div>
+                <!-- Garis Tegak Biru Langit Cerah: diawal textbox judul, urutan index 10 -->
+                <div class="logo-vertical-blue-bar" aria-hidden="true"></div>
+              </div>
+            </a>
+            <!-- Direct Button CARIEARSA.COM: Cyber parallelogram with bottom-right chamfer cut, white outline, bright green shadow (#00FF66) -->
+            <a href="https://cariearsa.com" id="btn-cariearsa-tag" class="cyber-cariearsa-tag-btn" title="Kunjungi CARIEARSA.COM" target="_blank" rel="noopener noreferrer" aria-label="Visit CARIEARSA.COM">
+              <div class="cariearsa-outline-layer" aria-hidden="true"></div>
+              <div class="cariearsa-btn-plate" id="cariearsa-tag-plate">
+                <span class="cariearsa-btn-text">CARIEARSA.COM</span>
+              </div>
+            </a>
+          </div>
+
+          <!-- Theme Toggle Button -->
+          <button
+            type="button"
+            class="cyber-theme-btn theme-toggle fadhil-mobile-theme-btn"
+            aria-label="Switch between Dark Manga and Light Manga theme"
+            aria-pressed="false"
+            title="Ganti Tema (Dark / Light)"
+          >
+            <img src="/fadhil/assets/images/theme.avif" alt="Theme" width="24" height="24" />
+          </button>
+        </div>
+
+        <!-- Row 2: Mobile Action Controls Deck -->
+        <nav class="header-actions fadhil-mobile-actions-deck" aria-label="Portfolio navigation">
+          <!-- Cloud Database -->
+          <a href="/cloud/" class="cyber-action-btn btn-cloud-db fadhil-mobile-btn" id="btn-cloud-database" title="Buka Cloud Database">
+            <span>☁</span>
+            <span>CLOUD DATABASE</span>
+          </a>
+
+          <!-- Email Pill -->
+          <a href="mailto:fadhil@fadhil.dev" class="email-cyber-btn fadhil-mobile-btn" id="btn-email-fadhil" title="Kirim email ke fadhil@fadhil.dev">
+            <span>
+              <span class="email-user">fadhil</span><span class="email-domain">@fadhil.dev</span>
+            </span>
+          </a>
+
+          <!-- Portfolios Jump -->
+          <a href="#portfolios-section" class="cyber-action-btn fadhil-mobile-btn" title="Lihat daftar aplikasi portofolio">
+            <span>📂</span>
+            <span>PORTFOLIOS</span>
+          </a>
+        </nav>
+      </header>
+
+      <!-- Desktop Bento Manga Grid (12 Columns) -->
+      <main class="bento-grid" role="main">
+        <!-- ===================================================================
+             COLUMN LEFT (7 COLS): HERO BANNER / VIDEO + SKILLS & LUAU WIDGET
+             =================================================================== -->
+        <div class="hero-column">
+          <!-- Hero Banner & Interactive Video Card (100% Size, Zero Top/Bottom Bezel) -->
+          <div class="cyber-frame cyber-frame-cut-both hero-banner-frame">
+            <div class="cyber-card-content hero-card-bleed">
+              <!-- Interactive Media Wrap (Click to Play YouTube Video) -->
+              <div
+                class="hero-media-wrap hero-video-trigger"
+                data-youtube-video-id="kQYLHjgUh_g"
+                data-youtube-start="11"
+                tabindex="0"
+                role="button"
+                aria-label="Play Fadhil Akbar portfolio video (start at 0:11 with audio)"
+                title="Klik untuk memutar video YouTube interaktif jernih 100% (Start 0:11)"
+              >
+                <!-- Responsive YouTube Embed Layer (Layer 1, di bawah image) -->
+                <div class="hero-video-frame-layer">
+                  <iframe
+                    id="fadhil-hero-yt"
+                    class="hero-yt-iframe"
+                    width="560"
+                    height="315"
+                    src="https://www.youtube.com/embed/kQYLHjgUh_g?si=qXgln7MLDKyIk_Fu&amp;start=11&amp;enablejsapi=1&amp;autoplay=1&amp;mute=1&amp;controls=1&amp;playsinline=1&amp;rel=0"
+                    title="YouTube video player"
+                    frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; compute-pressure"
+                    referrerpolicy="strict-origin-when-cross-origin"
+                    allowfullscreen>
+                  </iframe>
+                </div>
+
+                <!-- Picture Layer (Layer 2, di atas video, selang-seling tampil 2s dan hide 3s saat dimainkan) -->
+                <picture class="hero-picture-layer" id="hero-banner-picture">
+                  <source srcset="/fadhil/assets/images/portfolio-banner.avif" type="image/avif" />
+                  <source srcset="/fadhil/assets/images/portfolio-banner.webp" type="image/webp" />
+                  <img
+                    src="/fadhil/assets/images/portfolio-banner.jpg"
+                    alt="Fadhil Akbar Portfolio Banner"
+                    width="1600"
+                    height="900"
+                    loading="eager"
+                    decoding="async"
+                  />
+                </picture>
+
+                <!-- Hero Content Overlay (Pristine typography from original) -->
+                <div class="hero-overlay-content">
+                  <div class="hero-name-badge">
+                    <span>Fadhil Akbar</span>
+                    <span class="neon-dot">●</span>
+                    <span style="font-size: 1.2rem; color: var(--manga-accent); font-style: normal;">CARIEARSA</span>
+                  </div>
+                  <div class="hero-desc-badge">
+                    Hobbyist Developer, Designer & Cybersecurity Enthusiast.
+                  </div>
+                  <div class="hero-tech-strip">
+                    <span class="hero-tag-pill">Full-Stack Development</span>
+                    <span class="hero-tag-pill">UI/UX Design</span>
+                    <span class="hero-tag-pill">System Security</span>
+                    <button type="button" id="hero-sound-btn" class="hero-sound-pill" title="Aktifkan audio video YouTube 100%">
+                      <span class="sound-icon">🔊</span>
+                      <span class="sound-label">SOUND 100%</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card: Skills (3 Sub-Cards: Creative & Art, Technology & Development, Cyber & Research) -->
+          <div class="cyber-frame skills-cyber-frame" id="skills-cyber-frame">
+            <div class="cyber-card-content">
+              <div class="card-header-bar">
+                <div class="card-title-tag">
+                  <span class="cyber-title-box">SKILLS</span>
+                  <span class="cyber-jp-box">スキル</span>
+                </div>
+                <span class="card-status-pill">6 CAPABILITIES</span>
+              </div>
+              <div class="skills-box-inner" id="skills-box-inner">
+                <!-- Sub-card 1: CREATIVE AND ART -->
+                <div class="skill-subcard" id="skill-subcard-creative">
+                  <div class="skill-subcard-label">CREATIVE AND ART</div>
+                  <div class="skill-subcard-grid">
+                    <div class="skill-pill-item">
+                      <span>3D Animation</span>
+                      <span class="skill-jp">3Dアニメーション</span>
+                    </div>
+                    <div class="skill-pill-item">
+                      <span>2D Art &amp; Illustration</span>
+                      <span class="skill-jp">2Dアート＆イラスト</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Sub-card 2: TECHNOLOGY AND DEVELOPMENT -->
+                <div class="skill-subcard" id="skill-subcard-technology">
+                  <div class="skill-subcard-label">TECHNOLOGY AND DEVELOPMENT</div>
+                  <div class="skill-subcard-grid">
+                    <div class="skill-pill-item">
+                      <span>Full-Stack Development</span>
+                      <span class="skill-jp">フルスタック開発</span>
+                    </div>
+                    <div class="skill-pill-item">
+                      <span>UI/UX Design</span>
+                      <span class="skill-jp">UI/UXデザイン</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Sub-card 3: CYBER AND RESEARCH -->
+                <div class="skill-subcard" id="skill-subcard-cyber">
+                  <div class="skill-subcard-label">CYBER AND RESEARCH</div>
+                  <div class="skill-subcard-grid">
+                    <div class="skill-pill-item">
+                      <span>Digital Psychology</span>
+                      <span class="skill-jp">デジタル心理学</span>
+                    </div>
+                    <div class="skill-pill-item">
+                      <span>Technical Writing</span>
+                      <span class="skill-jp">テクニカルライティング</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===================================================================
+             COLUMN RIGHT (5 COLS): ABOUT ME, SOCIALS (14), TOOLS (10)
+             =================================================================== -->
+        <div class="profile-column">
+          <!-- Card 1: About Me & Core Tech Stack -->
+          <div class="cyber-frame">
+            <div class="cyber-card-content">
+              <div class="card-header-bar">
+                <div class="card-title-tag">
+                  <span class="cyber-title-box">ABOUT ME</span>
+                  <span class="cyber-jp-box">自己紹介</span>
+                </div>
+                <!-- Language Switcher Flags (Matching /*) -->
+                <div class="lang-flags-group" role="group" aria-label="Language Selector">
+                  <button type="button" class="lang-flag-btn" data-lang="id" title="Bahasa Indonesia" aria-label="Ganti bahasa ke Indonesia">
+                    <svg class="flag-icon" viewBox="0 0 24 16" width="18" height="12" aria-hidden="true">
+                      <rect width="24" height="8" fill="#E70011"/>
+                      <rect y="8" width="24" height="8" fill="#FFFFFF"/>
+                      <rect width="24" height="16" fill="none" stroke="#000000" stroke-width="1"/>
+                    </svg>
+                    <span class="flag-code">ID</span>
+                  </button>
+                  <button type="button" class="lang-flag-btn active" data-lang="en" title="English" aria-label="Switch language to English">
+                    <svg class="flag-icon" viewBox="0 0 60 40" width="18" height="12" aria-hidden="true">
+                      <clipPath id="uk-flag-clip-fadhil">
+                        <rect width="60" height="40"/>
+                      </clipPath>
+                      <g clip-path="url(#uk-flag-clip-fadhil)">
+                        <rect width="60" height="40" fill="#012169"/>
+                        <path d="M0,0 L60,40 M60,0 L0,40" stroke="#fff" stroke-width="8"/>
+                        <path d="M0,0 L60,40 M60,0 L0,40" stroke="#C8102E" stroke-width="4"/>
+                        <path d="M30,0 v40 M0,20 h60" stroke="#fff" stroke-width="12"/>
+                        <path d="M30,0 v40 M0,20 h60" stroke="#C8102E" stroke-width="7"/>
+                        <rect width="60" height="40" fill="none" stroke="#000000" stroke-width="2"/>
+                      </g>
+                    </svg>
+                    <span class="flag-code">EN</span>
+                  </button>
+                  <button type="button" class="lang-flag-btn" data-lang="jp" title="日本語 (Japanese)" aria-label="言語を日本語に変更">
+                    <svg class="flag-icon" viewBox="0 0 24 16" width="18" height="12" aria-hidden="true">
+                      <rect width="24" height="16" fill="#FFFFFF"/>
+                      <circle cx="12" cy="8" r="4.8" fill="#BC002D"/>
+                      <rect width="24" height="16" fill="none" stroke="#000000" stroke-width="1"/>
+                    </svg>
+                    <span class="flag-code">JP</span>
+                  </button>
+                </div>
+              </div>
+
+              <div class="about-card-body">
+                <div class="about-author-header">
+                  <div class="about-author-title-group">
+                    <div class="about-author-name">FADHIL AKBAR CARIEARSA</div>
+                    <div class="cyber-badge-student" title="Status: Student">
+                      <span class="cyber-badge-student-inner">STUDENT</span>
+                    </div>
+                    <div class="cyber-badge-hobbyist" title="Status: Hobbyist">
+                      <span class="cyber-badge-hobbyist-inner">HOBBYIST</span>
+                    </div>
+                  </div>
+                  <div class="about-owned-tag">
+                    <span>OWNED BY</span>
+                    <a href="https://fadhil.dev" target="_blank" rel="noopener noreferrer">FADHIL.DEV</a>
+                  </div>
+                </div>
+
+                <div class="about-quote-box">
+                  <p id="about-desc-content">
+                    A generalist hobbyist with interests in design, development, animation, cybersecurity, and 2D art (strictly as a hobby and personal interest, not pursued seriously).
+                  </p>
+                </div>
+
+                <!-- Core 6 Languages Grid -->
+                <ul class="core-lang-grid" aria-label="Core Programming Languages">
+                  <!-- HTML5 -->
+                  <li class="core-lang-item" title="HTML5">
+                    <picture>
+                      <source srcset="/fadhil/assets/images/platform-icons/html-224.avif" type="image/avif" />
+                      <img src="/fadhil/assets/images/platform-icons/html-224.webp" alt="HTML5" width="48" height="48" loading="eager" />
+                    </picture>
+                  </li>
+                  <!-- JavaScript -->
+                  <li class="core-lang-item" title="JavaScript">
+                    <picture>
+                      <source srcset="/fadhil/assets/images/platform-icons/javascript-224.avif" type="image/avif" />
+                      <img src="/fadhil/assets/images/platform-icons/javascript-224.webp" alt="JavaScript" width="48" height="48" loading="eager" />
+                    </picture>
+                  </li>
+                  <!-- CSS3 -->
+                  <li class="core-lang-item" title="CSS3">
+                    <picture>
+                      <source srcset="/fadhil/assets/images/platform-icons/css-224.avif" type="image/avif" />
+                      <img src="/fadhil/assets/images/platform-icons/css-224.webp" alt="CSS3" width="48" height="48" loading="eager" />
+                    </picture>
+                  </li>
+                  <!-- TypeScript -->
+                  <li class="core-lang-item" title="TypeScript">
+                    <picture>
+                      <source srcset="/fadhil/assets/images/platform-icons/typescript-224.avif" type="image/avif" />
+                      <img src="/fadhil/assets/images/platform-icons/typescript-224.webp" alt="TypeScript" width="48" height="48" loading="eager" />
+                    </picture>
+                  </li>
+                  <!-- Luau -->
+                  <li class="core-lang-item" title="Luau">
+                    <picture>
+                      <source srcset="/fadhil/assets/images/platform-icons/luau-224.avif" type="image/avif" />
+                      <img src="/fadhil/assets/images/platform-icons/luau-224.webp" alt="Luau" width="48" height="48" loading="eager" />
+                    </picture>
+                  </li>
+                  <!-- Python -->
+                  <li class="core-lang-item" title="Python">
+                    <picture>
+                      <source srcset="/fadhil/assets/images/platform-icons/python-224.avif" type="image/avif" />
+                      <img src="/fadhil/assets/images/platform-icons/python-224.webp" alt="Python" width="48" height="48" loading="eager" />
+                    </picture>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 2: Active Social Profiles (14 Clickable) -->
+          <div class="cyber-frame">
+            <div class="cyber-card-content">
+              <div class="card-header-bar">
+                <div class="card-title-tag">
+                  <span class="cyber-title-box">SOCIAL PROFILES</span>
+                  <span class="cyber-jp-box">ソーシャル</span>
+                </div>
+                <span class="card-status-pill">14 CLICKABLE</span>
+              </div>
+              <div class="socials-card-body">
+                <ul class="socials-14-grid" aria-label="Active social profiles">
+                  <!-- 1. MAL -->
+                  <li>
+                    <a href="https://myanimelist.net/profile/fadhilakbar" target="_blank" rel="noopener noreferrer" class="social-slot-link" title="MyAnimeList">
+                      <picture>
+                        <source srcset="/fadhil/assets/images/social/myanimelist.avif" type="image/avif" />
+                        <source srcset="/fadhil/assets/images/social/myanimelist.webp" type="image/webp" />
+                        <img src="/fadhil/assets/images/social/myanimelist.jpg" alt="MyAnimeList" width="36" height="36" loading="lazy" />
+                      </picture>
+                    </a>
+                  </li>
+                  <!-- 2. Discord -->
+                  <li>
+                    <a href="https://discord.com/users/1323914885238624298" target="_blank" rel="noopener noreferrer" class="social-slot-link" title="Discord">
+                      <picture>
+                        <source srcset="/fadhil/assets/images/social/discord.avif" type="image/avif" />
+                        <source srcset="/fadhil/assets/images/social/discord.webp" type="image/webp" />
+                        <img src="/fadhil/assets/images/social/discord.jpg" alt="Discord" width="36" height="36" loading="lazy" />
+                      </picture>
+                    </a>
+                  </li>
+                  <!-- 3. Instagram -->
+                  <li>
+                    <a href="https://www.instagram.com/fadhil.akbar.cariearsa?igsh=MWxraXQ2cjh0b3JyZA==" target="_blank" rel="noopener noreferrer" class="social-slot-link" title="Instagram">
+                      <picture>
+                        <source srcset="/fadhil/assets/images/social/instagram.avif" type="image/avif" />
+                        <source srcset="/fadhil/assets/images/social/instagram.webp" type="image/webp" />
+                        <img src="/fadhil/assets/images/social/instagram.jpg" alt="Instagram" width="36" height="36" loading="lazy" />
+                      </picture>
+                    </a>
+                  </li>
+                  <!-- 4. Duolingo -->
+                  <li>
+                    <a href="https://www.duolingo.com/profile/MTsN3Malang" target="_blank" rel="noopener noreferrer" class="social-slot-link" title="Duolingo">
+                      <picture>
+                        <source srcset="/fadhil/assets/images/social/duolingo.avif" type="image/avif" />
+                        <source srcset="/fadhil/assets/images/social/duolingo.webp" type="image/webp" />
+                        <img src="/fadhil/assets/images/social/duolingo.jpg" alt="Duolingo" width="36" height="36" loading="lazy" />
+                      </picture>
+                    </a>
+                  </li>
+                  <!-- 5. LeetCode -->
+                  <li>
+                    <a href="https://leetcode.com/u/FadhilAkbarCariearsa" target="_blank" rel="noopener noreferrer" class="social-slot-link" title="LeetCode">
+                      <picture>
+                        <source srcset="/fadhil/assets/images/social/leetcode.avif" type="image/avif" />
+                        <source srcset="/fadhil/assets/images/social/leetcode.webp" type="image/webp" />
+                        <img src="/fadhil/assets/images/social/leetcode.jpg" alt="LeetCode" width="36" height="36" loading="lazy" />
+                      </picture>
+                    </a>
+                  </li>
+                  <!-- 6. Monkeytype -->
+                  <li>
+                    <a href="https://monkeytype.com/profile/fadhilakbar" target="_blank" rel="noopener noreferrer" class="social-slot-link" title="Monkeytype">
+                      <picture>
+                        <source srcset="/fadhil/assets/images/social/monkeytype.avif" type="image/avif" />
+                        <source srcset="/fadhil/assets/images/social/monkeytype.webp" type="image/webp" />
+                        <img src="/fadhil/assets/images/social/monkeytype.jpg" alt="Monkeytype" width="36" height="36" loading="lazy" />
+                      </picture>
+                    </a>
+                  </li>
+                  <!-- 7. GitHub -->
+                  <li>
+                    <a href="https://github.com/fadhilakbarcariearsaindonesia" target="_blank" rel="noopener noreferrer" class="social-slot-link" title="GitHub">
+                      <picture>
+                        <source srcset="/fadhil/assets/images/social/github.avif" type="image/avif" />
+                        <source srcset="/fadhil/assets/images/social/github.webp" type="image/webp" />
+                        <img src="/fadhil/assets/images/social/github.jpg" alt="GitHub" width="36" height="36" loading="lazy" />
+                      </picture>
+                    </a>
+                  </li>
+                  <!-- 8. TryHackMe -->
+                  <li>
+                    <a href="https://tryhackme.com/p/fadhilakbar" target="_blank" rel="noopener noreferrer" class="social-slot-link" title="TryHackMe">
+                      <picture>
+                        <source srcset="/fadhil/assets/images/social/tryhackme.avif" type="image/avif" />
+                        <source srcset="/fadhil/assets/images/social/tryhackme.webp" type="image/webp" />
+                        <img src="/fadhil/assets/images/social/tryhackme.jpg" alt="TryHackMe" width="36" height="36" loading="lazy" />
+                      </picture>
+                    </a>
+                  </li>
+                  <!-- 9. Spotify -->
+                  <li>
+                    <a href="https://open.spotify.com/user/31atjyxnu3ck3yxvr3vsk7igsoqi" target="_blank" rel="noopener noreferrer" class="social-slot-link" title="Spotify">
+                      <picture>
+                        <source srcset="/fadhil/assets/images/social/spotify.avif" type="image/avif" />
+                        <source srcset="/fadhil/assets/images/social/spotify.webp" type="image/webp" />
+                        <img src="/fadhil/assets/images/social/spotify.jpg" alt="Spotify" width="36" height="36" loading="lazy" />
+                      </picture>
+                    </a>
+                  </li>
+                  <!-- 10. IMDb -->
+                  <li>
+                    <a href="https://www.imdb.com/user/p.bl7qolkdgr7bhx2kf7hxuhokau?ref_=hm_nv_profile" target="_blank" rel="noopener noreferrer" class="social-slot-link" title="IMDb">
+                      <picture>
+                        <source srcset="/fadhil/assets/images/social/imdb.avif" type="image/avif" />
+                        <source srcset="/fadhil/assets/images/social/imdb.webp" type="image/webp" />
+                        <img src="/fadhil/assets/images/social/imdb.jpg" alt="IMDb" width="36" height="36" loading="lazy" />
+                      </picture>
+                    </a>
+                  </li>
+                  <!-- 11. Wikipedia -->
+                  <li>
+                    <a href="https://id.wikipedia.org/wiki/Pengguna:Fadhil_Akbar_Cariearsa" target="_blank" rel="noopener noreferrer" class="social-slot-link" title="Wikipedia Profile">
+                      <picture>
+                        <source srcset="/fadhil/assets/images/social/wikipedia.avif" type="image/avif" />
+                        <source srcset="/fadhil/assets/images/social/wikipedia.webp" type="image/webp" />
+                        <img src="/fadhil/assets/images/social/wikipedia.jpg" alt="Wikipedia" width="36" height="36" loading="lazy" />
+                      </picture>
+                    </a>
+                  </li>
+                  <!-- 12. LinkedIn -->
+                  <li>
+                    <a href="https://www.linkedin.com/in/cariearsa/" target="_blank" rel="noopener noreferrer" class="social-slot-link" title="LinkedIn">
+                      <picture>
+                        <source srcset="/fadhil/assets/images/social/linkedin.avif" type="image/avif" />
+                        <source srcset="/fadhil/assets/images/social/linkedin.webp" type="image/webp" />
+                        <img src="/fadhil/assets/images/social/linkedin.jpg" alt="LinkedIn" width="36" height="36" loading="lazy" />
+                      </picture>
+                    </a>
+                  </li>
+                  <!-- 13. Roblox -->
+                  <li>
+                    <a href="https://www.roblox.com/users/profile?username=therealjeff_roblox" target="_blank" rel="noopener noreferrer" class="social-slot-link" title="Roblox">
+                      <picture>
+                        <source srcset="/fadhil/assets/images/social/roblox.avif" type="image/avif" />
+                        <source srcset="/fadhil/assets/images/social/roblox.webp" type="image/webp" />
+                        <img src="/fadhil/assets/images/social/roblox.jpg" alt="Roblox" width="36" height="36" loading="lazy" />
+                      </picture>
+                    </a>
+                  </li>
+                  <!-- 14. daily.dev -->
+                  <li>
+                    <a href="https://app.daily.dev/fadhilakbar" target="_blank" rel="noopener noreferrer" class="social-slot-link" title="daily.dev">
+                      <picture>
+                        <source srcset="/fadhil/assets/images/social/dailydev.avif" type="image/avif" />
+                        <source srcset="/fadhil/assets/images/social/dailydev.webp" type="image/webp" />
+                        <img src="/fadhil/assets/images/social/dailydev.jpg" alt="daily.dev" width="36" height="36" loading="lazy" />
+                      </picture>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 3: Development Tools & Platforms (10 Items) -->
+          <div class="cyber-frame tools-cyber-frame" id="tools-cyber-frame">
+            <div class="cyber-card-content">
+              <div class="card-header-bar">
+                <div class="card-title-tag">
+                  <span class="cyber-title-box">TOOLS AND PLATFORMS</span>
+                  <span class="cyber-jp-box">開発ツール</span>
+                </div>
+                <span class="card-status-pill">10 PLATFORMS</span>
+              </div>
+              <div class="tools-card-body">
+                <ul class="tools-10-grid" aria-label="Development tools and platforms">
+                  <!-- ibisPaint -->
+                  <li class="tool-slot-item" title="ibisPaint">
+                    <picture>
+                      <source srcset="/fadhil/assets/images/platform-icons/ibispaint.avif" type="image/avif" />
+                      <source srcset="/fadhil/assets/images/platform-icons/ibispaint.webp" type="image/webp" />
+                      <img src="/fadhil/assets/images/platform-icons/ibispaint.avif" alt="ibisPaint" width="40" height="40" loading="lazy" />
+                    </picture>
+                  </li>
+                  <!-- VS Code -->
+                  <li class="tool-slot-item" title="VS Code">
+                    <picture>
+                      <source srcset="/fadhil/assets/images/platform-icons/vscode.avif" type="image/avif" />
+                      <source srcset="/fadhil/assets/images/platform-icons/vs-code-180.webp" type="image/webp" />
+                      <img src="/fadhil/assets/images/platform-icons/vscode.avif" alt="VS Code" width="40" height="40" loading="lazy" />
+                    </picture>
+                  </li>
+                  <!-- Cloudflare -->
+                  <li class="tool-slot-item" title="Cloudflare">
+                    <picture>
+                      <source srcset="/fadhil/assets/images/platform-icons/cloudflare.avif" type="image/avif" />
+                      <source srcset="/fadhil/assets/images/platform-icons/cloudflare.webp" type="image/webp" />
+                      <img src="/fadhil/assets/images/platform-icons/cloudflare.avif" alt="Cloudflare" width="40" height="40" loading="lazy" />
+                    </picture>
+                  </li>
+                  <!-- Supabase -->
+                  <li class="tool-slot-item" title="Supabase">
+                    <picture>
+                      <source srcset="/fadhil/assets/images/platform-icons/supabase.avif" type="image/avif" />
+                      <source srcset="/fadhil/assets/images/platform-icons/supabase.webp" type="image/webp" />
+                      <img src="/fadhil/assets/images/platform-icons/supabase.avif" alt="Supabase" width="40" height="40" loading="lazy" />
+                    </picture>
+                  </li>
+                  <!-- Git -->
+                  <li class="tool-slot-item" title="Git">
+                    <picture>
+                      <source srcset="/fadhil/assets/images/platform-icons/git.avif" type="image/avif" />
+                      <source srcset="/fadhil/assets/images/platform-icons/git-180.webp" type="image/webp" />
+                      <img src="/fadhil/assets/images/platform-icons/git.avif" alt="Git" width="40" height="40" loading="lazy" />
+                    </picture>
+                  </li>
+                  <!-- MongoDB -->
+                  <li class="tool-slot-item" title="MongoDB">
+                    <picture>
+                      <source srcset="/fadhil/assets/images/platform-icons/mongodb.avif" type="image/avif" />
+                      <source srcset="/fadhil/assets/images/platform-icons/mongo-db-180.webp" type="image/webp" />
+                      <img src="/fadhil/assets/images/platform-icons/mongodb.avif" alt="MongoDB" width="40" height="40" loading="lazy" />
+                    </picture>
+                  </li>
+                  <!-- GitHub -->
+                  <li class="tool-slot-item" title="GitHub">
+                    <picture>
+                      <source srcset="/fadhil/assets/images/platform-icons/github.avif" type="image/avif" />
+                      <source srcset="/fadhil/assets/images/platform-icons/github-180.webp" type="image/webp" />
+                      <img src="/fadhil/assets/images/platform-icons/github.avif" alt="GitHub" width="40" height="40" loading="lazy" />
+                    </picture>
+                  </li>
+                  <!-- Figma -->
+                  <li class="tool-slot-item" title="Figma">
+                    <picture>
+                      <source srcset="/fadhil/assets/images/platform-icons/figma.avif" type="image/avif" />
+                      <source srcset="/fadhil/assets/images/platform-icons/figma-180.webp" type="image/webp" />
+                      <img src="/fadhil/assets/images/platform-icons/figma.avif" alt="Figma" width="40" height="40" loading="lazy" />
+                    </picture>
+                  </li>
+                  <!-- PostgreSQL -->
+                  <li class="tool-slot-item" title="PostgreSQL">
+                    <picture>
+                      <source srcset="/fadhil/assets/images/platform-icons/postgresql.avif" type="image/avif" />
+                      <source srcset="/fadhil/assets/images/platform-icons/post-gre-sql-180.webp" type="image/webp" />
+                      <img src="/fadhil/assets/images/platform-icons/postgresql.avif" alt="PostgreSQL" width="40" height="40" loading="lazy" />
+                    </picture>
+                  </li>
+                  <!-- Vercel -->
+                  <li class="tool-slot-item" title="Vercel">
+                    <picture>
+                      <source srcset="/fadhil/assets/images/platform-icons/vercel.avif" type="image/avif" />
+                      <source srcset="/fadhil/assets/images/platform-icons/vercel-180.webp" type="image/webp" />
+                      <img src="/fadhil/assets/images/platform-icons/vercel.avif" alt="Vercel" width="40" height="40" loading="lazy" />
+                    </picture>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===================================================================
+             FULL WIDTH ROW (12 COLS): 4 FEATURED LEARNING PORTFOLIO APPS
+             =================================================================== -->
+        <section id="portfolios-section" class="portfolios-section" aria-labelledby="portfolios-heading">
+          <div class="card-header-bar" style="border-radius: 4px;">
+            <div class="card-title-tag">
+              FEATURED LEARNING PORTFOLIOS
+              <span class="jp-sub" id="portfolios-heading">プロジェクトポートフォリオ (4 APPS)</span>
+            </div>
+            <span class="card-status-pill pill-green">ALL LIVE</span>
+          </div>
+
+          <div class="portfolios-grid-4">
+            <!-- 1. Share Ideas -->
+            <article class="portfolio-card-item">
+              <div class="portfolio-inner-plate">
+                <div class="portfolio-header-strip">
+                  <span class="portfolio-type-pill">EXPERIMENTAL DYNAMIC</span>
+                  <span class="card-status-pill">WEB APP</span>
+                </div>
+                <div class="portfolio-figure-wrap">
+                  <picture>
+                    <source srcset="/fadhil/assets/images/shareideas-banner.avif" type="image/avif" />
+                    <source srcset="/fadhil/assets/images/shareideas-banner.webp" type="image/webp" />
+                    <img src="/fadhil/assets/images/shareideas-banner.jpg" alt="Share Ideas Banner" width="480" height="270" loading="lazy" />
+                  </picture>
+                  <div class="portfolio-sfx-badge">ドンッ!!</div>
+                </div>
+                <div class="portfolio-meta-body">
+                  <h3 class="portfolio-app-title">Share Ideas</h3>
+                  <a href="https://fadhil.dev/shareideas" target="_blank" rel="noopener noreferrer" class="portfolio-launch-btn" title="Buka Share Ideas">
+                    <span>LAUNCH APP</span>
+                    <span>// 開く</span>
+                  </a>
+                </div>
+              </div>
+            </article>
+
+            <!-- 2. Mind Map Maker -->
+            <article class="portfolio-card-item">
+              <div class="portfolio-inner-plate">
+                <div class="portfolio-header-strip">
+                  <span class="portfolio-type-pill">EXPERIMENTAL DYNAMIC</span>
+                  <span class="card-status-pill">WEB APP</span>
+                </div>
+                <div class="portfolio-figure-wrap">
+                  <picture>
+                    <source srcset="/fadhil/assets/images/mindmapmaker-banner.avif" type="image/avif" />
+                    <source srcset="/fadhil/assets/images/mindmapmaker-banner.webp" type="image/webp" />
+                    <img src="/fadhil/assets/images/mindmapmaker-banner.jpg" alt="Mind Map Maker Banner" width="480" height="270" loading="lazy" />
+                  </picture>
+                  <div class="portfolio-sfx-badge">バァン!!</div>
+                </div>
+                <div class="portfolio-meta-body">
+                  <h3 class="portfolio-app-title">Mind Map Maker</h3>
+                  <a href="https://fadhil.dev/mindmapmaker" target="_blank" rel="noopener noreferrer" class="portfolio-launch-btn" title="Buka Mind Map Maker">
+                    <span>LAUNCH APP</span>
+                    <span>// 開く</span>
+                  </a>
+                </div>
+              </div>
+            </article>
+
+            <!-- 3. Flag Maker -->
+            <article class="portfolio-card-item">
+              <div class="portfolio-inner-plate">
+                <div class="portfolio-header-strip">
+                  <span class="portfolio-type-pill">STATIC CANVAS ENGINE</span>
+                  <span class="card-status-pill">TOOL</span>
+                </div>
+                <div class="portfolio-figure-wrap">
+                  <picture>
+                    <source srcset="/fadhil/assets/images/flagmaker-banner.avif" type="image/avif" />
+                    <source srcset="/fadhil/assets/images/flagmaker-banner.webp" type="image/webp" />
+                    <img src="/fadhil/assets/images/flagmaker-banner.jpg" alt="Flag Maker Banner" width="480" height="270" loading="lazy" />
+                  </picture>
+                  <div class="portfolio-sfx-badge">シュッ!!</div>
+                </div>
+                <div class="portfolio-meta-body">
+                  <h3 class="portfolio-app-title">Flag Maker</h3>
+                  <a href="https://fadhil.dev/Flag-Maker" target="_blank" rel="noopener noreferrer" class="portfolio-launch-btn" title="Buka Flag Maker">
+                    <span>LAUNCH APP</span>
+                    <span>// 開く</span>
+                  </a>
+                </div>
+              </div>
+            </article>
+
+            <!-- 4. Wikipedia Custom Profile -->
+            <article class="portfolio-card-item">
+              <div class="portfolio-inner-plate">
+                <div class="portfolio-header-strip">
+                  <span class="portfolio-type-pill">CUSTOM HTML, CSS, JS</span>
+                  <span class="card-status-pill">PROFILE</span>
+                </div>
+                <div class="portfolio-figure-wrap">
+                  <picture>
+                    <source srcset="/fadhil/assets/images/wikipediaindonesia-banner.avif" type="image/avif" />
+                    <source srcset="/fadhil/assets/images/wikipediaindonesia-banner.webp" type="image/webp" />
+                    <img src="/fadhil/assets/images/wikipediaindonesia-banner.jpg" alt="Wikipedia Custom Profile Banner" width="480" height="270" loading="lazy" />
+                  </picture>
+                  <div class="portfolio-sfx-badge">ズズズ</div>
+                </div>
+                <div class="portfolio-meta-body">
+                  <h3 class="portfolio-app-title">Wikipedia Custom Profile</h3>
+                  <a href="https://fadhil.dev/wikipediaindonesia" target="_blank" rel="noopener noreferrer" class="portfolio-launch-btn" title="Buka Wikipedia Custom Profile">
+                    <span>LAUNCH APP</span>
+                    <span>// 開く</span>
+                  </a>
+                </div>
+              </div>
+            </article>
+          </div>
+        </section>
+      </main>
+
+      <!-- Cyber Angled Footer -->
+      <footer class="fadhil-footer" role="contentinfo">
+        <div>
+          © 2026 <strong>FADHIL AKBAR CARIEARSA</strong>. ALL RIGHTS RESERVED. LICENSED UNDER CC BY-NC-ND 4.0.
+        </div>
+        <a href="#" class="footer-top-jump" title="Kembali ke atas">
+          <span>▲ TOP OF PAGE</span>
+          <span>// 先頭へ</span>
+        </a>
+      </footer>
+    </div>
+
+    <!-- YouTube IFrame API & Main Cyber Controller -->
+    <script src="https://www.youtube.com/iframe_api"></script>
+    <script src="/fadhil/app/main.js" defer></script>
+  </body>
+</html>

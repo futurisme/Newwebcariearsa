@@ -24,6 +24,14 @@ import { initPlayStoreIntro, replayPlayStoreIntro, skipPlayStoreIntro } from './
   if (window.__cariearsa_anime_intro_initialized) return;
   window.__cariearsa_anime_intro_initialized = true;
 
+  // STRICT ISOLATION: The universal intro ONLY executes when accessing the /intro subdirectory!
+  // All other URLs (root, /mobile, /hub, /japan, /aniwatch, etc.) are strictly exempted with zero overhead.
+  const currentPath = window.location.pathname.toLowerCase();
+  const isIntroPage = currentPath === '/intro' || currentPath.startsWith('/intro/') || currentPath.includes('/intro');
+  if (!isIntroPage) {
+    return;
+  }
+
   // Prioritized Cache Engine & Asset Preloader (2026 Web Engineering)
   const prioritizeIntroCache = () => {
     try {
@@ -155,10 +163,29 @@ import { initPlayStoreIntro, replayPlayStoreIntro, skipPlayStoreIntro } from './
 
   // Synthesized Web Audio Sound Engine (Zero external assets, instant zero-latency)
   let audioCtx = null;
+  let isAudioUnlocked = false;
+
+  const unlockAudio = () => {
+    isAudioUnlocked = true;
+    if (audioCtx && audioCtx.state === 'suspended') {
+      audioCtx.resume().catch(() => {});
+    }
+  };
+
+  ['click', 'pointerdown', 'keydown', 'touchstart'].forEach((evt) => {
+    window.addEventListener(evt, unlockAudio, { capture: true, passive: true });
+  });
+
   const getAudioContext = () => {
+    const hasGesture = isAudioUnlocked || (typeof navigator !== 'undefined' && navigator.userActivation && navigator.userActivation.hasBeenActive);
+    if (!hasGesture) return null;
+
     if (!audioCtx) {
       const AudioContextClass = window.AudioContext || window.webkitAudioContext;
       if (AudioContextClass) audioCtx = new AudioContextClass();
+    }
+    if (audioCtx && audioCtx.state === 'suspended') {
+      audioCtx.resume().catch(() => {});
     }
     return audioCtx;
   };

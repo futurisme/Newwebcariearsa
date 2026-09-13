@@ -22,16 +22,32 @@ document.addEventListener('DOMContentLoaded', () => {
   // 2. Synthesized Web Audio Engine
   const AudioContextClass = window.AudioContext || window.webkitAudioContext;
   let audioCtx = null;
+  let isAudioUnlocked = false;
   const canvas = document.getElementById('soundCanvas');
   const canvasCtx = canvas ? canvas.getContext('2d') : null;
 
+  const unlockAudio = () => {
+    isAudioUnlocked = true;
+    if (audioCtx && audioCtx.state === 'suspended') {
+      audioCtx.resume().catch(() => {});
+    }
+  };
+
+  ['click', 'pointerdown', 'keydown', 'touchstart'].forEach((evt) => {
+    window.addEventListener(evt, unlockAudio, { capture: true, passive: true });
+  });
+
   const initAudio = () => {
-    if (!audioCtx) {
+    const hasGesture = isAudioUnlocked || (typeof navigator !== 'undefined' && navigator.userActivation && navigator.userActivation.hasBeenActive);
+    if (!hasGesture) return null;
+
+    if (!audioCtx && AudioContextClass) {
       audioCtx = new AudioContextClass();
     }
-    if (audioCtx.state === 'suspended') {
-      audioCtx.resume();
+    if (audioCtx && audioCtx.state === 'suspended') {
+      audioCtx.resume().catch(() => {});
     }
+    return audioCtx;
   };
 
   const drawWaveform = (data) => {

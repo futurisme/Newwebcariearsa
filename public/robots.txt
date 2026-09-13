@@ -1,0 +1,21 @@
+# CARIEARSA - High-Performance Ultra-Lightweight Robots Directives (2026)
+User-agent: *
+Allow: /
+Allow: /hub/
+Allow: /japan/
+Allow: /japan/mobile/
+Allow: /aniwatch/
+Allow: /aniwatch/watch/
+Allow: /cloud/
+Allow: /cloud/mobile/
+Allow: /note/
+Allow: /introlab/
+Allow: /mobile/
+Allow: /components/
+
+# Confidential / Isolated Subdirectory - Strictly Excluded from Crawlers & Search Engines
+Disallow: /intro/
+Disallow: /intro
+Disallow: /api/
+
+Sitemap: https://cariearsa.com/sitemap.xml

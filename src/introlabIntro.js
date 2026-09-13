@@ -269,7 +269,10 @@
       const playerContainer = document.getElementById('introlab-yt-player');
       if (!playerContainer) return;
 
+      let playerInitialized = false;
       const initPlayer = () => {
+        if (playerInitialized) return;
+        playerInitialized = true;
         try {
           if (window.YT && window.YT.Player) {
             this.ytPlayer = new window.YT.Player('introlab-yt-player', {
@@ -294,8 +297,8 @@
                   try {
                     event.target.playVideo();
                     event.target.setLoop(true);
-                  } catch (e) {
-                    console.warn('YT playVideo issue:', e);
+                  } catch (_) {
+                    // Handled gracefully
                   }
                 },
                 onStateChange: (event) => {
@@ -312,13 +315,13 @@
                 id="introlab-yt-iframe"
                 src="https://www.youtube-nocookie.com/embed/videoseries?list=${playlistId}&autoplay=1&mute=1&loop=1&controls=0&playsinline=1&rel=0&enablejsapi=1" 
                 class="introlab-bg-yt-iframe" 
-                allow="autoplay; encrypted-media" 
+                allow="autoplay; encrypted-media; compute-pressure" 
                 allowfullscreen>
               </iframe>
             `;
           }
-        } catch (err) {
-          console.warn('YouTube Player setup:', err);
+        } catch (_) {
+          // Handled gracefully
         }
       };
 
@@ -345,8 +348,8 @@
             this.ytPlayer.unMute();
             this.ytPlayer.setVolume(100);
             this.ytPlayer.playVideo();
-          } catch (e) {
-            console.warn('unMute error:', e);
+          } catch (_) {
+            // Handled gracefully
           }
         }
 

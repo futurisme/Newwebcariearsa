@@ -1,8 +1,8 @@
 import express from 'express';
 import path from 'path';
 import { createClient } from '@supabase/supabase-js';
-import { cloudRouter } from './src/server/cloudApi.ts';
-import { noteRouter } from './src/server/noteApi.ts';
+import { cloudRouter } from './src/server/cloudApi.js';
+import { noteRouter } from './src/server/noteApi.js';
 
 const getDirname = () => {
   if (typeof __dirname !== 'undefined') return __dirname;
@@ -21,28 +21,32 @@ try {
 const app = express();
 const PORT = 3000;
 
-const supabaseUrl = process.env.SUPABASE_URL || 'https://gnhkhnmvggltqszbhfev.supabase.co';
-const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || 'sb_secret_E7C1i2kfhrHHBdbrCbIfZA_5I12RT6C';
-const supabase = createClient(supabaseUrl, supabaseKey);
+const supabaseUrl = process.env.SUPABASE_URL || '';
+const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_KEY || '';
+const isSupabaseKeyValid = typeof supabaseKey === 'string' && (supabaseKey.startsWith('sb_') || supabaseKey.startsWith('eyJ') || supabaseKey.length > 20);
+const supabase = isSupabaseKeyValid ? createClient(supabaseUrl, supabaseKey) : null;
 const BUCKET_NAME = 'vault_files';
 
 async function initBucket() {
+  if (!supabase) return;
   try {
     const { data, error } = await supabase.storage.getBucket(BUCKET_NAME);
-    if (error && error.message.includes('not found')) {
+    if (!data || error) {
       const { error: createError } = await supabase.storage.createBucket(BUCKET_NAME, {
         public: true,
         fileSizeLimit: 52428800, // 50MB
       });
       if (!createError) {
         console.log(`Successfully created public bucket: ${BUCKET_NAME}`);
+      } else {
+        await supabase.storage.updateBucket(BUCKET_NAME, { public: true });
       }
-    } else if (!error) {
+    } else {
       console.log(`Bucket verified: ${BUCKET_NAME}`);
       await supabase.storage.updateBucket(BUCKET_NAME, { public: true });
     }
-  } catch (err) {
-    console.error('Bucket check skipped or failed:', err);
+  } catch (_) {
+    // Silent fallback to local storage
   }
 }
 
@@ -50,6 +54,8 @@ function isMobileClient(req: express.Request): boolean {
   const chMobile = req.headers['sec-ch-ua-mobile'];
   if (chMobile === '?1') return true;
   const ua = (req.headers['user-agent'] as string) || '';
+  const isTV = /SmartTV|HbbTV|BRAVIA|NetCast|Tizen|Viera|AppleTV|Xbox|PlayStation|Nintendo|Roku/i.test(ua);
+  if (isTV) return false;
   return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|Tablet|Silk|Kindle|PlayBook|Nexus|SM-|Pixel|XiaoMi|Oppo|Vivo|Realme|HarmonyOS|Huawei/i.test(ua);
 }
 
@@ -83,9 +89,36 @@ async function startServer() {
     next();
   });
 
+  // Robots.txt & Sitemap.xml SEO handlers
+  app.get('/robots.txt', (_req, res) => {
+    res.setHeader('Content-Type', 'text/plain; charset=utf-8');
+    res.setHeader('Cache-Control', 'public, max-age=86400');
+    res.sendFile(path.join(appDir, 'public/robots.txt'));
+  });
+
+  app.get('/sitemap.xml', (_req, res) => {
+    res.setHeader('Content-Type', 'application/xml; charset=utf-8');
+    res.setHeader('Cache-Control', 'public, max-age=86400');
+    res.sendFile(path.join(appDir, 'public/sitemap.xml'));
+  });
+
   // Mobile redirect handler
   app.get('/mobile', (req, res) => {
     res.redirect(302, '/mobile/');
+  });
+
+  // Secret isolated intro subdirectory redirect handler
+  app.get('/intro', (req, res) => {
+    res.redirect(302, '/intro/');
+  });
+
+  // Fadhil portfolio subdirectory redirect handlers
+  app.get('/fadhil', (req, res) => {
+    res.redirect(302, '/fadhil/');
+  });
+
+  app.get('/fadhil/mobile', (req, res) => {
+    res.redirect(302, '/fadhil/mobile/');
   });
 
   app.use((req, res, next) => {
@@ -93,6 +126,21 @@ async function startServer() {
       if (isMobileClient(req)) {
         const qs = req.url.includes('?') ? req.url.slice(req.url.indexOf('?')) : '';
         return res.redirect(302, `/mobile/${qs}`);
+      }
+    }
+    if (req.path === '/fadhil' || req.path === '/fadhil/' || req.path === '/fadhil/index.html') {
+      if (isMobileClient(req)) {
+        const qs = req.url.includes('?') ? req.url.slice(req.url.indexOf('?')) : '';
+        return res.redirect(302, `/fadhil/mobile/${qs}`);
+      }
+    }
+    if (req.path === '/fadhil/mobile' || req.path === '/fadhil/mobile/' || req.path === '/fadhil/mobile/index.html') {
+      const ua = (req.headers['user-agent'] as string) || '';
+      const isTV = /SmartTV|HbbTV|BRAVIA|NetCast|Tizen|Viera|AppleTV|Xbox|PlayStation|Nintendo|Roku/i.test(ua);
+      const isDesktop = isTV || (!isMobileClient(req) && /Windows NT|Macintosh|Linux x86_64|CrOS x86_64/i.test(ua));
+      if (isDesktop) {
+        const qs = req.url.includes('?') ? req.url.slice(req.url.indexOf('?')) : '';
+        return res.redirect(302, `/fadhil/${qs}`);
       }
     }
     next();
@@ -132,6 +180,9 @@ async function startServer() {
     app.use(express.static(distPath, {
       maxAge: '1h'
     }));
+    app.get(['/intro', '/intro/'], (req, res) => {
+      res.sendFile(path.join(distPath, 'intro/index.html'));
+    });
     app.get(['/mobile', '/mobile/'], (req, res) => {
       res.sendFile(path.join(distPath, 'mobile/index.html'));
     });
@@ -161,6 +212,12 @@ async function startServer() {
     });
     app.get(['/note', '/note/'], (req, res) => {
       res.sendFile(path.join(distPath, 'note/index.html'));
+    });
+    app.get(['/fadhil', '/fadhil/'], (req, res) => {
+      res.sendFile(path.join(distPath, 'fadhil/index.html'));
+    });
+    app.get(['/fadhil/mobile', '/fadhil/mobile/'], (req, res) => {
+      res.sendFile(path.join(distPath, 'fadhil/mobile/index.html'));
     });
     app.get(['/components', '/components/'], (req, res) => {
       res.sendFile(path.join(distPath, 'components/index.html'));

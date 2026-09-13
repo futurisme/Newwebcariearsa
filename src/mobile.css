@@ -36,7 +36,7 @@ body::-webkit-scrollbar {
 
 body {
   margin: 0;
-  padding: 34px 0 0 0;
+  padding: 0;
   background-color: var(--bg-gray);
   color: var(--ink-black);
   font-family: var(--font-body);
@@ -123,7 +123,7 @@ body::before {
   width: 100%;
   max-width: 540px;
   margin: 0 auto;
-  padding: 48px 12px 28px 12px;
+  padding: calc(36px + env(safe-area-inset-top, 0px)) 12px 24px 12px;
   display: flex;
   flex-direction: column;
   position: relative;
@@ -135,8 +135,8 @@ body::before {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  padding: 14px 4px 14px 4px;
-  gap: 12px;
+  padding: 4px 4px 8px 4px;
+  gap: 10px;
   width: 100%;
 }
 
@@ -247,27 +247,29 @@ body::before {
   align-items: center;
   justify-content: center;
   gap: 10px;
-  width: 100%;
+  width: auto;
+  margin: 4px auto 0;
 }
 
 .mobile-nav-btn {
   font-family: var(--font-display, 'Oswald', sans-serif);
   font-weight: 800;
-  letter-spacing: 1px;
-  font-size: 0.85rem;
-  padding: 8px 14px;
-  min-height: 42px;
+  letter-spacing: 1.1px;
+  font-size: 0.82rem;
+  padding: 5px 14px;
+  min-height: 32px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 6px;
   text-decoration: none;
   transform: skew(-6deg);
-  border: 2px solid var(--ink-true-black);
+  border: 2px solid #000000;
   cursor: pointer;
   user-select: none;
-  flex: 1;
-  max-width: 220px;
+  flex: 0 0 auto;
+  width: auto;
+  max-width: none;
   text-align: center;
   transition: transform 0.16s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.16s ease, color 0.16s ease, box-shadow 0.16s ease, border-color 0.16s ease;
 }
@@ -277,28 +279,133 @@ body::before {
   display: inline-flex;
   align-items: center;
   gap: 5px;
+  color: inherit;
 }
 
-/* CLOUD DATABASE BTN - Pertahankan style biru cerah */
-.cloud-nav-btn {
-  background: #0284c7;
+/* CLOUD DATABASE BTN - Scaled Cyber Chamfer (Top-Left 11px & Bottom-Right 11px Cut) with Solid Black Outline */
+.cloud-nav-btn,
+.mobile-nav-btn.cloud-nav-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 8px 18px;
+  background-color: transparent !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  outline: none !important;
+  overflow: visible !important;
+  clip-path: none !important;
+  transform: none !important;
+  font-family: var(--font-display, 'Oswald', sans-serif);
+  font-weight: 800;
+  letter-spacing: 1.2px;
+  font-size: 0.96rem;
+  line-height: 1.1;
+  text-decoration: none;
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+  filter: drop-shadow(3.5px 3.5px 0px #00E5FF);
+  transition: transform 0.16s cubic-bezier(0.16, 1, 0.3, 1), filter 0.16s ease;
+  will-change: transform, filter;
+}
+
+.cloud-nav-btn::before,
+.mobile-nav-btn.cloud-nav-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-color: #000000;
+  clip-path: polygon(
+    11px 0%,
+    100% 0%,
+    100% calc(100% - 11px),
+    calc(100% - 11px) 100%,
+    0% 100%,
+    0% 11px
+  );
+  z-index: 1;
+  pointer-events: none;
+}
+
+.cloud-nav-btn::after,
+.mobile-nav-btn.cloud-nav-btn::after {
+  content: '';
+  position: absolute;
+  inset: 2.5px;
+  background-color: #FF003C;
+  clip-path: polygon(
+    10px 0%,
+    100% 0%,
+    100% calc(100% - 10px),
+    calc(100% - 10px) 100%,
+    0% 100%,
+    0% 10px
+  );
+  z-index: 2;
+  pointer-events: none;
+  transition: background-color 0.16s ease;
+}
+
+.cloud-nav-btn > *,
+.mobile-nav-btn.cloud-nav-btn > * {
+  transform: none !important;
+  position: relative;
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
   color: #FFFFFF;
-  box-shadow: 3px 3px 0px var(--ink-true-black);
+  line-height: 1;
+  transition: color 0.16s ease;
+  pointer-events: none;
 }
 
-.cloud-nav-btn:hover {
-  background: #00E5FF;
-  color: #000000;
-  border-color: #000000;
-  box-shadow: 4px 4px 0px var(--ink-true-black);
-  transform: skew(-6deg) translate(-2px, -2px);
+.cloud-nav-btn:hover,
+.cloud-nav-btn:focus-visible,
+.mobile-nav-btn.cloud-nav-btn:hover,
+.mobile-nav-btn.cloud-nav-btn:focus-visible {
+  box-shadow: none !important;
+  border: none !important;
+  outline: none !important;
+  filter: drop-shadow(5px 5px 0px #FF003C);
+  transform: translate(-2px, -2px) !important;
 }
 
-.cloud-nav-btn:active {
-  background: #00E5FF;
+.cloud-nav-btn:hover::after,
+.cloud-nav-btn:focus-visible::after,
+.mobile-nav-btn.cloud-nav-btn:hover::after,
+.mobile-nav-btn.cloud-nav-btn:focus-visible::after {
+  background-color: #00E5FF;
+}
+
+.cloud-nav-btn:hover > *,
+.cloud-nav-btn:focus-visible > *,
+.mobile-nav-btn.cloud-nav-btn:hover > *,
+.mobile-nav-btn.cloud-nav-btn:focus-visible > * {
   color: #000000;
-  transform: skew(-6deg) translate(1px, 1px);
-  box-shadow: 1px 1px 0px var(--ink-true-black);
+}
+
+.cloud-nav-btn:active,
+.mobile-nav-btn.cloud-nav-btn:active {
+  box-shadow: none !important;
+  border: none !important;
+  outline: none !important;
+  filter: drop-shadow(1.5px 1.5px 0px #FF003C);
+  transform: translate(1px, 1px) !important;
+}
+
+.cloud-nav-btn:active::after,
+.mobile-nav-btn.cloud-nav-btn:active::after {
+  background-color: #00E5FF;
+}
+
+.cloud-nav-btn:active > *,
+.mobile-nav-btn.cloud-nav-btn:active > * {
+  color: #000000;
 }
 
 /* REPLAY INTRO BTN - Pertahankan style cyber yellow & black */
@@ -982,13 +1089,13 @@ body::before {
     color 0.18s ease;
 }
 
-/* Skew -12deg persis seperti desktop */
+/* Diagonal Cyber Shape (Upright cyber chamfer geometry matching desktop & panels) */
 .slash-btn { 
-  transform: skew(-12deg); 
+  transform: none !important; 
 }
 
 .slash-btn > * { 
-  transform: skew(12deg);
+  transform: none !important;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1056,31 +1163,88 @@ body::before {
   transition: color 0.15s ease;
 }
 
-/* COMING SOON BUTTON (Cyan Cyber Default -> Ruby Red Hover/Active) */
+/* -------------------------------------------------------------
+   1. BUTTON: PLAY STORE / COMING SOON (hub-btn-playstore)
+   - Cyber cut corner: kanan bawah (14px cut)
+   - Solid outline: 2.5px solid #000000
+   - Bayangan: #FF003C (default), #00E5FF (hover/active)
+   - Inner-fill: #00E5FF (default), #FF003C (hover/active)
+   - Teks: #000000 (default), #FFFFFF (hover/active)
+   ------------------------------------------------------------- */
+.hub-btn-playstore {
+  filter: drop-shadow(4px 4px 0px #FF003C);
+  transition: filter 0.18s ease;
+}
+
+.hub-btn-playstore:hover,
+.hub-btn-playstore:focus-visible {
+  filter: drop-shadow(6px 6px 0px #00E5FF);
+}
+
+.hub-btn-playstore:active {
+  filter: drop-shadow(2px 2px 0px #00E5FF);
+}
+
+/* Outer black cyber border layer (Cut Corner Kiri Atas 14px & Kanan Bawah 14px) */
 .hub-btn-playstore .hub-btn-plate {
+  background-color: #000000 !important;
+  border: none !important;
+  box-shadow: none !important;
+  transform: none !important;
+  clip-path: polygon(
+    14px 0%,
+    100% 0%,
+    100% calc(100% - 14px),
+    calc(100% - 14px) 100%,
+    0% 100%,
+    0% 14px
+  );
+}
+
+/* Inner color plate fill (Cut Corner Kiri Atas 12.5px & Kanan Bawah 12.5px, inset 2.5px creates uniform 2.5px black outline) */
+.hub-btn-playstore .hub-btn-plate::before {
+  content: '';
+  position: absolute;
+  inset: 2.5px !important;
+  top: 2.5px !important;
+  left: 2.5px !important;
+  right: 2.5px !important;
+  bottom: 2.5px !important;
+  width: auto !important;
+  height: auto !important;
+  box-sizing: border-box !important;
   background-color: #00E5FF;
-  border-color: #000000;
-  box-shadow: 4px 4px 0px 0px #FF003C;
-  color: #000000;
+  clip-path: polygon(
+    12.5px 0%,
+    100% 0%,
+    100% calc(100% - 12.5px),
+    calc(100% - 12.5px) 100%,
+    0% 100%,
+    0% 12.5px
+  );
+  z-index: 1;
+  pointer-events: none;
+  transition: background-color 0.18s ease;
+  transform: none !important;
 }
 
 .hub-btn-playstore .btn-text,
 .hub-btn-playstore .btn-jp {
   color: #000000;
-}
-
-.hub-btn-playstore .hub-btn-plate::before {
-  background-color: #FF003C;
+  position: relative;
+  z-index: 2;
+  transition: color 0.18s ease;
 }
 
 /* COMING SOON - Hover & Focus */
 .hub-btn-playstore:hover .hub-btn-plate,
 .hub-btn-playstore:focus-visible .hub-btn-plate {
-  transform: skew(-12deg) translate(-3px, -3px);
+  transform: translate(-3px, -3px) !important;
+}
+
+.hub-btn-playstore:hover .hub-btn-plate::before,
+.hub-btn-playstore:focus-visible .hub-btn-plate::before {
   background-color: #FF003C;
-  border-color: #000000;
-  box-shadow: 6px 6px 0px 0px #00E5FF;
-  color: #FFFFFF;
 }
 
 .hub-btn-playstore:hover .btn-text,
@@ -1090,18 +1254,13 @@ body::before {
   color: #FFFFFF;
 }
 
-.hub-btn-playstore:hover .hub-btn-plate::before,
-.hub-btn-playstore:focus-visible .hub-btn-plate::before {
-  transform: scaleX(1);
-}
-
 /* COMING SOON - Active (Click / Tap) */
 .hub-btn-playstore:active .hub-btn-plate {
-  transform: skew(-12deg) translate(2px, 2px);
+  transform: translate(2px, 2px) !important;
+}
+
+.hub-btn-playstore:active .hub-btn-plate::before {
   background-color: #FF003C;
-  border-color: #000000;
-  box-shadow: 2px 2px 0px 0px #00E5FF;
-  color: #FFFFFF;
 }
 
 .hub-btn-playstore:active .btn-text,
@@ -1109,35 +1268,88 @@ body::before {
   color: #FFFFFF;
 }
 
-.hub-btn-playstore:active .hub-btn-plate::before {
-  transform: scaleX(1);
+/* -------------------------------------------------------------
+   2. BUTTON: FADHIL.DEV (hub-btn-fadhil)
+   - Cyber cut corner: kiri atas dan kanan bawah (14px cut)
+   - Solid outline: 2.5px solid #000000
+   - Bayangan: #00E5FF (default), #FF003C (hover/active)
+   - Inner-fill: #FF003C (default), #00E5FF (hover/active)
+   - Teks: #FFFFFF (default), #000000 (hover/active)
+   ------------------------------------------------------------- */
+.hub-btn-fadhil {
+  filter: drop-shadow(4px 4px 0px #00E5FF);
+  transition: filter 0.18s ease;
 }
 
-/* FADHIL.DEV BUTTON (Pengembalian ke style & bentuk asli Desktop: Hitam Pekat + Border Kuning + Shadow Cyan Glow!) */
+.hub-btn-fadhil:hover,
+.hub-btn-fadhil:focus-visible {
+  filter: drop-shadow(6px 6px 0px #FF003C);
+}
+
+.hub-btn-fadhil:active {
+  filter: drop-shadow(2px 2px 0px #FF003C);
+}
+
+/* Outer black cyber border layer (Cut Corner Kiri Atas & Kanan Bawah 14px) */
 .hub-btn-fadhil .hub-btn-plate {
-  background-color: #000000;
-  border-color: #FFD000;
-  box-shadow: 4px 4px 0px 0px #00E5FF;
-  color: #FFD000;
+  background-color: #000000 !important;
+  border: none !important;
+  box-shadow: none !important;
+  transform: none !important;
+  clip-path: polygon(
+    14px 0%,
+    100% 0%,
+    100% calc(100% - 14px),
+    calc(100% - 14px) 100%,
+    0% 100%,
+    0% 14px
+  );
+}
+
+/* Inner color plate fill (Cut Corner Kiri Atas & Kanan Bawah 12.5px, inset 2.5px creates uniform 2.5px black outline) */
+.hub-btn-fadhil .hub-btn-plate::before {
+  content: '';
+  position: absolute;
+  inset: 2.5px !important;
+  top: 2.5px !important;
+  left: 2.5px !important;
+  right: 2.5px !important;
+  bottom: 2.5px !important;
+  width: auto !important;
+  height: auto !important;
+  box-sizing: border-box !important;
+  background-color: #FF003C;
+  clip-path: polygon(
+    12.5px 0%,
+    100% 0%,
+    100% calc(100% - 12.5px),
+    calc(100% - 12.5px) 100%,
+    0% 100%,
+    0% 12.5px
+  );
+  z-index: 1;
+  pointer-events: none;
+  transition: background-color 0.18s ease;
+  transform: none !important;
 }
 
 .hub-btn-fadhil .btn-text,
 .hub-btn-fadhil .btn-jp {
-  color: #FFD000;
-}
-
-.hub-btn-fadhil .hub-btn-plate::before {
-  background-color: #FFD000;
+  color: #FFFFFF;
+  position: relative;
+  z-index: 2;
+  transition: color 0.18s ease;
 }
 
 /* FADHIL.DEV - Hover & Focus */
 .hub-btn-fadhil:hover .hub-btn-plate,
 .hub-btn-fadhil:focus-visible .hub-btn-plate {
-  transform: skew(-12deg) translate(-3px, -3px);
-  background-color: #FFD000;
-  border-color: #000000;
-  box-shadow: 6px 6px 0px 0px #FF003C;
-  color: #000000;
+  transform: translate(-3px, -3px) !important;
+}
+
+.hub-btn-fadhil:hover .hub-btn-plate::before,
+.hub-btn-fadhil:focus-visible .hub-btn-plate::before {
+  background-color: #00E5FF;
 }
 
 .hub-btn-fadhil:hover .btn-text,
@@ -1147,27 +1359,18 @@ body::before {
   color: #000000;
 }
 
-.hub-btn-fadhil:hover .hub-btn-plate::before,
-.hub-btn-fadhil:focus-visible .hub-btn-plate::before {
-  transform: scaleX(1);
-}
-
 /* FADHIL.DEV - Active (Click / Tap) */
 .hub-btn-fadhil:active .hub-btn-plate {
-  transform: skew(-12deg) translate(2px, 2px);
-  background-color: #FFD000;
-  border-color: #000000;
-  box-shadow: 2px 2px 0px 0px #FF003C;
-  color: #000000;
+  transform: translate(2px, 2px) !important;
+}
+
+.hub-btn-fadhil:active .hub-btn-plate::before {
+  background-color: #00E5FF;
 }
 
 .hub-btn-fadhil:active .btn-text,
 .hub-btn-fadhil:active .btn-jp {
   color: #000000;
-}
-
-.hub-btn-fadhil:active .hub-btn-plate::before {
-  transform: scaleX(1);
 }
 
 /* FOOTER */

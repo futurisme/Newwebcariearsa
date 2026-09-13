@@ -1,0 +1,39 @@
+{
+  "id": "/fadhil/",
+  "name": "Fadhil.dev",
+  "short_name": "Fadhil.dev",
+  "description": "Fadhil Akbar Cariearsa official portfolio, tools, games, and self-hosted web experiments.",
+  "lang": "en",
+  "dir": "ltr",
+  "start_url": "/fadhil/",
+  "scope": "/fadhil/",
+  "display": "standalone",
+  "display_override": [
+    "window-controls-overlay",
+    "standalone",
+    "browser"
+  ],
+  "orientation": "any",
+  "background_color": "#090f1f",
+  "theme_color": "#4a0b1f",
+  "categories": [
+    "portfolio",
+    "productivity",
+    "games",
+    "developer"
+  ],
+  "icons": [
+    {
+      "src": "/fadhil/fadhil-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/fadhil/fadhil.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
