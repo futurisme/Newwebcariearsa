@@ -133,7 +133,7 @@
   const pictureLayer = document.querySelector(".hero-picture-layer");
 
   if (heroTrigger) {
-    const startTime = parseInt(heroTrigger.dataset.youtubeStart || "11", 10);
+    const startTime = parseInt(heroTrigger.dataset.youtubeStart || "6", 10);
     const iframe = document.getElementById("fadhil-hero-yt") || heroTrigger.querySelector("iframe");
     let ytPlayer = null;
     let isAudioActive = false;
@@ -198,17 +198,24 @@
       isAudioActive = true;
       isPlaying = true;
 
-      // 1. PostMessage immediate control (seek to 11s, unMute, 100% volume, play)
+      // 1. PostMessage immediate control (seek to 6s, unMute, 100% volume, high resolution hd1080, play)
       sendYTCommand("seekTo", [startTime, true]);
       sendYTCommand("unMute");
       sendYTCommand("setVolume", [100]);
+      sendYTCommand("setPlaybackQuality", ["hd1080"]);
+      sendYTCommand("setPlaybackQualityRange", ["hd1080", "highres"]);
       sendYTCommand("playVideo");
 
       // 2. YT.Player API control if initialized
       if (ytPlayer && typeof ytPlayer.playVideo === "function") {
         try {
+          ytPlayer.seekTo?.(startTime, true);
           ytPlayer.unMute?.();
           ytPlayer.setVolume?.(100);
+          ytPlayer.setPlaybackQuality?.("hd1080");
+          if (typeof ytPlayer.setPlaybackQualityRange === "function") {
+            ytPlayer.setPlaybackQualityRange("hd1080", "highres");
+          }
           ytPlayer.playVideo?.();
         } catch (_) {}
       }
@@ -232,6 +239,12 @@
               onReady: (event) => {
                 event.target.seekTo(startTime, true);
                 event.target.setVolume(100);
+                try {
+                  event.target.setPlaybackQuality("hd1080");
+                  if (typeof event.target.setPlaybackQualityRange === "function") {
+                    event.target.setPlaybackQualityRange("hd1080", "highres");
+                  }
+                } catch (_) {}
                 if (isAudioActive) {
                   try {
                     event.target.unMute();
@@ -240,7 +253,10 @@
                 }
               },
               onStateChange: (event) => {
-                // If ended (0), seamlessly loop back to 11s
+                try {
+                  event.target.setPlaybackQuality("hd1080");
+                } catch (_) {}
+                // If ended (0), seamlessly loop back to 6s
                 if (event.data === 0) {
                   event.target.seekTo(startTime, true);
                   event.target.playVideo();
@@ -295,7 +311,7 @@
     };
     gestureEvents.forEach(evt => window.addEventListener(evt, handleUniversalGesture, { capture: true, passive: true }));
 
-    // Keyboard shortcut Shift+E untuk memicu video dari detik 11
+    // Keyboard shortcut Shift+E untuk memicu video dari detik 6
     window.addEventListener("keydown", (event) => {
       if (event.altKey || event.ctrlKey || event.metaKey || event.repeat) return;
       const key = event.key.toLowerCase();
@@ -386,5 +402,50 @@
   const originalTitle = document.title;
   document.addEventListener("visibilitychange", () => {
     document.title = document.hidden ? "戻ってきて！ (PORTFOLIO STANDBY)" : originalTitle;
+  });
+
+  // 7. Core Language Iconbox Interactive Click & Touch Handler
+  const coreLangItems = document.querySelectorAll(".core-lang-item");
+  coreLangItems.forEach((item) => {
+    const handleActivate = () => {
+      coreLangItems.forEach((other) => {
+        if (other !== item) other.classList.remove("is-clicked");
+      });
+      item.classList.add("is-clicked");
+      playCyberSound('click');
+      setTimeout(() => {
+        item.classList.remove("is-clicked");
+      }, 700);
+    };
+
+    item.addEventListener("click", handleActivate);
+    item.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        handleActivate();
+      }
+    });
+  });
+
+  // 8. Social Profile Iconbox Interactive Click & Touch Handler
+  const socialSlotLinks = document.querySelectorAll(".social-slot-link");
+  socialSlotLinks.forEach((link) => {
+    const handleSocialActivate = () => {
+      socialSlotLinks.forEach((other) => {
+        if (other !== link) other.classList.remove("is-clicked");
+      });
+      link.classList.add("is-clicked");
+      playCyberSound('click');
+      setTimeout(() => {
+        link.classList.remove("is-clicked");
+      }, 700);
+    };
+
+    link.addEventListener("click", handleSocialActivate);
+    link.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") {
+        handleSocialActivate();
+      }
+    });
   });
 })();

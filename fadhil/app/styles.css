@@ -25,22 +25,132 @@
   --font-jp: 'Noto Sans JP', sans-serif;
 }
 
+/* --------------------------------------------------------------------------
+   THEME: LUXURY DEEP MAROON WITH BRONZE GRADIENT (FORMERLY LIGHT/WHITE)
+   Background seluruh website yang tadinya putih diubah menjadi marun pekat
+   mewah dengan gradasi warna bronze (perunggu berkilau berkelas tinggi).
+   -------------------------------------------------------------------------- */
 body.light-theme, [data-theme="light"] {
-  --ink-black: #111111;
+  --ink-black: #FFFFFF;
   --ink-true-black: #000000;
-  --paper-white: #FFFFFF;
-  --bg-gray: #E9ECEF;
-  --panel-bg: #FFFFFF;
-  --panel-surface: #F8F9FA;
-  --panel-border: #000000;
+  --paper-white: #3A0712;
+  --bg-gray: #26040A;
+  --panel-bg: #350812;
+  --panel-surface: #440D18;
+  --panel-border: #8C532B;
   --manga-red: #FF003C;
   --manga-pink: #FF007F;
   --manga-accent: #00E5FF;
   --manga-yellow: #FFE600;
-  --text-main: #000000;
-  --text-muted: #4A5568;
-  --card-outline: #000000;
-  --halftone-dot: rgba(0, 0, 0, 0.12);
+  --text-main: #FFFFFF;
+  --text-muted: #E2C0A5;
+  --card-outline: #5C2C13;
+  --halftone-dot: rgba(199, 130, 72, 0.16);
+
+  /* Bronze & Maroon Lux Tokens */
+  --bronze-accent: #C78248;
+  --bronze-mid: #945327;
+  --bronze-glow: rgba(199, 130, 72, 0.35);
+}
+
+/* Background seluruh website pada tema light (Marun Gelap Mewah + Gradasi Bronze) */
+html:has(body.light-theme),
+html[data-theme="light"] {
+  background-color: #240308;
+}
+
+body.light-theme,
+[data-theme="light"] {
+  background-color: #240308 !important;
+  background-image:
+    radial-gradient(ellipse 90% 60% at 50% 0%, rgba(199, 130, 72, 0.25) 0%, transparent 70%),
+    radial-gradient(circle at 10% 25%, rgba(148, 83, 39, 0.22) 0%, transparent 45%),
+    radial-gradient(circle at 90% 75%, rgba(199, 130, 72, 0.2) 0%, transparent 50%),
+    linear-gradient(145deg, #1C0206 0%, #30060E 25%, #4A0C18 50%, #350E16 75%, #180205 100%),
+    radial-gradient(rgba(214, 151, 94, 0.15) 1.5px, transparent 0) !important;
+  background-size: 100% 100%, auto, auto, auto, 20px 20px !important;
+  background-position: top center, 0 0, 0 0, 0 0, -10px -10px !important;
+  background-attachment: fixed !important;
+  color: #FFFFFF !important;
+}
+
+body.light-theme::before,
+[data-theme="light"]::before {
+  opacity: 0.05;
+  background-image: repeating-linear-gradient(45deg, #C78248 0, #C78248 1px, transparent 0, transparent 50%);
+}
+
+/* Penyesuaian Panel Bento dan Kontainer agar harmonis dengan Marun Mewah Bronze */
+body.light-theme .cyber-card-content,
+[data-theme="light"] .cyber-card-content {
+  background: linear-gradient(160deg, #380812 0%, #2A050E 100%) !important;
+  border: 1.5px solid rgba(199, 130, 72, 0.5) !important;
+  box-shadow: inset 0 0 15px rgba(199, 130, 72, 0.08);
+}
+
+body.light-theme .cyber-frame::before,
+[data-theme="light"] .cyber-frame::before {
+  background: #180205 !important;
+}
+
+body.light-theme .card-header-bar,
+[data-theme="light"] .card-header-bar {
+  background: #1B0207 !important;
+  border-bottom: 2px solid #C78248 !important;
+}
+
+body.light-theme .about-quote-box,
+[data-theme="light"] .about-quote-box {
+  background: linear-gradient(135deg, rgba(62, 10, 20, 0.95), rgba(42, 5, 12, 0.9)) !important;
+  border-left: 4px solid #C78248 !important;
+  border-top: 1px solid rgba(199, 130, 72, 0.2) !important;
+  border-right: 1px solid rgba(199, 130, 72, 0.2) !important;
+  border-bottom: 1px solid rgba(199, 130, 72, 0.2) !important;
+  color: #FFFFFF !important;
+}
+
+body.light-theme .skill-subcard,
+[data-theme="light"] .skill-subcard {
+  background: rgba(43, 7, 14, 0.9) !important;
+  border: 1.5px solid rgba(199, 130, 72, 0.45) !important;
+}
+
+body.light-theme .skill-pill-item,
+[data-theme="light"] .skill-pill-item {
+  background: #1C0206 !important;
+  border: 1px solid rgba(199, 130, 72, 0.4) !important;
+  color: #FFFFFF !important;
+}
+
+body.light-theme .portfolio-meta-body,
+[data-theme="light"] .portfolio-meta-body {
+  background: #28040C !important;
+}
+
+body.light-theme .portfolio-inner-plate,
+[data-theme="light"] .portfolio-inner-plate {
+  background: #360711 !important;
+}
+
+body.light-theme .lang-flag-btn,
+[data-theme="light"] .lang-flag-btn {
+  background: #360711 !important;
+  color: #FFFFFF !important;
+  border-color: #C78248 !important;
+}
+
+body.light-theme .lang-flag-btn.active,
+[data-theme="light"] .lang-flag-btn.active {
+  background: #000000 !important;
+  color: #FFE600 !important;
+  border-color: #FFE600 !important;
+  box-shadow: 2px 2px 0px #FF003C !important;
+}
+
+body.light-theme .tool-slot-item,
+[data-theme="light"] .tool-slot-item {
+  background: #1C0206 !important;
+  border-color: rgba(199, 130, 72, 0.45) !important;
 }
 
 /* Base resets & hardware-accelerated viewport sizing */
@@ -935,7 +1045,13 @@ body::before {
   opacity: 1 !important;
 }
 
-/* YouTube Video Layer (Layer 1: Di bawah picture layer) */
+/* YouTube Video Layer (Layer 1: Di bawah picture layer)
+   High-Precision 110% Zoom & Zero-Bezel Letterbox/Pillarbox Crop Fill:
+   - Wadah card (.hero-media-wrap) tetap terisolasi dan terkunci dengan overflow: hidden !important (zero expansion pada container card).
+   - Iframe video diperbesar menjadi 110% (min-width: 110%, min-height: 110%) terpusat (top: 50%, left: 50%, translate(-50%, -50%)).
+   - Kelebihan dimensi 5% di sisi atas, bawah, kiri, dan kanan otomatis ter-crop sempurna oleh boundary wadah card.
+   - Hasil visual: 100% bebas garis hitam kanan-kiri (pillarbox) maupun atas-bawah (letterbox), super tajam, dan responsive di segala ukuran layar.
+*/
 .hero-video-frame-layer {
   position: absolute;
   inset: 0;
@@ -944,15 +1060,29 @@ body::before {
   z-index: 1;
   opacity: 1;
   pointer-events: auto;
+  overflow: hidden !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #000000;
 }
 
 .hero-video-frame-layer iframe,
 .hero-video-frame-layer .hero-yt-iframe {
-  width: 100%;
-  height: 100%;
-  border: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 110% !important;
+  height: 110% !important;
+  min-width: 110% !important;
+  min-height: 110% !important;
+  transform: translate(-50%, -50%) scale(1.01);
+  transform-origin: center center;
+  border: 0 !important;
+  outline: 0 !important;
   display: block;
   pointer-events: auto;
+  will-change: transform;
 }
 
 /* HAPUS SEMUA EFEK MENGGELAP DI BANNER UTAMA (100% Bersih & Terang) */
@@ -1494,7 +1624,20 @@ body::before {
   text-decoration: none;
 }
 
-/* Core 6 Language Icons Row */
+/* --------------------------------------------------------------------------
+   CORE PROGRAMMING LANGUAGES (6 ICONS) - POLA SELANG-SELING 3 VARIAN
+   Kompatibel tajam semua browser, ringan dan modern.
+   Pola 3 warna beda tiap iconbox (dari kiri):
+   - Varian 1 (Icon 1 & 4):
+       Default: outline kuning cerah, inner-fill marun gelap, bayangan manga-red
+       Hover/Click: outline merah biasa terang, inner-fill hitam, bayangan kuning cerah
+   - Varian 2 (Icon 2 & 5):
+       Default: outline biru langit cerah, inner-fill hitam, bayangan manga-red
+       Hover/Click: outline ungu cerah terang, inner-fill hitam, bayangan biru langit cerah
+   - Varian 3 (Icon 3 & 6):
+       Default: outline pink cerah terang, inner-fill marun gelap, bayangan biru langit cerah terang
+       Hover/Click: outline kuning cerah, inner-fill hitam, bayangan kuning cerah
+   -------------------------------------------------------------------------- */
 .core-lang-grid {
   display: flex;
   align-items: center;
@@ -1511,29 +1654,127 @@ body::before {
   width: 50px;
   height: 50px;
   flex: 0 0 50px;
-  background: #000000;
-  border: 2px solid var(--manga-accent);
-  box-shadow: 2px 2px 0px rgba(0, 0, 0, 0.85);
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 5px;
-  transition: all 0.16s ease;
   cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  outline: none;
+  transition: transform 0.16s cubic-bezier(0.2, 0.8, 0.2, 1),
+              background-color 0.16s ease,
+              border-color 0.16s ease,
+              box-shadow 0.16s ease;
 }
 
-.core-lang-item:hover {
-  border-color: var(--manga-yellow);
-  transform: translate(-1.5px, -1.5px);
-  box-shadow: 3px 3px 0px var(--manga-red);
-  background: #141724;
-}
-
+.core-lang-item picture,
 .core-lang-item img {
   width: 100%;
   height: 100%;
   object-fit: contain;
   display: block;
+  pointer-events: none;
+  transition: transform 0.16s ease;
+}
+
+/* VARIAN 1: Icon 1 (HTML5) & Icon 4 (TypeScript)
+   Default: outline kuning cerah (#FFE600), inner-fill marun sangat gelap (#1E0207), bayangan manga-red (#FF003C)
+   Hover/Click: outline pink terang cerah (#FF007F), inner-fill biru navy sangat gelap (#060D20), bayangan kuning cerah (#FFE600)
+*/
+.core-lang-item.core-lang-variant-1,
+.core-lang-item:nth-child(3n + 1) {
+  border: 2px solid #FFE600 !important;
+  background-color: #1E0207 !important;
+  box-shadow: 3px 3px 0px #FF003C !important;
+}
+
+.core-lang-item.core-lang-variant-1:hover,
+.core-lang-item.core-lang-variant-1:active,
+.core-lang-item.core-lang-variant-1:focus-visible,
+.core-lang-item.core-lang-variant-1.is-clicked,
+.core-lang-item:nth-child(3n + 1):hover,
+.core-lang-item:nth-child(3n + 1):active,
+.core-lang-item:nth-child(3n + 1):focus-visible,
+.core-lang-item:nth-child(3n + 1).is-clicked {
+  border-color: #FF007F !important;
+  background-color: #060D20 !important;
+  box-shadow: 4px 4px 0px #FFE600 !important;
+  transform: translate(-1.5px, -1.5px);
+}
+
+.core-lang-item.core-lang-variant-1:active,
+.core-lang-item:nth-child(3n + 1):active {
+  transform: translate(1px, 1px);
+  box-shadow: 2px 2px 0px #FFE600 !important;
+}
+
+/* VARIAN 2: Icon 2 (JavaScript) & Icon 5 (Luau)
+   Default: outline pink terang cerah (#FF007F), inner-fill hitam (#000000), bayangan kuning cerah terang (#FFE600)
+   Hover/Click: outline kuning cerah terang (#FFE600), inner-fill hitam (#000000), bayangan pink cerah terang (#FF007F)
+*/
+.core-lang-item.core-lang-variant-2,
+.core-lang-item:nth-child(3n + 2) {
+  border: 2px solid #FF007F !important;
+  background-color: #000000 !important;
+  box-shadow: 3px 3px 0px #FFE600 !important;
+}
+
+.core-lang-item.core-lang-variant-2:hover,
+.core-lang-item.core-lang-variant-2:active,
+.core-lang-item.core-lang-variant-2:focus-visible,
+.core-lang-item.core-lang-variant-2.is-clicked,
+.core-lang-item:nth-child(3n + 2):hover,
+.core-lang-item:nth-child(3n + 2):active,
+.core-lang-item:nth-child(3n + 2):focus-visible,
+.core-lang-item:nth-child(3n + 2).is-clicked {
+  border-color: #FFE600 !important;
+  background-color: #000000 !important;
+  box-shadow: 4px 4px 0px #FF007F !important;
+  transform: translate(-1.5px, -1.5px);
+}
+
+.core-lang-item.core-lang-variant-2:active,
+.core-lang-item:nth-child(3n + 2):active {
+  transform: translate(1px, 1px);
+  box-shadow: 2px 2px 0px #FF007F !important;
+}
+
+/* VARIAN 3: Icon 3 (CSS3) & Icon 6 (Python)
+   Default: outline biru langit cerah terang (#00E5FF), inner-fill biru navy sangat gelap (#060D20), bayangan manga-red (#FF003C)
+   Hover/Click: outline pink cerah terang (#FF007F), inner-fill marun sangat gelap (#1E0207), bayangan biru langit cerah terang (#00E5FF)
+*/
+.core-lang-item.core-lang-variant-3,
+.core-lang-item:nth-child(3n) {
+  border: 2px solid #00E5FF !important;
+  background-color: #060D20 !important;
+  box-shadow: 3px 3px 0px #FF003C !important;
+}
+
+.core-lang-item.core-lang-variant-3:hover,
+.core-lang-item.core-lang-variant-3:active,
+.core-lang-item.core-lang-variant-3:focus-visible,
+.core-lang-item.core-lang-variant-3.is-clicked,
+.core-lang-item:nth-child(3n):hover,
+.core-lang-item:nth-child(3n):active,
+.core-lang-item:nth-child(3n):focus-visible,
+.core-lang-item:nth-child(3n).is-clicked {
+  border-color: #FF007F !important;
+  background-color: #1E0207 !important;
+  box-shadow: 4px 4px 0px #00E5FF !important;
+  transform: translate(-1.5px, -1.5px);
+}
+
+.core-lang-item.core-lang-variant-3:active,
+.core-lang-item:nth-child(3n):active {
+  transform: translate(1px, 1px);
+  box-shadow: 2px 2px 0px #00E5FF !important;
+}
+
+.core-lang-item:hover img,
+.core-lang-item:active img,
+.core-lang-item.is-clicked img {
+  transform: scale(1.08);
 }
 
 /* Active Social Profile Links (14 Clickable) */
@@ -1554,6 +1795,17 @@ body::before {
   padding: 0;
 }
 
+/* --------------------------------------------------------------------------
+   SOCIAL PROFILES (14 Iconboxes) - Pola Zig Zag 3 Varian
+   Grid 7 kolom x 2 baris:
+     Gelombang 1: MAL (1), SPOTIFY (2), Instagram (3), Wikipedia (1), LeetCode (2), Roblox (3), GitHub (1)
+     Gelombang 2: TryHackMe (3), Discord (2), IMDb (1), Duolingo (3), LinkedIn (2), Monkeytype (1), daily.dev (3)
+   Peta Varian:
+     Varian 1: Items 1, 6, 7, 10, 11 (MAL, Monkeytype, GitHub, IMDb, Wikipedia)
+     Varian 2: Items 2, 5, 9, 12 (Discord, LeetCode, Spotify, LinkedIn)
+     Varian 3: Items 3, 4, 8, 13, 14 (Instagram, Duolingo, TryHackMe, Roblox, daily.dev)
+   -------------------------------------------------------------------------- */
+
 .social-slot-link {
   position: relative;
   width: 50px;
@@ -1561,27 +1813,196 @@ body::before {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #000000;
-  border: 2px solid #333d59;
-  box-shadow: 2px 2px 0px #000000;
+  background-color: #000000;
   padding: 5px;
   text-decoration: none;
-  transition: all 0.16s ease;
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  outline: none;
+  transition: transform 0.16s cubic-bezier(0.2, 0.8, 0.2, 1),
+              background-color 0.16s ease,
+              border-color 0.16s ease,
+              box-shadow 0.16s ease;
 }
 
-.social-slot-link:hover {
-  border-color: var(--manga-accent);
-  transform: translate(-1.5px, -1.5px);
-  box-shadow: 3px 3px 0px var(--manga-pink);
-  background: #151829;
-}
-
+.social-slot-link picture,
 .social-slot-link img {
   width: 100%;
   height: 100%;
   object-fit: contain;
   display: block;
-  filter: drop-shadow(0 0 2px rgba(255,255,255,0.2));
+  pointer-events: none;
+  transition: transform 0.16s ease;
+  filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.2));
+}
+
+.social-slot-link:hover img,
+.social-slot-link:active img,
+.social-slot-link.is-clicked img {
+  transform: scale(1.08);
+}
+
+/* VARIAN 1: Iconbox 1
+   Items: 1 (MAL), 6 (Monkeytype), 7 (GitHub), 10 (IMDb), 11 (Wikipedia)
+   Default: outline biru langit terang cerah (#00E5FF), bayangan pink cerah terang (#FF007F), inner-fill hitam (#000000)
+   Hover/Click: outline pink cerah terang (#FF007F), bayangan biru langit cerang terang (#00E5FF), inner-fill hitam (#000000)
+*/
+.social-slot-link.social-variant-1,
+.socials-14-grid li:nth-child(1) .social-slot-link,
+.socials-14-grid li:nth-child(6) .social-slot-link,
+.socials-14-grid li:nth-child(7) .social-slot-link,
+.socials-14-grid li:nth-child(10) .social-slot-link,
+.socials-14-grid li:nth-child(11) .social-slot-link {
+  border: 2px solid #00E5FF !important;
+  background-color: #000000 !important;
+  box-shadow: 3px 3px 0px #FF007F !important;
+}
+
+.social-slot-link.social-variant-1:hover,
+.social-slot-link.social-variant-1:active,
+.social-slot-link.social-variant-1:focus-visible,
+.social-slot-link.social-variant-1.is-clicked,
+.socials-14-grid li:nth-child(1) .social-slot-link:hover,
+.socials-14-grid li:nth-child(1) .social-slot-link:active,
+.socials-14-grid li:nth-child(1) .social-slot-link:focus-visible,
+.socials-14-grid li:nth-child(1) .social-slot-link.is-clicked,
+.socials-14-grid li:nth-child(6) .social-slot-link:hover,
+.socials-14-grid li:nth-child(6) .social-slot-link:active,
+.socials-14-grid li:nth-child(6) .social-slot-link:focus-visible,
+.socials-14-grid li:nth-child(6) .social-slot-link.is-clicked,
+.socials-14-grid li:nth-child(7) .social-slot-link:hover,
+.socials-14-grid li:nth-child(7) .social-slot-link:active,
+.socials-14-grid li:nth-child(7) .social-slot-link:focus-visible,
+.socials-14-grid li:nth-child(7) .social-slot-link.is-clicked,
+.socials-14-grid li:nth-child(10) .social-slot-link:hover,
+.socials-14-grid li:nth-child(10) .social-slot-link:active,
+.socials-14-grid li:nth-child(10) .social-slot-link:focus-visible,
+.socials-14-grid li:nth-child(10) .social-slot-link.is-clicked,
+.socials-14-grid li:nth-child(11) .social-slot-link:hover,
+.socials-14-grid li:nth-child(11) .social-slot-link:active,
+.socials-14-grid li:nth-child(11) .social-slot-link:focus-visible,
+.socials-14-grid li:nth-child(11) .social-slot-link.is-clicked {
+  border-color: #FF007F !important;
+  background-color: #000000 !important;
+  box-shadow: 4px 4px 0px #00E5FF !important;
+  transform: translate(-1.5px, -1.5px);
+}
+
+.social-slot-link.social-variant-1:active,
+.socials-14-grid li:nth-child(1) .social-slot-link:active,
+.socials-14-grid li:nth-child(6) .social-slot-link:active,
+.socials-14-grid li:nth-child(7) .social-slot-link:active,
+.socials-14-grid li:nth-child(10) .social-slot-link:active,
+.socials-14-grid li:nth-child(11) .social-slot-link:active {
+  transform: translate(1px, 1px);
+  box-shadow: 2px 2px 0px #00E5FF !important;
+}
+
+/* VARIAN 2: Iconbox 2
+   Items: 2 (Discord), 5 (LeetCode), 9 (Spotify), 12 (LinkedIn)
+   Default: outline kuning cerah terang (#FFE600), bayangan biru langit cerah (#00E5FF), inner-fill hitam (#000000)
+   Hover/Click: outline biru langit cerah (#00E5FF), bayangan kuning cerah (#FFE600), inner-fill hitam (#000000)
+*/
+.social-slot-link.social-variant-2,
+.socials-14-grid li:nth-child(2) .social-slot-link,
+.socials-14-grid li:nth-child(5) .social-slot-link,
+.socials-14-grid li:nth-child(9) .social-slot-link,
+.socials-14-grid li:nth-child(12) .social-slot-link {
+  border: 2px solid #FFE600 !important;
+  background-color: #000000 !important;
+  box-shadow: 3px 3px 0px #00E5FF !important;
+}
+
+.social-slot-link.social-variant-2:hover,
+.social-slot-link.social-variant-2:active,
+.social-slot-link.social-variant-2:focus-visible,
+.social-slot-link.social-variant-2.is-clicked,
+.socials-14-grid li:nth-child(2) .social-slot-link:hover,
+.socials-14-grid li:nth-child(2) .social-slot-link:active,
+.socials-14-grid li:nth-child(2) .social-slot-link:focus-visible,
+.socials-14-grid li:nth-child(2) .social-slot-link.is-clicked,
+.socials-14-grid li:nth-child(5) .social-slot-link:hover,
+.socials-14-grid li:nth-child(5) .social-slot-link:active,
+.socials-14-grid li:nth-child(5) .social-slot-link:focus-visible,
+.socials-14-grid li:nth-child(5) .social-slot-link.is-clicked,
+.socials-14-grid li:nth-child(9) .social-slot-link:hover,
+.socials-14-grid li:nth-child(9) .social-slot-link:active,
+.socials-14-grid li:nth-child(9) .social-slot-link:focus-visible,
+.socials-14-grid li:nth-child(9) .social-slot-link.is-clicked,
+.socials-14-grid li:nth-child(12) .social-slot-link:hover,
+.socials-14-grid li:nth-child(12) .social-slot-link:active,
+.socials-14-grid li:nth-child(12) .social-slot-link:focus-visible,
+.socials-14-grid li:nth-child(12) .social-slot-link.is-clicked {
+  border-color: #00E5FF !important;
+  background-color: #000000 !important;
+  box-shadow: 4px 4px 0px #FFE600 !important;
+  transform: translate(-1.5px, -1.5px);
+}
+
+.social-slot-link.social-variant-2:active,
+.socials-14-grid li:nth-child(2) .social-slot-link:active,
+.socials-14-grid li:nth-child(5) .social-slot-link:active,
+.socials-14-grid li:nth-child(9) .social-slot-link:active,
+.socials-14-grid li:nth-child(12) .social-slot-link:active {
+  transform: translate(1px, 1px);
+  box-shadow: 2px 2px 0px #FFE600 !important;
+}
+
+/* VARIAN 3: Iconbox 3
+   Items: 3 (Instagram), 4 (Duolingo), 8 (TryHackMe), 13 (Roblox), 14 (daily.dev)
+   Default: outline hijau lime cerah cyber (#00FF66), bayangan kuning cerah terang (#FFE600), inner-fill hitam (#000000)
+   Hover/Click: outline kuning cerah terang (#FFE600), bayangan hijau lime cerah (#00FF66), inner-fill hitam (#000000)
+*/
+.social-slot-link.social-variant-3,
+.socials-14-grid li:nth-child(3) .social-slot-link,
+.socials-14-grid li:nth-child(4) .social-slot-link,
+.socials-14-grid li:nth-child(8) .social-slot-link,
+.socials-14-grid li:nth-child(13) .social-slot-link,
+.socials-14-grid li:nth-child(14) .social-slot-link {
+  border: 2px solid #00FF66 !important;
+  background-color: #000000 !important;
+  box-shadow: 3px 3px 0px #FFE600 !important;
+}
+
+.social-slot-link.social-variant-3:hover,
+.social-slot-link.social-variant-3:active,
+.social-slot-link.social-variant-3:focus-visible,
+.social-slot-link.social-variant-3.is-clicked,
+.socials-14-grid li:nth-child(3) .social-slot-link:hover,
+.socials-14-grid li:nth-child(3) .social-slot-link:active,
+.socials-14-grid li:nth-child(3) .social-slot-link:focus-visible,
+.socials-14-grid li:nth-child(3) .social-slot-link.is-clicked,
+.socials-14-grid li:nth-child(4) .social-slot-link:hover,
+.socials-14-grid li:nth-child(4) .social-slot-link:active,
+.socials-14-grid li:nth-child(4) .social-slot-link:focus-visible,
+.socials-14-grid li:nth-child(4) .social-slot-link.is-clicked,
+.socials-14-grid li:nth-child(8) .social-slot-link:hover,
+.socials-14-grid li:nth-child(8) .social-slot-link:active,
+.socials-14-grid li:nth-child(8) .social-slot-link:focus-visible,
+.socials-14-grid li:nth-child(8) .social-slot-link.is-clicked,
+.socials-14-grid li:nth-child(13) .social-slot-link:hover,
+.socials-14-grid li:nth-child(13) .social-slot-link:active,
+.socials-14-grid li:nth-child(13) .social-slot-link:focus-visible,
+.socials-14-grid li:nth-child(13) .social-slot-link.is-clicked,
+.socials-14-grid li:nth-child(14) .social-slot-link:hover,
+.socials-14-grid li:nth-child(14) .social-slot-link:active,
+.socials-14-grid li:nth-child(14) .social-slot-link:focus-visible,
+.socials-14-grid li:nth-child(14) .social-slot-link.is-clicked {
+  border-color: #FFE600 !important;
+  background-color: #000000 !important;
+  box-shadow: 4px 4px 0px #00FF66 !important;
+  transform: translate(-1.5px, -1.5px);
+}
+
+.social-slot-link.social-variant-3:active,
+.socials-14-grid li:nth-child(3) .social-slot-link:active,
+.socials-14-grid li:nth-child(4) .social-slot-link:active,
+.socials-14-grid li:nth-child(8) .social-slot-link:active,
+.socials-14-grid li:nth-child(13) .social-slot-link:active,
+.socials-14-grid li:nth-child(14) .social-slot-link:active {
+  transform: translate(1px, 1px);
+  box-shadow: 2px 2px 0px #00FF66 !important;
 }
 
 /* Development Tools & Platforms (10 Items) */

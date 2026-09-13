@@ -121,6 +121,12 @@ async function startServer() {
     res.redirect(302, '/fadhil/mobile/');
   });
 
+  app.get('/fadhil/app/styles.css', (req, res) => {
+    res.setHeader('Content-Type', 'text/css; charset=utf-8');
+    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+    res.sendFile(path.join(appDir, 'fadhil/app/styles.css'));
+  });
+
   app.use((req, res, next) => {
     if (req.path === '/' || req.path === '/index.html') {
       if (isMobileClient(req)) {

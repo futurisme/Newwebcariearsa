@@ -1,5 +1,6 @@
 import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
+import fs from 'fs';
 import path from 'path';
 import {fileURLToPath} from 'url';
 import {defineConfig} from 'vite';
@@ -26,6 +27,13 @@ export default defineConfig(() => {
             apiApp.get('/api/health', (_r: any, s: any) => s.json({ status: 'ok', time: new Date().toISOString() }));
 
             server.middlewares.use((req: any, res: any, next: any) => {
+              if (req.url && req.url.startsWith('/fadhil/app/styles.css')) {
+                res.setHeader('Content-Type', 'text/css; charset=utf-8');
+                res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+                const cssPath = path.resolve(process.cwd(), 'fadhil/app/styles.css');
+                const css = fs.readFileSync(cssPath, 'utf-8');
+                return res.end(css);
+              }
               if (req.url && req.url.startsWith('/public/')) {
                 req.url = req.url.replace(/^\/public/, '');
               }
