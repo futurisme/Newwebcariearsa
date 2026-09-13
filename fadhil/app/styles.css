@@ -1796,14 +1796,14 @@ body::before {
 }
 
 /* --------------------------------------------------------------------------
-   SOCIAL PROFILES (14 Iconboxes) - Pola Zig Zag 3 Varian
-   Grid 7 kolom x 2 baris:
-     Gelombang 1: MAL (1), SPOTIFY (2), Instagram (3), Wikipedia (1), LeetCode (2), Roblox (3), GitHub (1)
-     Gelombang 2: TryHackMe (3), Discord (2), IMDb (1), Duolingo (3), LinkedIn (2), Monkeytype (1), daily.dev (3)
+   SOCIAL PROFILES (14 Iconboxes) - Pola Horizontal Zig-Zag 3 Varian
+   Grid 7 kolom x 2 baris (Kiri ke Kanan):
+     Baris Atas:  MAL (1), Discord (2), Instagram (3), Duolingo (1), LeetCode (2), Monkeytype (3), GitHub (1)
+     Baris Bawah: TryHackMe (2), Spotify (3), IMDb (1), Wikipedia (2), LinkedIn (3), Roblox (1), daily.dev (2)
    Peta Varian:
-     Varian 1: Items 1, 6, 7, 10, 11 (MAL, Monkeytype, GitHub, IMDb, Wikipedia)
-     Varian 2: Items 2, 5, 9, 12 (Discord, LeetCode, Spotify, LinkedIn)
-     Varian 3: Items 3, 4, 8, 13, 14 (Instagram, Duolingo, TryHackMe, Roblox, daily.dev)
+     Varian 1: Items 1, 4, 7, 10, 13 (MAL, Duolingo, GitHub, IMDb, Roblox)
+     Varian 2: Items 2, 5, 8, 11, 14 (Discord, LeetCode, TryHackMe, Wikipedia, daily.dev)
+     Varian 3: Items 3, 6, 9, 12 (Instagram, Monkeytype, Spotify, LinkedIn)
    -------------------------------------------------------------------------- */
 
 .social-slot-link {
@@ -1843,17 +1843,17 @@ body::before {
   transform: scale(1.08);
 }
 
-/* VARIAN 1: Iconbox 1
-   Items: 1 (MAL), 6 (Monkeytype), 7 (GitHub), 10 (IMDb), 11 (Wikipedia)
+/* VARIAN 1: Iconbox Varian 1
+   Items: 1 (MAL), 4 (Duolingo), 7 (GitHub), 10 (IMDb), 13 (Roblox)
    Default: outline biru langit terang cerah (#00E5FF), bayangan pink cerah terang (#FF007F), inner-fill hitam (#000000)
    Hover/Click: outline pink cerah terang (#FF007F), bayangan biru langit cerang terang (#00E5FF), inner-fill hitam (#000000)
 */
 .social-slot-link.social-variant-1,
 .socials-14-grid li:nth-child(1) .social-slot-link,
-.socials-14-grid li:nth-child(6) .social-slot-link,
+.socials-14-grid li:nth-child(4) .social-slot-link,
 .socials-14-grid li:nth-child(7) .social-slot-link,
 .socials-14-grid li:nth-child(10) .social-slot-link,
-.socials-14-grid li:nth-child(11) .social-slot-link {
+.socials-14-grid li:nth-child(13) .social-slot-link {
   border: 2px solid #00E5FF !important;
   background-color: #000000 !important;
   box-shadow: 3px 3px 0px #FF007F !important;
@@ -1867,10 +1867,10 @@ body::before {
 .socials-14-grid li:nth-child(1) .social-slot-link:active,
 .socials-14-grid li:nth-child(1) .social-slot-link:focus-visible,
 .socials-14-grid li:nth-child(1) .social-slot-link.is-clicked,
-.socials-14-grid li:nth-child(6) .social-slot-link:hover,
-.socials-14-grid li:nth-child(6) .social-slot-link:active,
-.socials-14-grid li:nth-child(6) .social-slot-link:focus-visible,
-.socials-14-grid li:nth-child(6) .social-slot-link.is-clicked,
+.socials-14-grid li:nth-child(4) .social-slot-link:hover,
+.socials-14-grid li:nth-child(4) .social-slot-link:active,
+.socials-14-grid li:nth-child(4) .social-slot-link:focus-visible,
+.socials-14-grid li:nth-child(4) .social-slot-link.is-clicked,
 .socials-14-grid li:nth-child(7) .social-slot-link:hover,
 .socials-14-grid li:nth-child(7) .social-slot-link:active,
 .socials-14-grid li:nth-child(7) .social-slot-link:focus-visible,
@@ -1879,10 +1879,10 @@ body::before {
 .socials-14-grid li:nth-child(10) .social-slot-link:active,
 .socials-14-grid li:nth-child(10) .social-slot-link:focus-visible,
 .socials-14-grid li:nth-child(10) .social-slot-link.is-clicked,
-.socials-14-grid li:nth-child(11) .social-slot-link:hover,
-.socials-14-grid li:nth-child(11) .social-slot-link:active,
-.socials-14-grid li:nth-child(11) .social-slot-link:focus-visible,
-.socials-14-grid li:nth-child(11) .social-slot-link.is-clicked {
+.socials-14-grid li:nth-child(13) .social-slot-link:hover,
+.socials-14-grid li:nth-child(13) .social-slot-link:active,
+.socials-14-grid li:nth-child(13) .social-slot-link:focus-visible,
+.socials-14-grid li:nth-child(13) .social-slot-link.is-clicked {
   border-color: #FF007F !important;
   background-color: #000000 !important;
   box-shadow: 4px 4px 0px #00E5FF !important;
@@ -1891,24 +1891,25 @@ body::before {
 
 .social-slot-link.social-variant-1:active,
 .socials-14-grid li:nth-child(1) .social-slot-link:active,
-.socials-14-grid li:nth-child(6) .social-slot-link:active,
+.socials-14-grid li:nth-child(4) .social-slot-link:active,
 .socials-14-grid li:nth-child(7) .social-slot-link:active,
 .socials-14-grid li:nth-child(10) .social-slot-link:active,
-.socials-14-grid li:nth-child(11) .social-slot-link:active {
+.socials-14-grid li:nth-child(13) .social-slot-link:active {
   transform: translate(1px, 1px);
   box-shadow: 2px 2px 0px #00E5FF !important;
 }
 
-/* VARIAN 2: Iconbox 2
-   Items: 2 (Discord), 5 (LeetCode), 9 (Spotify), 12 (LinkedIn)
+/* VARIAN 2: Iconbox Varian 2
+   Items: 2 (Discord), 5 (LeetCode), 8 (TryHackMe), 11 (Wikipedia), 14 (daily.dev)
    Default: outline kuning cerah terang (#FFE600), bayangan biru langit cerah (#00E5FF), inner-fill hitam (#000000)
    Hover/Click: outline biru langit cerah (#00E5FF), bayangan kuning cerah (#FFE600), inner-fill hitam (#000000)
 */
 .social-slot-link.social-variant-2,
 .socials-14-grid li:nth-child(2) .social-slot-link,
 .socials-14-grid li:nth-child(5) .social-slot-link,
-.socials-14-grid li:nth-child(9) .social-slot-link,
-.socials-14-grid li:nth-child(12) .social-slot-link {
+.socials-14-grid li:nth-child(8) .social-slot-link,
+.socials-14-grid li:nth-child(11) .social-slot-link,
+.socials-14-grid li:nth-child(14) .social-slot-link {
   border: 2px solid #FFE600 !important;
   background-color: #000000 !important;
   box-shadow: 3px 3px 0px #00E5FF !important;
@@ -1926,14 +1927,18 @@ body::before {
 .socials-14-grid li:nth-child(5) .social-slot-link:active,
 .socials-14-grid li:nth-child(5) .social-slot-link:focus-visible,
 .socials-14-grid li:nth-child(5) .social-slot-link.is-clicked,
-.socials-14-grid li:nth-child(9) .social-slot-link:hover,
-.socials-14-grid li:nth-child(9) .social-slot-link:active,
-.socials-14-grid li:nth-child(9) .social-slot-link:focus-visible,
-.socials-14-grid li:nth-child(9) .social-slot-link.is-clicked,
-.socials-14-grid li:nth-child(12) .social-slot-link:hover,
-.socials-14-grid li:nth-child(12) .social-slot-link:active,
-.socials-14-grid li:nth-child(12) .social-slot-link:focus-visible,
-.socials-14-grid li:nth-child(12) .social-slot-link.is-clicked {
+.socials-14-grid li:nth-child(8) .social-slot-link:hover,
+.socials-14-grid li:nth-child(8) .social-slot-link:active,
+.socials-14-grid li:nth-child(8) .social-slot-link:focus-visible,
+.socials-14-grid li:nth-child(8) .social-slot-link.is-clicked,
+.socials-14-grid li:nth-child(11) .social-slot-link:hover,
+.socials-14-grid li:nth-child(11) .social-slot-link:active,
+.socials-14-grid li:nth-child(11) .social-slot-link:focus-visible,
+.socials-14-grid li:nth-child(11) .social-slot-link.is-clicked,
+.socials-14-grid li:nth-child(14) .social-slot-link:hover,
+.socials-14-grid li:nth-child(14) .social-slot-link:active,
+.socials-14-grid li:nth-child(14) .social-slot-link:focus-visible,
+.socials-14-grid li:nth-child(14) .social-slot-link.is-clicked {
   border-color: #00E5FF !important;
   background-color: #000000 !important;
   box-shadow: 4px 4px 0px #FFE600 !important;
@@ -1943,23 +1948,23 @@ body::before {
 .social-slot-link.social-variant-2:active,
 .socials-14-grid li:nth-child(2) .social-slot-link:active,
 .socials-14-grid li:nth-child(5) .social-slot-link:active,
-.socials-14-grid li:nth-child(9) .social-slot-link:active,
-.socials-14-grid li:nth-child(12) .social-slot-link:active {
+.socials-14-grid li:nth-child(8) .social-slot-link:active,
+.socials-14-grid li:nth-child(11) .social-slot-link:active,
+.socials-14-grid li:nth-child(14) .social-slot-link:active {
   transform: translate(1px, 1px);
   box-shadow: 2px 2px 0px #FFE600 !important;
 }
 
-/* VARIAN 3: Iconbox 3
-   Items: 3 (Instagram), 4 (Duolingo), 8 (TryHackMe), 13 (Roblox), 14 (daily.dev)
+/* VARIAN 3: Iconbox Varian 3
+   Items: 3 (Instagram), 6 (Monkeytype), 9 (Spotify), 12 (LinkedIn)
    Default: outline hijau lime cerah cyber (#00FF66), bayangan kuning cerah terang (#FFE600), inner-fill hitam (#000000)
    Hover/Click: outline kuning cerah terang (#FFE600), bayangan hijau lime cerah (#00FF66), inner-fill hitam (#000000)
 */
 .social-slot-link.social-variant-3,
 .socials-14-grid li:nth-child(3) .social-slot-link,
-.socials-14-grid li:nth-child(4) .social-slot-link,
-.socials-14-grid li:nth-child(8) .social-slot-link,
-.socials-14-grid li:nth-child(13) .social-slot-link,
-.socials-14-grid li:nth-child(14) .social-slot-link {
+.socials-14-grid li:nth-child(6) .social-slot-link,
+.socials-14-grid li:nth-child(9) .social-slot-link,
+.socials-14-grid li:nth-child(12) .social-slot-link {
   border: 2px solid #00FF66 !important;
   background-color: #000000 !important;
   box-shadow: 3px 3px 0px #FFE600 !important;
@@ -1973,22 +1978,18 @@ body::before {
 .socials-14-grid li:nth-child(3) .social-slot-link:active,
 .socials-14-grid li:nth-child(3) .social-slot-link:focus-visible,
 .socials-14-grid li:nth-child(3) .social-slot-link.is-clicked,
-.socials-14-grid li:nth-child(4) .social-slot-link:hover,
-.socials-14-grid li:nth-child(4) .social-slot-link:active,
-.socials-14-grid li:nth-child(4) .social-slot-link:focus-visible,
-.socials-14-grid li:nth-child(4) .social-slot-link.is-clicked,
-.socials-14-grid li:nth-child(8) .social-slot-link:hover,
-.socials-14-grid li:nth-child(8) .social-slot-link:active,
-.socials-14-grid li:nth-child(8) .social-slot-link:focus-visible,
-.socials-14-grid li:nth-child(8) .social-slot-link.is-clicked,
-.socials-14-grid li:nth-child(13) .social-slot-link:hover,
-.socials-14-grid li:nth-child(13) .social-slot-link:active,
-.socials-14-grid li:nth-child(13) .social-slot-link:focus-visible,
-.socials-14-grid li:nth-child(13) .social-slot-link.is-clicked,
-.socials-14-grid li:nth-child(14) .social-slot-link:hover,
-.socials-14-grid li:nth-child(14) .social-slot-link:active,
-.socials-14-grid li:nth-child(14) .social-slot-link:focus-visible,
-.socials-14-grid li:nth-child(14) .social-slot-link.is-clicked {
+.socials-14-grid li:nth-child(6) .social-slot-link:hover,
+.socials-14-grid li:nth-child(6) .social-slot-link:active,
+.socials-14-grid li:nth-child(6) .social-slot-link:focus-visible,
+.socials-14-grid li:nth-child(6) .social-slot-link.is-clicked,
+.socials-14-grid li:nth-child(9) .social-slot-link:hover,
+.socials-14-grid li:nth-child(9) .social-slot-link:active,
+.socials-14-grid li:nth-child(9) .social-slot-link:focus-visible,
+.socials-14-grid li:nth-child(9) .social-slot-link.is-clicked,
+.socials-14-grid li:nth-child(12) .social-slot-link:hover,
+.socials-14-grid li:nth-child(12) .social-slot-link:active,
+.socials-14-grid li:nth-child(12) .social-slot-link:focus-visible,
+.socials-14-grid li:nth-child(12) .social-slot-link.is-clicked {
   border-color: #FFE600 !important;
   background-color: #000000 !important;
   box-shadow: 4px 4px 0px #00FF66 !important;
@@ -1997,10 +1998,9 @@ body::before {
 
 .social-slot-link.social-variant-3:active,
 .socials-14-grid li:nth-child(3) .social-slot-link:active,
-.socials-14-grid li:nth-child(4) .social-slot-link:active,
-.socials-14-grid li:nth-child(8) .social-slot-link:active,
-.socials-14-grid li:nth-child(13) .social-slot-link:active,
-.socials-14-grid li:nth-child(14) .social-slot-link:active {
+.socials-14-grid li:nth-child(6) .social-slot-link:active,
+.socials-14-grid li:nth-child(9) .social-slot-link:active,
+.socials-14-grid li:nth-child(12) .social-slot-link:active {
   transform: translate(1px, 1px);
   box-shadow: 2px 2px 0px #00FF66 !important;
 }
