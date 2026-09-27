@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Allow: /mobile/
+Allow: /fadhil/
+Allow: /fadhil/mobile/
+
+Sitemap: https://cariearsa.com/fadhil/sitemap.xml

@@ -1,8 +1,3 @@
-/* ==========================================================================
-   CARIEARSA x FADHIL.DEV - CYBER JAPANESE MANGA PORTFOLIO DESIGN SYSTEM 2026
-   Ultra-dense, high-precision desktop/laptop bento manga architecture
-   ========================================================================== */
-
 :root, body[data-theme="dark"], body:not(.light-theme) {
   --ink-black: #A0AAB5;
   --ink-true-black: #000000;
@@ -25,11 +20,6 @@
   --font-jp: 'Noto Sans JP', sans-serif;
 }
 
-/* --------------------------------------------------------------------------
-   THEME: LUXURY DEEP MAROON WITH BRONZE GRADIENT (FORMERLY LIGHT/WHITE)
-   Background seluruh website yang tadinya putih diubah menjadi marun pekat
-   mewah dengan gradasi warna bronze (perunggu berkilau berkelas tinggi).
-   -------------------------------------------------------------------------- */
 body.light-theme, [data-theme="light"] {
   --ink-black: #FFFFFF;
   --ink-true-black: #000000;
@@ -47,30 +37,22 @@ body.light-theme, [data-theme="light"] {
   --card-outline: #5C2C13;
   --halftone-dot: rgba(199, 130, 72, 0.16);
 
-  /* Bronze & Maroon Lux Tokens */
   --bronze-accent: #C78248;
   --bronze-mid: #945327;
   --bronze-glow: rgba(199, 130, 72, 0.35);
 }
 
-/* Background seluruh website pada tema light (Marun Gelap Mewah + Gradasi Bronze) */
-html:has(body.light-theme),
-html[data-theme="light"] {
+html[data-theme="light"],
+body.light-theme {
   background-color: #240308;
 }
 
 body.light-theme,
 [data-theme="light"] {
   background-color: #240308 !important;
-  background-image:
-    radial-gradient(ellipse 90% 60% at 50% 0%, rgba(199, 130, 72, 0.25) 0%, transparent 70%),
-    radial-gradient(circle at 10% 25%, rgba(148, 83, 39, 0.22) 0%, transparent 45%),
-    radial-gradient(circle at 90% 75%, rgba(199, 130, 72, 0.2) 0%, transparent 50%),
-    linear-gradient(145deg, #1C0206 0%, #30060E 25%, #4A0C18 50%, #350E16 75%, #180205 100%),
-    radial-gradient(rgba(214, 151, 94, 0.15) 1.5px, transparent 0) !important;
-  background-size: 100% 100%, auto, auto, auto, 20px 20px !important;
-  background-position: top center, 0 0, 0 0, 0 0, -10px -10px !important;
-  background-attachment: fixed !important;
+  background-image: radial-gradient(var(--halftone-dot) 1.5px, transparent 0) !important;
+  background-size: 20px 20px !important;
+  background-position: -10px -10px !important;
   color: #FFFFFF !important;
 }
 
@@ -80,17 +62,46 @@ body.light-theme::before,
   background-image: repeating-linear-gradient(45deg, #C78248 0, #C78248 1px, transparent 0, transparent 50%);
 }
 
-/* Penyesuaian Panel Bento dan Kontainer agar harmonis dengan Marun Mewah Bronze */
 body.light-theme .cyber-card-content,
 [data-theme="light"] .cyber-card-content {
   background: linear-gradient(160deg, #380812 0%, #2A050E 100%) !important;
-  border: 1.5px solid rgba(199, 130, 72, 0.5) !important;
-  box-shadow: inset 0 0 15px rgba(199, 130, 72, 0.08);
+  border: none !important;
+  box-shadow: inset 0 0 10px rgba(199, 130, 72, 0.15) !important;
 }
 
 body.light-theme .cyber-frame::before,
 [data-theme="light"] .cyber-frame::before {
-  background: #180205 !important;
+  background: linear-gradient(135deg, #FFB074 0%, #C78248 50%, #E29B63 100%) !important;
+}
+
+body.light-theme .cyber-frame,
+[data-theme="light"] .cyber-frame,
+body.light-theme .portfolio-card-item,
+[data-theme="light"] .portfolio-card-item,
+body.light-theme .hero-banner-frame,
+[data-theme="light"] .hero-banner-frame {
+  filter: drop-shadow(4px 4px 0px #000000) !important;
+}
+
+body.light-theme .cyber-frame:hover,
+body.light-theme .cyber-frame:focus-within,
+body.light-theme .cyber-frame:active,
+[data-theme="light"] .cyber-frame:hover,
+[data-theme="light"] .cyber-frame:focus-within,
+[data-theme="light"] .cyber-frame:active,
+body.light-theme .portfolio-card-item:hover,
+body.light-theme .portfolio-card-item:focus-within,
+body.light-theme .portfolio-card-item:active,
+[data-theme="light"] .portfolio-card-item:hover,
+[data-theme="light"] .portfolio-card-item:focus-within,
+[data-theme="light"] .portfolio-card-item:active,
+body.light-theme .hero-banner-frame:hover,
+body.light-theme .hero-banner-frame:focus-within,
+body.light-theme .hero-banner-frame:active,
+[data-theme="light"] .hero-banner-frame:hover,
+[data-theme="light"] .hero-banner-frame:focus-within,
+[data-theme="light"] .hero-banner-frame:active {
+  filter: drop-shadow(0 0 6px rgba(199, 130, 72, 0.75)) drop-shadow(0 0 2px #E29B63) drop-shadow(4px 4px 0px #000000) !important;
 }
 
 body.light-theme .card-header-bar,
@@ -115,45 +126,49 @@ body.light-theme .skill-subcard,
   border: 1.5px solid rgba(199, 130, 72, 0.45) !important;
 }
 
-body.light-theme .skill-pill-item,
-[data-theme="light"] .skill-pill-item {
-  background: #1C0206 !important;
-  border: 1px solid rgba(199, 130, 72, 0.4) !important;
-  color: #FFFFFF !important;
-}
-
 body.light-theme .portfolio-meta-body,
 [data-theme="light"] .portfolio-meta-body {
   background: #28040C !important;
 }
 
+body.light-theme .portfolio-card-item::before,
+[data-theme="light"] .portfolio-card-item::before {
+  background: linear-gradient(135deg, #FFB074 0%, #C78248 50%, #E29B63 100%) !important;
+}
+
 body.light-theme .portfolio-inner-plate,
 [data-theme="light"] .portfolio-inner-plate {
   background: #360711 !important;
+  border: none !important;
+  box-shadow: inset 0 0 10px rgba(199, 130, 72, 0.15) !important;
 }
 
-body.light-theme .lang-flag-btn,
-[data-theme="light"] .lang-flag-btn {
-  background: #360711 !important;
-  color: #FFFFFF !important;
-  border-color: #C78248 !important;
+body.light-theme .hero-banner-frame::before,
+[data-theme="light"] .hero-banner-frame::before {
+  background: linear-gradient(135deg, #FFB074 0%, #C78248 50%, #E29B63 100%) !important;
 }
 
-body.light-theme .lang-flag-btn.active,
-[data-theme="light"] .lang-flag-btn.active {
-  background: #000000 !important;
+body.light-theme .tools-bottom-plate,
+[data-theme="light"] .tools-bottom-plate {
+  background: #1B0207 !important;
+  border-top: 2px solid #C78248 !important;
+}
+
+body.light-theme .tools-bottom-plate-text .plate-cross,
+[data-theme="light"] .tools-bottom-plate-text .plate-cross {
+  color: #C78248 !important;
+}
+
+body.light-theme .tools-bottom-plate-text .plate-part-develop,
+[data-theme="light"] .tools-bottom-plate-text .plate-part-develop {
   color: #FFE600 !important;
-  border-color: #FFE600 !important;
-  box-shadow: 2px 2px 0px #FF003C !important;
 }
 
-body.light-theme .tool-slot-item,
-[data-theme="light"] .tool-slot-item {
-  background: #1C0206 !important;
-  border-color: rgba(199, 130, 72, 0.45) !important;
+body.light-theme .tools-bottom-plate-text .plate-part-deploy,
+[data-theme="light"] .tools-bottom-plate-text .plate-part-deploy {
+  color: #E29B63 !important;
 }
 
-/* Base resets & hardware-accelerated viewport sizing */
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
@@ -184,7 +199,6 @@ body {
   color: var(--text-main);
 }
 
-/* Subtle Comic Screentone Texture Overlay */
 body::before {
   content: '';
   position: fixed;
@@ -196,9 +210,6 @@ body::before {
   z-index: 9999;
 }
 
-/* --------------------------------------------------------------------------
-   DYNAMIC BILLBOARD MARQUEE (TOP RUNNER)
-   -------------------------------------------------------------------------- */
 .cyber-marquee {
   position: sticky;
   top: 0;
@@ -275,9 +286,6 @@ body::before {
   font-size: 0.82rem;
 }
 
-/* --------------------------------------------------------------------------
-   LAYOUT CONTAINER (DESKTOP/LAPTOP HIGH DENSITY)
-   -------------------------------------------------------------------------- */
 .fadhil-shell {
   width: 100%;
   max-width: 1480px;
@@ -290,9 +298,6 @@ body::before {
   z-index: 10;
 }
 
-/* --------------------------------------------------------------------------
-   TOP HEADER & NAVIGATION BAR
-   -------------------------------------------------------------------------- */
 .fadhil-header {
   display: flex;
   justify-content: space-between;
@@ -334,7 +339,6 @@ body::before {
   filter: drop-shadow(2px 2px 0px #FF003C);
 }
 
-/* 1. Outline Kuning Cerah Terang: membentuk kontur polygon cut-corner */
 .logo-outline-layer {
   position: absolute;
   inset: 0;
@@ -357,7 +361,6 @@ body::before {
   pointer-events: none;
 }
 
-/* Inner Plate Hitam Inti: urutan index 2, margin 2.5px di dalam outline kuning */
 .logo-inner-plate {
   position: relative;
   z-index: 2;
@@ -384,8 +387,6 @@ body::before {
   box-shadow: 0 0 0 1.5px rgba(255, 230, 0, 0.95);
 }
 
-/* 3. Garis Tegak Biru Langit Cerah: diawal textbox judul, urutan index 10 (diatas outline kuning & bayangan hijau)
-   Warna biru langit terang cerah (#00E5FF) */
 .logo-vertical-blue-bar {
   position: absolute;
   left: 0;
@@ -412,13 +413,6 @@ body::before {
   white-space: nowrap;
 }
 
-/* Character Color Specifications for <FADHIL.DEV>:
-   < and > : Hijau terang cerah (#00FF66)
-   FA : Putih bersih terang cerah (#FFFFFF)
-   DH : Pink jepang terang cerah (#FF007F)
-   IL : Biru langit terang cerah (#00E5FF)
-   .DEV : Kuning terang cerah (#FFE600)
-*/
 .logo-bracket {
   color: #00FF66;
   text-shadow: 0 0 6px rgba(0, 255, 102, 0.75);
@@ -462,13 +456,6 @@ body::before {
   display: inline-block;
 }
 
-/* Direct Button CARIEARSA.COM
-   - Bentuk: Parallelogram (Jajar Genjang) dengan corner kanan bawah dipotong (Style Cyber)
-   - Outline Textbox: Solid White (#FFFFFF) 2.5px mengelilingi seluruh kontur bentuk tanpa terpotong
-   - Bayangan: Hijau Terang Cerah (#00FF66) 3.5px 3.5px tajam, presisi & sepenuhnya terlihat (unclipped)
-   - Inner Plate: Kuning Cerah Terang (#FFE600)
-   - Teks: Hitam (#000000) Cyber Bold Italic dengan posisi simetris & aman dari corner yang dipotong
-*/
 .cyber-cariearsa-tag-btn {
   position: relative;
   display: inline-flex;
@@ -492,7 +479,6 @@ body::before {
   filter: drop-shadow(2px 2px 0px #00FF66);
 }
 
-/* 1. Outline Layer Putih Solid: membentuk kontur polygon luar dengan warna putih (#FFFFFF) */
 .cariearsa-outline-layer {
   position: absolute;
   inset: 0;
@@ -515,7 +501,6 @@ body::before {
   pointer-events: none;
 }
 
-/* 2. Inner Plate Kuning Cerah: bersarang dengan margin 2.5px di dalam outline putih */
 .cariearsa-btn-plate {
   position: relative;
   z-index: 2;
@@ -553,7 +538,6 @@ body::before {
   display: inline-block;
 }
 
-/* Header Action Controls */
 .header-actions {
   display: flex;
   align-items: center;
@@ -561,7 +545,6 @@ body::before {
   flex-wrap: wrap;
 }
 
-/* Reusable Cyber Button */
 .cyber-action-btn {
   position: relative;
   display: inline-flex;
@@ -610,10 +593,6 @@ body::before {
   background: #151824;
 }
 
-/* Cloud Database Button
-   Default: inner-fill bright sky blue (#00E5FF), outline bright yellow (#FFE600), shadow manga-red (#FF003C), text black (#000000)
-   Hover/Active: inner-fill manga-red (#FF003C), outline white (#FFFFFF), shadow bright sky blue (#00E5FF), text white (#FFFFFF)
-*/
 .cyber-action-btn.btn-cloud-db {
   filter: drop-shadow(3px 3px 0px var(--manga-red));
   transition: transform 0.16s ease, filter 0.16s ease;
@@ -705,11 +684,6 @@ body::before {
   filter: drop-shadow(1px 1px 0px var(--manga-red));
 }
 
-/* Email Pill button (fadhil@fadhil.dev)
-   Default: inner-fill black (#000000), outline bright yellow (#FFE600), shadow manga-red (#FF003C)
-   Hover/Active: inner-fill bright yellow (#FFE600), outline black (#000000), shadow bright sky blue (#00E5FF),
-                 text "fadhil" black (#000000), "@fadhil.dev" bright red (#FF003C)
-*/
 .email-cyber-btn {
   display: inline-flex;
   align-items: center;
@@ -772,7 +746,6 @@ body::before {
   color: var(--manga-red);
 }
 
-/* Theme toggle button */
 .cyber-theme-btn {
   background: #000000;
   border: 2px solid var(--manga-accent);
@@ -806,9 +779,6 @@ body::before {
   transform: skew(6deg) rotate(360deg);
 }
 
-/* --------------------------------------------------------------------------
-   BENTO MANGA GRID (12 COLUMNS - DESKTOP FIRST)
-   -------------------------------------------------------------------------- */
 .bento-grid {
   display: grid;
   grid-template-columns: repeat(12, 1fr);
@@ -816,19 +786,26 @@ body::before {
   align-items: stretch;
 }
 
-/* Card Chamfered Frame */
 .cyber-frame {
   position: relative;
   background: transparent;
   filter: drop-shadow(4px 4px 0px var(--ink-true-black));
-  transition: filter 0.2s ease, transform 0.2s ease;
+  transition: filter 0.22s cubic-bezier(0.16, 1, 0.3, 1), transform 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: filter, transform;
+}
+
+.cyber-frame:hover,
+.cyber-frame:focus-within,
+.cyber-frame:active {
+  filter: drop-shadow(0 0 6px rgba(0, 229, 255, 0.75)) drop-shadow(0 0 2px #00E5FF) drop-shadow(4px 4px 0px var(--ink-true-black));
 }
 
 .cyber-frame::before {
   content: '';
   position: absolute;
   inset: 0;
-  background: #000000;
+  background: #00E5FF;
+  background: linear-gradient(135deg, #00F0FF 0%, #00E5FF 50%, #38BDF8 100%);
   clip-path: polygon(
     0% 0%,
     100% 0%,
@@ -850,12 +827,28 @@ body::before {
   );
 }
 
+.cyber-frame-cut-all::before {
+  clip-path: polygon(
+    18px 0%,
+    calc(100% - 18px) 0%,
+    100% 18px,
+    100% calc(100% - 18px),
+    calc(100% - 18px) 100%,
+    18px 100%,
+    0% calc(100% - 18px),
+    0% 18px
+  );
+}
+
 .cyber-card-content {
   position: relative;
   z-index: 2;
-  margin: 3px;
+  margin: 2px;
+  width: calc(100% - 4px);
+  height: calc(100% - 4px);
   background: var(--panel-bg);
-  border: 1px solid rgba(0, 229, 255, 0.35);
+  border: none !important;
+  box-shadow: inset 0 0 10px rgba(0, 229, 255, 0.08);
   clip-path: polygon(
     0% 0%,
     100% 0%,
@@ -863,7 +856,6 @@ body::before {
     calc(100% - 12px) 100%,
     0% 100%
   );
-  height: calc(100% - 6px);
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -880,7 +872,26 @@ body::before {
   );
 }
 
-/* Card Header Strip */
+.cyber-frame-cut-all .cyber-card-content {
+  clip-path: polygon(
+    16px 0%,
+    calc(100% - 16px) 0%,
+    100% 16px,
+    100% calc(100% - 16px),
+    calc(100% - 16px) 100%,
+    16px 100%,
+    0% calc(100% - 16px),
+    0% 16px
+  );
+}
+
+.about-cyber-frame .cyber-card-content,
+.socials-cyber-frame .cyber-card-content,
+.skills-cyber-frame .cyber-card-content,
+.tools-cyber-frame .cyber-card-content {
+  border: none !important;
+}
+
 .card-header-bar {
   display: flex;
   align-items: center;
@@ -916,7 +927,6 @@ body::before {
   font-weight: 700;
 }
 
-/* Cyber Title Box: Bright Yellow with Cyber Chamfered Top-Left & Bottom-Right Corners */
 .cyber-title-box {
   display: inline-flex;
   align-items: center;
@@ -933,7 +943,7 @@ body::before {
   line-height: 1.15;
   white-space: nowrap;
   user-select: none;
-  /* Precision Cyber Chamfer: Cut Top-Left (7px) and Bottom-Right (7px) */
+  
   clip-path: polygon(
     7px 0%,
     100% 0%,
@@ -954,7 +964,6 @@ body::before {
   margin-right: 1px;
 }
 
-/* Cyber Japanese Sub-Tag Box: Bright Pure Red with Symmetrical Rounded Corners */
 .cyber-jp-box {
   display: inline-flex;
   align-items: center;
@@ -990,9 +999,6 @@ body::before {
   color: #000000;
 }
 
-/* --------------------------------------------------------------------------
-   HERO PANEL (LEFT SIDE - 7 COLS)
-   -------------------------------------------------------------------------- */
 .hero-column {
   grid-column: span 7;
   display: flex;
@@ -1010,7 +1016,6 @@ body::before {
   cursor: pointer;
 }
 
-/* Picture Layer (Layer 2: Di atas video, selang-seling tampil 2s dan sembunyi 3s ketika video main) */
 .hero-picture-layer {
   position: absolute;
   inset: 0;
@@ -1035,7 +1040,6 @@ body::before {
   transform: scale(1.03);
 }
 
-/* Status Image Banner Utama: Tampil (2s) / Hide (3s) */
 .hero-picture-layer.is-hidden {
   opacity: 0 !important;
   pointer-events: none;
@@ -1045,13 +1049,6 @@ body::before {
   opacity: 1 !important;
 }
 
-/* YouTube Video Layer (Layer 1: Di bawah picture layer)
-   High-Precision 110% Zoom & Zero-Bezel Letterbox/Pillarbox Crop Fill:
-   - Wadah card (.hero-media-wrap) tetap terisolasi dan terkunci dengan overflow: hidden !important (zero expansion pada container card).
-   - Iframe video diperbesar menjadi 110% (min-width: 110%, min-height: 110%) terpusat (top: 50%, left: 50%, translate(-50%, -50%)).
-   - Kelebihan dimensi 5% di sisi atas, bawah, kiri, dan kanan otomatis ter-crop sempurna oleh boundary wadah card.
-   - Hasil visual: 100% bebas garis hitam kanan-kiri (pillarbox) maupun atas-bawah (letterbox), super tajam, dan responsive di segala ukuran layar.
-*/
 .hero-video-frame-layer {
   position: absolute;
   inset: 0;
@@ -1085,7 +1082,6 @@ body::before {
   will-change: transform;
 }
 
-/* HAPUS SEMUA EFEK MENGGELAP DI BANNER UTAMA (100% Bersih & Terang) */
 .hero-speed-lines {
   display: none !important;
 }
@@ -1094,7 +1090,6 @@ body::before {
   display: none !important;
 }
 
-/* Hero Content Badges */
 .hero-overlay-content {
   position: absolute;
   bottom: 0;
@@ -1133,18 +1128,60 @@ body::before {
   line-height: 1.3;
 }
 
-/* Zero-Bezel 100% Full-Bleed Banner Frame */
 .hero-banner-frame {
   margin-bottom: 0;
   flex-shrink: 0;
+  position: relative;
+  filter: drop-shadow(4px 4px 0px var(--ink-true-black));
+  transition: filter 0.25s cubic-bezier(0.16, 1, 0.3, 1), transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: filter, transform;
+}
+
+.hero-banner-frame:hover,
+.hero-banner-frame:focus-within,
+.hero-banner-frame:active {
+  filter: drop-shadow(0 0 8px rgba(0, 229, 255, 0.8)) drop-shadow(0 0 2px #00E5FF) drop-shadow(4px 4px 0px var(--ink-true-black));
+}
+
+.hero-banner-frame::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: #00E5FF;
+  background: linear-gradient(135deg, #00F0FF 0%, #00E5FF 50%, #38BDF8 100%);
+  clip-path: polygon(
+    18px 0%,
+    calc(100% - 18px) 0%,
+    100% 18px,
+    100% calc(100% - 18px),
+    calc(100% - 18px) 100%,
+    18px 100%,
+    0% calc(100% - 18px),
+    0% 18px
+  ) !important;
+  z-index: 1;
 }
 
 .hero-banner-frame .hero-card-bleed {
-  margin: 0 !important;
-  height: 100% !important;
+  position: relative;
+  z-index: 2;
+  margin: 2.5px !important;
+  height: calc(100% - 5px) !important;
+  width: calc(100% - 5px) !important;
   padding: 0 !important;
   border: none !important;
   background: #000000 !important;
+  clip-path: polygon(
+    16px 0%,
+    calc(100% - 16px) 0%,
+    100% 16px,
+    100% calc(100% - 16px),
+    calc(100% - 16px) 100%,
+    16px 100%,
+    0% calc(100% - 16px),
+    0% 16px
+  ) !important;
+  overflow: hidden;
 }
 
 .hero-banner-frame .hero-media-wrap {
@@ -1153,6 +1190,17 @@ body::before {
   aspect-ratio: 16 / 9;
   max-height: clamp(330px, 28vw, 385px);
   display: block;
+  clip-path: polygon(
+    16px 0%,
+    calc(100% - 16px) 0%,
+    100% 16px,
+    100% calc(100% - 16px),
+    calc(100% - 16px) 100%,
+    16px 100%,
+    0% calc(100% - 16px),
+    0% 16px
+  );
+  overflow: hidden;
 }
 
 .hero-tech-strip {
@@ -1178,7 +1226,6 @@ body::before {
   align-items: center;
 }
 
-/* Sound 100% Pill Overlay (Placed symmetrical next to System Security) */
 .hero-sound-pill {
   font-family: var(--font-display);
   font-size: 0.75rem;
@@ -1236,10 +1283,6 @@ body::before {
   font-weight: bold;
 }
 
-/* --------------------------------------------------------------------------
-   LOWER HERO AREA: TRANSFERABLE SKILLS (3 SUB-CARDS WITH 2 TEXTBOXES EACH)
-   Symmetrically aligned with Tools and Platforms bottom edge & drop shadow
-   -------------------------------------------------------------------------- */
 .skills-cyber-frame {
   flex: 1;
   display: flex;
@@ -1252,7 +1295,8 @@ body::before {
   flex: 1;
   display: flex;
   flex-direction: column;
-  height: calc(100% - 6px);
+  height: calc(100% - 4px);
+  width: calc(100% - 4px);
   min-height: 0;
 }
 
@@ -1266,7 +1310,6 @@ body::before {
   gap: 7px;
 }
 
-/* Sub-card: Elongated container with centered label at top */
 .skill-subcard {
   display: flex;
   flex-direction: column;
@@ -1311,52 +1354,144 @@ body::before {
   align-items: stretch;
 }
 
-/* Textboxes (Pills): Same authentic design & styling with adjusted sizing */
 .skill-pill-item {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 5px 10px;
-  background: var(--panel-surface);
-  border: 1.5px solid #000000;
-  border-left: 4px solid var(--manga-accent);
-  box-shadow: 2px 2px 0px rgba(0, 0, 0, 0.7);
+  padding: 5px 10px 5px 14px;
   font-family: var(--font-display);
   font-weight: 800;
   font-size: 0.86rem;
   letter-spacing: 0.5px;
-  color: var(--text-main);
-  transition: all 0.16s ease;
-  user-select: none;
   min-height: 34px;
   box-sizing: border-box;
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  outline: none;
+  transition: transform 0.16s cubic-bezier(0.2, 0.8, 0.2, 1),
+              background-color 0.16s ease,
+              border-color 0.16s ease,
+              box-shadow 0.16s ease,
+              color 0.16s ease;
 }
 
-.skill-pill-item:hover {
-  background: var(--manga-red);
-  color: #FFFFFF;
-  border-color: #000000;
-  border-left-color: var(--manga-yellow);
-  transform: translate(-1.5px, -1.5px);
-  box-shadow: 3px 3px 0px var(--ink-true-black);
+.skill-pill-item > span {
+  position: relative;
+  z-index: 6;
+  pointer-events: none;
 }
 
 .skill-pill-item .skill-jp {
   font-family: var(--font-jp);
   font-size: 0.68rem;
-  color: var(--manga-yellow);
   font-weight: 700;
   margin-left: 6px;
   white-space: nowrap;
+  transition: color 0.16s ease;
 }
 
-.skill-pill-item:hover .skill-jp {
-  color: #FFFFFF;
+.skill-pill-item::before {
+  content: "";
+  position: absolute;
+  top: -2px;
+  bottom: -2px;
+  left: -2px;
+  width: 5px;
+  z-index: 5;
+  pointer-events: none;
+  transition: background-color 0.16s ease;
 }
 
-/* --------------------------------------------------------------------------
-   RIGHT COLUMN (ABOUT, SOCIALS, TOOLS - 5 COLS)
-   -------------------------------------------------------------------------- */
+.skill-pill-item.skill-variant-1 {
+  background-color: #FFE600 !important;
+  border: 2px solid #FFFFFF !important;
+  color: #000000 !important;
+  box-shadow: none !important;
+}
+
+.skill-pill-item.skill-variant-1::before {
+  background-color: #00E5FF !important;
+}
+
+.skill-pill-item.skill-variant-1 .skill-jp {
+  color: #000000 !important;
+}
+
+.skill-pill-item.skill-variant-1:hover,
+.skill-pill-item.skill-variant-1:active,
+.skill-pill-item.skill-variant-1:focus-visible,
+.skill-pill-item.skill-variant-1.is-clicked {
+  background-color: #00E5FF !important;
+  border-color: #000000 !important;
+  box-shadow: 2px 2px 0px #FFE600 !important;
+  color: #000000 !important;
+  transform: translate(-1.5px, -1.5px);
+}
+
+.skill-pill-item.skill-variant-1:hover::before,
+.skill-pill-item.skill-variant-1:active::before,
+.skill-pill-item.skill-variant-1:focus-visible::before,
+.skill-pill-item.skill-variant-1.is-clicked::before {
+  background-color: #FF003C !important;
+}
+
+.skill-pill-item.skill-variant-1:hover .skill-jp,
+.skill-pill-item.skill-variant-1:active .skill-jp,
+.skill-pill-item.skill-variant-1.is-clicked .skill-jp {
+  color: #000000 !important;
+}
+
+.skill-pill-item.skill-variant-1:active {
+  transform: translate(1px, 1px);
+  box-shadow: 1px 1px 0px #FFE600 !important;
+}
+
+.skill-pill-item.skill-variant-2 {
+  background-color: #FF003C !important;
+  border: 2px solid #FFFFFF !important;
+  color: #FFFFFF !important;
+  box-shadow: 2px 2px 0px #000000 !important;
+}
+
+.skill-pill-item.skill-variant-2::before {
+  background-color: #FFE600 !important;
+}
+
+.skill-pill-item.skill-variant-2 .skill-jp {
+  color: #FFFFFF !important;
+}
+
+.skill-pill-item.skill-variant-2:hover,
+.skill-pill-item.skill-variant-2:active,
+.skill-pill-item.skill-variant-2:focus-visible,
+.skill-pill-item.skill-variant-2.is-clicked {
+  background-color: #FFE600 !important;
+  border-color: #000000 !important;
+  box-shadow: 2px 2px 0px #FF003C !important;
+  color: #000000 !important;
+  transform: translate(-1.5px, -1.5px);
+}
+
+.skill-pill-item.skill-variant-2:hover::before,
+.skill-pill-item.skill-variant-2:active::before,
+.skill-pill-item.skill-variant-2:focus-visible::before,
+.skill-pill-item.skill-variant-2.is-clicked::before {
+  background-color: #00E5FF !important;
+}
+
+.skill-pill-item.skill-variant-2:hover .skill-jp,
+.skill-pill-item.skill-variant-2:active .skill-jp,
+.skill-pill-item.skill-variant-2.is-clicked .skill-jp {
+  color: #000000 !important;
+}
+
+.skill-pill-item.skill-variant-2:active {
+  transform: translate(1px, 1px);
+  box-shadow: 1px 1px 0px #FF003C !important;
+}
+
 .profile-column {
   grid-column: span 5;
   display: flex;
@@ -1364,7 +1499,6 @@ body::before {
   gap: 12px;
 }
 
-/* About & Core Stack Card */
 .about-card-body {
   padding: 10px 14px 12px;
   display: flex;
@@ -1382,36 +1516,101 @@ body::before {
 .lang-flags-group {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
+  gap: 5px;
 }
 
 .lang-flag-btn {
-  background: var(--paper-white, #FFFFFF);
-  border: 2px solid var(--ink-true-black, #000000);
-  box-shadow: 2px 2px 0px var(--ink-true-black, #000000);
-  padding: 2px 6px;
+  padding: 3px 6px;
   display: inline-flex;
   align-items: center;
   gap: 4px;
   cursor: pointer;
   border-radius: 0;
-  transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease, color 0.15s ease;
+  outline: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform 0.15s cubic-bezier(0.2, 0.8, 0.2, 1),
+              box-shadow 0.15s ease,
+              background-color 0.15s ease,
+              border-color 0.15s ease,
+              color 0.15s ease;
   font-family: var(--font-display, 'Oswald', sans-serif);
   font-size: 0.72rem;
   font-weight: 800;
-  color: var(--ink-true-black, #000000);
   line-height: 1;
 }
 
-.lang-flag-btn:hover {
-  transform: translate(-1px, -1px);
-  box-shadow: 3px 3px 0px var(--manga-pink, #FF0055);
+.lang-flag-btn[data-lang="id"] {
+  background-color: #00E5FF !important;
+  border: 2px solid #000000 !important;
+  box-shadow: 2px 2px 0px #FF003C !important;
+  color: #000000 !important;
+}
+
+.lang-flag-btn[data-lang="id"]:hover,
+.lang-flag-btn[data-lang="id"]:focus-visible,
+.lang-flag-btn[data-lang="id"]:active,
+.lang-flag-btn[data-lang="id"].is-clicked {
+  background-color: #FFE600 !important;
+  border-color: #FF007F !important;
+  box-shadow: 3px 3px 0px #00E5FF !important;
+  color: #000000 !important;
+  transform: translate(-1.5px, -1.5px);
+}
+
+.lang-flag-btn[data-lang="id"]:active {
+  transform: translate(1px, 1px);
+  box-shadow: 1px 1px 0px #00E5FF !important;
+}
+
+.lang-flag-btn[data-lang="en"] {
+  background-color: #FFE600 !important;
+  border: 2px solid #000000 !important;
+  box-shadow: 2px 2px 0px #00E5FF !important;
+  color: #000000 !important;
+}
+
+.lang-flag-btn[data-lang="en"]:hover,
+.lang-flag-btn[data-lang="en"]:focus-visible,
+.lang-flag-btn[data-lang="en"]:active,
+.lang-flag-btn[data-lang="en"].is-clicked {
+  background-color: #00E5FF !important;
+  border-color: #FF007F !important;
+  box-shadow: 3px 3px 0px #FFE600 !important;
+  color: #000000 !important;
+  transform: translate(-1.5px, -1.5px);
+}
+
+.lang-flag-btn[data-lang="en"]:active {
+  transform: translate(1px, 1px);
+  box-shadow: 1px 1px 0px #FFE600 !important;
+}
+
+.lang-flag-btn[data-lang="jp"] {
+  background-color: #FF003C !important;
+  border: 2px solid #000000 !important;
+  box-shadow: 2px 2px 0px #FFE600 !important;
+  color: #FFFFFF !important;
+}
+
+.lang-flag-btn[data-lang="jp"]:hover,
+.lang-flag-btn[data-lang="jp"]:focus-visible,
+.lang-flag-btn[data-lang="jp"]:active,
+.lang-flag-btn[data-lang="jp"].is-clicked {
+  background-color: #00E5FF !important;
+  border-color: #FFE600 !important;
+  box-shadow: 3px 3px 0px #FF007F !important;
+  color: #000000 !important;
+  transform: translate(-1.5px, -1.5px);
+}
+
+.lang-flag-btn[data-lang="jp"]:active {
+  transform: translate(1px, 1px);
+  box-shadow: 1px 1px 0px #FF007F !important;
 }
 
 .lang-flag-btn.active {
-  background: var(--ink-true-black, #000000);
-  color: #FFFFFF;
-  box-shadow: 2px 2px 0px var(--manga-accent, #00E5FF);
+  outline: none;
 }
 
 .flag-icon {
@@ -1478,14 +1677,6 @@ body::before {
   white-space: nowrap;
 }
 
-/* Cyber Badge: STUDENT
-   - Outline: Bright Yellow (#FFE600)
-   - Inner Fill: Bright Clean White (#FFFFFF)
-   - Text: Japanese Hinomaru Red (#BC002D)
-   - Shadow: Bright Sky Blue (#00E5FF)
-   - Cyber Chamfer: Bottom-Left Corner Cut (1 corner kiri bawah dipotong)
-   - Continuous vector-quality outline without cut-off borders
-*/
 .cyber-badge-student {
   position: relative;
   display: inline-flex;
@@ -1527,13 +1718,6 @@ body::before {
   );
 }
 
-/* Cyber Badge: HOBBYIST
-   - Outline: Bright Sky Blue (#00E5FF)
-   - Inner Fill: True Black (#000000)
-   - Text: Manga Yellow (#FFE600)
-   - Shadow: Japanese Red (#FF0055)
-   - Cyber Chamfer: Bottom-Left Corner Cut (Matching Student)
-*/
 .cyber-badge-hobbyist {
   position: relative;
   display: inline-flex;
@@ -1624,20 +1808,6 @@ body::before {
   text-decoration: none;
 }
 
-/* --------------------------------------------------------------------------
-   CORE PROGRAMMING LANGUAGES (6 ICONS) - POLA SELANG-SELING 3 VARIAN
-   Kompatibel tajam semua browser, ringan dan modern.
-   Pola 3 warna beda tiap iconbox (dari kiri):
-   - Varian 1 (Icon 1 & 4):
-       Default: outline kuning cerah, inner-fill marun gelap, bayangan manga-red
-       Hover/Click: outline merah biasa terang, inner-fill hitam, bayangan kuning cerah
-   - Varian 2 (Icon 2 & 5):
-       Default: outline biru langit cerah, inner-fill hitam, bayangan manga-red
-       Hover/Click: outline ungu cerah terang, inner-fill hitam, bayangan biru langit cerah
-   - Varian 3 (Icon 3 & 6):
-       Default: outline pink cerah terang, inner-fill marun gelap, bayangan biru langit cerah terang
-       Hover/Click: outline kuning cerah, inner-fill hitam, bayangan kuning cerah
-   -------------------------------------------------------------------------- */
 .core-lang-grid {
   display: flex;
   align-items: center;
@@ -1678,10 +1848,6 @@ body::before {
   transition: transform 0.16s ease;
 }
 
-/* VARIAN 1: Icon 1 (HTML5) & Icon 4 (TypeScript)
-   Default: outline kuning cerah (#FFE600), inner-fill marun sangat gelap (#1E0207), bayangan manga-red (#FF003C)
-   Hover/Click: outline pink terang cerah (#FF007F), inner-fill biru navy sangat gelap (#060D20), bayangan kuning cerah (#FFE600)
-*/
 .core-lang-item.core-lang-variant-1,
 .core-lang-item:nth-child(3n + 1) {
   border: 2px solid #FFE600 !important;
@@ -1709,10 +1875,6 @@ body::before {
   box-shadow: 2px 2px 0px #FFE600 !important;
 }
 
-/* VARIAN 2: Icon 2 (JavaScript) & Icon 5 (Luau)
-   Default: outline pink terang cerah (#FF007F), inner-fill hitam (#000000), bayangan kuning cerah terang (#FFE600)
-   Hover/Click: outline kuning cerah terang (#FFE600), inner-fill hitam (#000000), bayangan pink cerah terang (#FF007F)
-*/
 .core-lang-item.core-lang-variant-2,
 .core-lang-item:nth-child(3n + 2) {
   border: 2px solid #FF007F !important;
@@ -1740,10 +1902,6 @@ body::before {
   box-shadow: 2px 2px 0px #FF007F !important;
 }
 
-/* VARIAN 3: Icon 3 (CSS3) & Icon 6 (Python)
-   Default: outline biru langit cerah terang (#00E5FF), inner-fill biru navy sangat gelap (#060D20), bayangan manga-red (#FF003C)
-   Hover/Click: outline pink cerah terang (#FF007F), inner-fill marun sangat gelap (#1E0207), bayangan biru langit cerah terang (#00E5FF)
-*/
 .core-lang-item.core-lang-variant-3,
 .core-lang-item:nth-child(3n) {
   border: 2px solid #00E5FF !important;
@@ -1777,7 +1935,6 @@ body::before {
   transform: scale(1.08);
 }
 
-/* Active Social Profile Links (14 Clickable) */
 .socials-card-body {
   padding: 8px 12px 10px;
   display: flex;
@@ -1794,17 +1951,6 @@ body::before {
   margin: 0 auto;
   padding: 0;
 }
-
-/* --------------------------------------------------------------------------
-   SOCIAL PROFILES (14 Iconboxes) - Pola Horizontal Zig-Zag 3 Varian
-   Grid 7 kolom x 2 baris (Kiri ke Kanan):
-     Baris Atas:  MAL (1), Discord (2), Instagram (3), Duolingo (1), LeetCode (2), Monkeytype (3), GitHub (1)
-     Baris Bawah: TryHackMe (2), Spotify (3), IMDb (1), Wikipedia (2), LinkedIn (3), Roblox (1), daily.dev (2)
-   Peta Varian:
-     Varian 1: Items 1, 4, 7, 10, 13 (MAL, Duolingo, GitHub, IMDb, Roblox)
-     Varian 2: Items 2, 5, 8, 11, 14 (Discord, LeetCode, TryHackMe, Wikipedia, daily.dev)
-     Varian 3: Items 3, 6, 9, 12 (Instagram, Monkeytype, Spotify, LinkedIn)
-   -------------------------------------------------------------------------- */
 
 .social-slot-link {
   position: relative;
@@ -1843,11 +1989,6 @@ body::before {
   transform: scale(1.08);
 }
 
-/* VARIAN 1: Iconbox Varian 1
-   Items: 1 (MAL), 4 (Duolingo), 7 (GitHub), 10 (IMDb), 13 (Roblox)
-   Default: outline biru langit terang cerah (#00E5FF), bayangan pink cerah terang (#FF007F), inner-fill hitam (#000000)
-   Hover/Click: outline pink cerah terang (#FF007F), bayangan biru langit cerang terang (#00E5FF), inner-fill hitam (#000000)
-*/
 .social-slot-link.social-variant-1,
 .socials-14-grid li:nth-child(1) .social-slot-link,
 .socials-14-grid li:nth-child(4) .social-slot-link,
@@ -1899,11 +2040,6 @@ body::before {
   box-shadow: 2px 2px 0px #00E5FF !important;
 }
 
-/* VARIAN 2: Iconbox Varian 2
-   Items: 2 (Discord), 5 (LeetCode), 8 (TryHackMe), 11 (Wikipedia), 14 (daily.dev)
-   Default: outline kuning cerah terang (#FFE600), bayangan biru langit cerah (#00E5FF), inner-fill hitam (#000000)
-   Hover/Click: outline biru langit cerah (#00E5FF), bayangan kuning cerah (#FFE600), inner-fill hitam (#000000)
-*/
 .social-slot-link.social-variant-2,
 .socials-14-grid li:nth-child(2) .social-slot-link,
 .socials-14-grid li:nth-child(5) .social-slot-link,
@@ -1955,11 +2091,6 @@ body::before {
   box-shadow: 2px 2px 0px #FFE600 !important;
 }
 
-/* VARIAN 3: Iconbox Varian 3
-   Items: 3 (Instagram), 6 (Monkeytype), 9 (Spotify), 12 (LinkedIn)
-   Default: outline hijau lime cerah cyber (#00FF66), bayangan kuning cerah terang (#FFE600), inner-fill hitam (#000000)
-   Hover/Click: outline kuning cerah terang (#FFE600), bayangan hijau lime cerah (#00FF66), inner-fill hitam (#000000)
-*/
 .social-slot-link.social-variant-3,
 .socials-14-grid li:nth-child(3) .social-slot-link,
 .socials-14-grid li:nth-child(6) .social-slot-link,
@@ -2005,7 +2136,6 @@ body::before {
   box-shadow: 2px 2px 0px #00FF66 !important;
 }
 
-/* Development Tools & Platforms (10 Items) */
 .tools-cyber-frame {
   flex: 1;
   display: flex;
@@ -2018,25 +2148,84 @@ body::before {
   flex: 1;
   display: flex;
   flex-direction: column;
-  height: calc(100% - 6px);
+  height: calc(100% - 4px);
+  width: calc(100% - 4px);
   min-height: 0;
 }
 
 .tools-card-body {
-  padding: 8px 12px 10px;
+  padding: 8px 12px 6px;
   display: flex;
   flex-direction: column;
-  flex: 1;
-  min-height: 0;
-  justify-content: center;
+  flex-shrink: 0;
+  justify-content: flex-start;
   gap: 6px;
 }
 
+.tools-bottom-plate {
+  flex: 1;
+  min-height: 44px;
+  width: 100%;
+  margin-top: auto;
+  background: #000000;
+  border-top: 2px solid var(--manga-accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 2;
+  clip-path: polygon(
+    0% 0%,
+    100% 0%,
+    100% calc(100% - 12px),
+    calc(100% - 12px) 100%,
+    0% 100%
+  );
+  overflow: hidden;
+  box-sizing: border-box;
+  user-select: none;
+  padding: 6px 12px;
+}
+
+.tools-bottom-plate-text {
+  font-family: var(--font-display, 'Oswald', sans-serif);
+  font-size: 1.05rem;
+  font-weight: 900;
+  letter-spacing: 2.2px;
+  text-transform: uppercase;
+  color: #FFFFFF;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.tools-bottom-plate-text .plate-part-design {
+  color: #FFFFFF;
+}
+
+.tools-bottom-plate-text .plate-cross {
+  color: var(--manga-pink, #FF007F);
+  font-weight: 900;
+  font-size: 0.95rem;
+}
+
+.tools-bottom-plate-text .plate-part-develop {
+  color: var(--manga-yellow, #FFE600);
+}
+
+.tools-bottom-plate-text .plate-part-deploy {
+  color: var(--manga-accent, #00E5FF);
+}
+
+.tools-14-grid,
 .tools-10-grid {
   display: grid;
-  grid-template-columns: repeat(5, 50px);
+  grid-template-columns: repeat(7, 50px);
   justify-content: center;
-  gap: 7px 12px;
+  gap: 7px 8px;
   list-style: none;
   margin: 0 auto;
   padding: 0;
@@ -2049,31 +2238,134 @@ body::before {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #000000;
-  border: 2px solid #2a3045;
-  box-shadow: 2px 2px 0px #000000;
+  background-color: #000000 !important;
   padding: 5px;
-  transition: all 0.16s ease;
   cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  outline: none;
+  transition: transform 0.16s cubic-bezier(0.2, 0.8, 0.2, 1),
+              background-color 0.16s ease,
+              border-color 0.16s ease,
+              box-shadow 0.16s ease;
 }
 
-.tool-slot-item:hover {
-  border-color: var(--manga-yellow);
-  transform: translate(-1.5px, -1.5px);
-  box-shadow: 3px 3px 0px var(--manga-accent);
-  background: #141724;
-}
-
+.tool-slot-item picture,
 .tool-slot-item img {
   width: 100%;
   height: 100%;
   object-fit: contain;
   display: block;
+  pointer-events: none;
+  transition: transform 0.16s ease;
+  filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.2));
 }
 
-/* --------------------------------------------------------------------------
-   PORTFOLIOS SECTION (BOTTOM - FULL 12 COLS - 4 FEATURED APPS)
-   -------------------------------------------------------------------------- */
+.tool-slot-item:hover img,
+.tool-slot-item:active img,
+.tool-slot-item.is-clicked img {
+  transform: scale(1.08);
+}
+
+.tool-slot-item.tool-variant-1,
+.tools-14-grid li:nth-child(3n + 1),
+.tools-10-grid li:nth-child(3n + 1) {
+  border: 2px solid #FF007F !important;
+  background-color: #000000 !important;
+  box-shadow: 3px 3px 0px #00E5FF !important;
+}
+
+.tool-slot-item.tool-variant-1:hover,
+.tool-slot-item.tool-variant-1:active,
+.tool-slot-item.tool-variant-1:focus-visible,
+.tool-slot-item.tool-variant-1.is-clicked,
+.tools-14-grid li:nth-child(3n + 1):hover,
+.tools-14-grid li:nth-child(3n + 1):active,
+.tools-14-grid li:nth-child(3n + 1):focus-visible,
+.tools-14-grid li:nth-child(3n + 1).is-clicked,
+.tools-10-grid li:nth-child(3n + 1):hover,
+.tools-10-grid li:nth-child(3n + 1):active,
+.tools-10-grid li:nth-child(3n + 1):focus-visible,
+.tools-10-grid li:nth-child(3n + 1).is-clicked {
+  border-color: #00E5FF !important;
+  background-color: #000000 !important;
+  box-shadow: 4px 4px 0px #FF007F !important;
+  transform: translate(-1.5px, -1.5px);
+}
+
+.tool-slot-item.tool-variant-1:active,
+.tools-14-grid li:nth-child(3n + 1):active,
+.tools-10-grid li:nth-child(3n + 1):active {
+  transform: translate(1px, 1px);
+  box-shadow: 2px 2px 0px #FF007F !important;
+}
+
+.tool-slot-item.tool-variant-2,
+.tools-14-grid li:nth-child(3n + 2),
+.tools-10-grid li:nth-child(3n + 2) {
+  border: 2px solid #00E5FF !important;
+  background-color: #000000 !important;
+  box-shadow: 3px 3px 0px #FF007F !important;
+}
+
+.tool-slot-item.tool-variant-2:hover,
+.tool-slot-item.tool-variant-2:active,
+.tool-slot-item.tool-variant-2:focus-visible,
+.tool-slot-item.tool-variant-2.is-clicked,
+.tools-14-grid li:nth-child(3n + 2):hover,
+.tools-14-grid li:nth-child(3n + 2):active,
+.tools-14-grid li:nth-child(3n + 2):focus-visible,
+.tools-14-grid li:nth-child(3n + 2).is-clicked,
+.tools-10-grid li:nth-child(3n + 2):hover,
+.tools-10-grid li:nth-child(3n + 2):active,
+.tools-10-grid li:nth-child(3n + 2):focus-visible,
+.tools-10-grid li:nth-child(3n + 2).is-clicked {
+  border-color: #FF007F !important;
+  background-color: #000000 !important;
+  box-shadow: 4px 4px 0px #00E5FF !important;
+  transform: translate(-1.5px, -1.5px);
+}
+
+.tool-slot-item.tool-variant-2:active,
+.tools-14-grid li:nth-child(3n + 2):active,
+.tools-10-grid li:nth-child(3n + 2):active {
+  transform: translate(1px, 1px);
+  box-shadow: 2px 2px 0px #00E5FF !important;
+}
+
+.tool-slot-item.tool-variant-3,
+.tools-14-grid li:nth-child(3n),
+.tools-10-grid li:nth-child(3n) {
+  border: 2px solid #FF7A00 !important;
+  background-color: #000000 !important;
+  box-shadow: 3px 3px 0px #FFE600 !important;
+}
+
+.tool-slot-item.tool-variant-3:hover,
+.tool-slot-item.tool-variant-3:active,
+.tool-slot-item.tool-variant-3:focus-visible,
+.tool-slot-item.tool-variant-3.is-clicked,
+.tools-14-grid li:nth-child(3n):hover,
+.tools-14-grid li:nth-child(3n):active,
+.tools-14-grid li:nth-child(3n):focus-visible,
+.tools-14-grid li:nth-child(3n).is-clicked,
+.tools-10-grid li:nth-child(3n):hover,
+.tools-10-grid li:nth-child(3n):active,
+.tools-10-grid li:nth-child(3n):focus-visible,
+.tools-10-grid li:nth-child(3n).is-clicked {
+  border-color: #FFE600 !important;
+  background-color: #000000 !important;
+  box-shadow: 4px 4px 0px #FF7A00 !important;
+  transform: translate(-1.5px, -1.5px);
+}
+
+.tool-slot-item.tool-variant-3:active,
+.tools-14-grid li:nth-child(3n):active,
+.tools-10-grid li:nth-child(3n):active {
+  transform: translate(1px, 1px);
+  box-shadow: 2px 2px 0px #FF7A00 !important;
+}
+
 .portfolios-section {
   grid-column: span 12;
   display: flex;
@@ -2092,21 +2384,30 @@ body::before {
   position: relative;
   background: transparent;
   filter: drop-shadow(4px 4px 0px var(--ink-true-black));
-  transition: transform 0.2s ease, filter 0.2s ease;
+  transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), filter 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: filter, transform;
   display: flex;
   flex-direction: column;
+}
+
+.portfolio-card-item:hover,
+.portfolio-card-item:focus-within,
+.portfolio-card-item:active {
+  filter: drop-shadow(0 0 6px rgba(0, 229, 255, 0.75)) drop-shadow(0 0 2px #00E5FF) drop-shadow(5px 5px 0px var(--ink-true-black));
+  transform: translateY(-2px);
 }
 
 .portfolio-card-item::before {
   content: '';
   position: absolute;
   inset: 0;
-  background: #000000;
+  background: #00E5FF;
+  background: linear-gradient(135deg, #00F0FF 0%, #00E5FF 50%, #38BDF8 100%);
   clip-path: polygon(
     0% 0%,
     100% 0%,
-    100% calc(100% - 12px),
-    calc(100% - 12px) 100%,
+    100% calc(100% - 14px),
+    calc(100% - 14px) 100%,
     0% 100%
   );
   z-index: 1;
@@ -2115,19 +2416,21 @@ body::before {
 .portfolio-inner-plate {
   position: relative;
   z-index: 2;
-  margin: 3px;
+  margin: 2px;
+  width: calc(100% - 4px);
+  height: calc(100% - 4px);
   background: var(--panel-bg);
-  border: 1px solid rgba(0, 229, 255, 0.4);
+  border: none !important;
+  box-shadow: inset 0 0 10px rgba(0, 229, 255, 0.08);
   clip-path: polygon(
     0% 0%,
     100% 0%,
-    100% calc(100% - 10px),
-    calc(100% - 10px) 100%,
+    100% calc(100% - 12px),
+    calc(100% - 12px) 100%,
     0% 100%
   );
   display: flex;
   flex-direction: column;
-  height: calc(100% - 6px);
   overflow: hidden;
 }
 
@@ -2233,9 +2536,6 @@ body::before {
   box-shadow: 3px 3px 0px var(--manga-red);
 }
 
-/* --------------------------------------------------------------------------
-   FOOTER BAR (CYBER ANGLE FOOTER)
-   -------------------------------------------------------------------------- */
 .fadhil-footer {
   margin-top: 10px;
   padding: 10px 16px;
@@ -2271,9 +2571,6 @@ body::before {
   color: var(--manga-yellow);
 }
 
-/* --------------------------------------------------------------------------
-   EASTER EGG: TEXT RAINBOW DANCE
-   -------------------------------------------------------------------------- */
 .text-rainbow * {
   animation: textRainbowFlow 3s linear infinite !important;
 }
@@ -2283,18 +2580,17 @@ body::before {
   100% { filter: hue-rotate(360deg); }
 }
 
-/* --------------------------------------------------------------------------
-   RESPONSIVE QUERIES (DESKTOP PACKED -> LAPTOP -> TABLET)
-   -------------------------------------------------------------------------- */
 @media (max-width: 1200px) {
   .hero-column { grid-column: span 12; }
   .profile-column { grid-column: span 12; }
   .portfolios-grid-4 { grid-template-columns: repeat(2, 1fr); }
+  .tools-bottom-plate { display: none !important; }
 }
 
 @media (max-width: 768px) {
   .socials-14-grid { grid-template-columns: repeat(7, minmax(0, 50px)); justify-content: center; gap: 6px; }
-  .tools-10-grid { grid-template-columns: repeat(5, minmax(0, 50px)); justify-content: center; gap: 6px 10px; }
+  .tools-14-grid,
+  .tools-10-grid { grid-template-columns: repeat(7, minmax(0, 50px)); justify-content: center; gap: 6px; }
   .portfolios-grid-4 { grid-template-columns: 1fr; }
   .fadhil-header { flex-direction: column; align-items: flex-start; gap: 10px; }
   .header-left { gap: 10px; }
@@ -2330,6 +2626,35 @@ body::before {
   .social-slot-link { width: 100%; height: auto; aspect-ratio: 1; max-width: 50px; padding: 3px; }
   .core-lang-grid { gap: 5px; }
   .core-lang-item { width: 100%; height: auto; aspect-ratio: 1; max-width: 50px; flex: 1 1 0; padding: 3px; }
-  .tools-10-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 5px; }
+  .tools-14-grid,
+  .tools-10-grid { grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px; }
   .tool-slot-item { width: 100%; height: auto; aspect-ratio: 1; max-width: 50px; padding: 3px; }
+}
+:focus-visible {
+  outline: 2.5px solid #00E5FF !important;
+  outline-offset: 3px !important;
+  box-shadow: 0 0 12px #00E5FF, 0 0 24px rgba(0, 229, 255, 0.4) !important;
+}
+
+@media (min-width: 1600px) {
+  .fadhil-shell {
+    max-width: 1560px;
+  }
+  .cyber-logo-title {
+    font-size: 2.35rem;
+  }
+  .cariearsa-btn-text {
+    font-size: 1.82rem;
+  }
+}
+
+@media (min-width: 2560px) {
+  .fadhil-shell {
+    max-width: 1720px;
+  }
+}
+
+.portfolios-section {
+  content-visibility: auto;
+  contain-intrinsic-size: 1px 400px;
 }

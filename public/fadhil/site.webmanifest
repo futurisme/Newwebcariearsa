@@ -1,8 +1,8 @@
 {
   "id": "/fadhil/",
-  "name": "Fadhil.dev",
-  "short_name": "Fadhil.dev",
-  "description": "Fadhil Akbar Cariearsa official portfolio, tools, games, and self-hosted web experiments.",
+  "name": "Fadhil Akbar Cariearsa - Developer Portfolio",
+  "short_name": "Fadhil Portfolio",
+  "description": "Official portfolio of Fadhil Akbar Cariearsa showcasing software development projects, interactive web applications, technical skills, and core tools.",
   "lang": "en",
   "dir": "ltr",
   "start_url": "/fadhil/",

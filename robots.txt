@@ -1,0 +1,47 @@
+# CARIEARSA - High-Performance Robots Directives (Updated 2026-09-27)
+User-agent: *
+Allow: /
+Allow: /mobile/
+Allow: /fadhil/
+Allow: /fadhil/mobile/
+Allow: /cloud/
+Allow: /cloud/mobile/
+Allow: /hub/
+Allow: /japan/
+Allow: /japan/mobile/
+Allow: /aniwatch/
+Allow: /aniwatch/watch/
+Allow: /note/
+Allow: /introlab/
+Allow: /360/
+Allow: /components/
+Allow: /assets/
+Allow: /public/
+Allow: /*.avif
+Allow: /*.webp
+Allow: /*.png
+Allow: /*.svg
+Allow: /*.ico
+Allow: /*.css
+Allow: /*.js
+
+# Confidential / Isolated Subdirectory - Strictly Excluded from Crawlers & Search Engines
+Disallow: /intro/
+Disallow: /intro
+Disallow: /api/
+
+# Crawler specifics
+User-agent: Googlebot
+Allow: /
+Allow: /mobile/
+Allow: /fadhil/
+Allow: /fadhil/mobile/
+Allow: /cloud/
+Allow: /hub/
+Allow: /japan/
+Allow: /aniwatch/
+Allow: /note/
+Allow: /introlab/
+Allow: /components/
+
+Sitemap: https://cariearsa.com/sitemap.xml

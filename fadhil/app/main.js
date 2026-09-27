@@ -1,11 +1,4 @@
-/**
- * CARIEARSA x FADHIL.DEV - Interactive Cyber Controller (2026-09-09)
- * Pure vanilla TypeScript/JavaScript, ultra-lightweight Web Audio API synthesis,
- * YouTube multi-video manager, dynamic language switcher, and responsive shortcuts.
- */
-
 (() => {
-  // 1. Procedural Web Audio API Synthesizer (Zero network asset, pure math)
   let audioCtx = null;
   let isAudioUnlocked = false;
 
@@ -52,7 +45,6 @@
         osc.start();
         osc.stop(ctx.currentTime + 0.03);
       } else {
-        // High-tech crisp mechanical click
         const bufferSize = Math.floor(ctx.sampleRate * 0.035);
         const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
         const data = buffer.getChannelData(0);
@@ -78,7 +70,6 @@
     } catch (_) {}
   };
 
-  // Delegated sound listeners
   document.addEventListener('pointerenter', (e) => {
     const target = e.target;
     if (target && target.closest && target.closest('a, button, .cyber-action-btn, .skill-pill-item, .core-lang-item, .social-slot-link, .tool-slot-item, .portfolio-card-item')) {
@@ -93,7 +84,6 @@
     }
   }, { passive: true });
 
-  // 2. Theme Switcher (Dark Manga / Light Manga)
   const themeToggle = document.querySelector(".theme-toggle");
   const setTheme = (isLight) => {
     document.body.classList.toggle("light-theme", isLight);
@@ -103,22 +93,27 @@
       "aria-label",
       isLight ? "Switch to Cyber Dark theme" : "Switch to Manga Light theme"
     );
-    try {
-      localStorage.setItem("portfolio-theme", isLight ? "light" : "dark");
-    } catch {}
+    const metaTheme = document.querySelector('meta[name="theme-color"]');
+    if (metaTheme) {
+      metaTheme.setAttribute("content", isLight ? "#240308" : "#05060A");
+    }
   };
 
+  // Enforce default ALWAYS dark theme upon entry, refresh, or returning to page
   try {
-    setTheme(localStorage.getItem("portfolio-theme") === "light");
-  } catch {
-    setTheme(false);
-  }
+    localStorage.removeItem("portfolio-theme");
+  } catch {}
+  setTheme(false);
 
   const toggleTheme = () => {
-    themeToggle?.classList.remove("is-spinning");
-    if (themeToggle) void themeToggle.offsetWidth;
-    themeToggle?.classList.add("is-spinning");
-    setTheme(!document.body.classList.contains("light-theme"));
+    if (themeToggle) {
+      themeToggle.classList.remove("is-spinning");
+      requestAnimationFrame(() => {
+        themeToggle.classList.add("is-spinning");
+      });
+    }
+    const isNowLight = !document.body.classList.contains("light-theme");
+    setTheme(isNowLight);
     playCyberSound('click');
   };
 
@@ -127,7 +122,6 @@
     themeToggle.classList.remove("is-spinning");
   });
 
-  // 3. YouTube Embed Controller & Cyclic Banner Image Overlay (2s Show / 3s Hide)
   const heroTrigger = document.querySelector(".hero-media-wrap");
   const soundToggleBtn = document.getElementById("hero-sound-btn");
   const pictureLayer = document.querySelector(".hero-picture-layer");
@@ -139,7 +133,6 @@
     let isAudioActive = false;
     let isPlaying = false;
 
-    // Banner image alternating visibility timer (2s show / 3s hide)
     let bannerCycleTimer = null;
     let isCycling = false;
 
@@ -150,23 +143,20 @@
       const cycle = () => {
         if (!isCycling || !pictureLayer) return;
 
-        // Fase 1: Image tampil selama 2 detik (menutupi video)
         pictureLayer.classList.remove("is-hidden");
         pictureLayer.classList.add("is-visible");
 
         bannerCycleTimer = setTimeout(() => {
           if (!isCycling || !pictureLayer) return;
 
-          // Fase 2: Image hide selama 3 detik (video kelihatan)
           pictureLayer.classList.remove("is-visible");
           pictureLayer.classList.add("is-hidden");
 
           bannerCycleTimer = setTimeout(() => {
             if (!isCycling) return;
-            // Berulang kembali ke fase 1
             cycle();
-          }, 3000); // Hide selama 3 detik
-        }, 2000); // Tampil selama 2 detik
+          }, 3000);
+        }, 2000);
       };
 
       cycle();
@@ -198,7 +188,6 @@
       isAudioActive = true;
       isPlaying = true;
 
-      // 1. PostMessage immediate control (seek to 6s, unMute, 100% volume, high resolution hd1080, play)
       sendYTCommand("seekTo", [startTime, true]);
       sendYTCommand("unMute");
       sendYTCommand("setVolume", [100]);
@@ -206,7 +195,6 @@
       sendYTCommand("setPlaybackQualityRange", ["hd1080", "highres"]);
       sendYTCommand("playVideo");
 
-      // 2. YT.Player API control if initialized
       if (ytPlayer && typeof ytPlayer.playVideo === "function") {
         try {
           ytPlayer.seekTo?.(startTime, true);
@@ -220,17 +208,14 @@
         } catch (_) {}
       }
 
-      // Update sound indicator button
       if (soundToggleBtn) {
         soundToggleBtn.innerHTML = '<span class="sound-icon">🔊</span><span class="sound-label">SOUND 100%</span>';
         soundToggleBtn.classList.add("is-active");
       }
 
-      // Start the 2s show / 3s hide image alternating cycle
       startBannerCycle();
     };
 
-    // YouTube Iframe API Initialization
     const initYT = () => {
       if (window.YT && window.YT.Player && iframe && !ytPlayer) {
         try {
@@ -256,11 +241,10 @@
                 try {
                   event.target.setPlaybackQuality("hd1080");
                 } catch (_) {}
-                // If ended (0), seamlessly loop back to 6s
                 if (event.data === 0) {
                   event.target.seekTo(startTime, true);
                   event.target.playVideo();
-                } else if (event.data === 1) { // PLAYING
+                } else if (event.data === 1) {
                   isPlaying = true;
                   startBannerCycle();
                   if (isAudioActive) {
@@ -293,9 +277,15 @@
       }
     }
 
-    // Response to user clicks/touches on the banner or sound button
     heroTrigger.addEventListener("click", () => {
       activateVideoAndAudio();
+    });
+
+    heroTrigger.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        activateVideoAndAudio();
+      }
     });
 
     soundToggleBtn?.addEventListener("click", (e) => {
@@ -303,7 +293,14 @@
       activateVideoAndAudio();
     });
 
-    // Merespon ketukan di mana saja pada document / window untuk memutar video dan mengaktifkan suara
+    soundToggleBtn?.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        e.stopPropagation();
+        activateVideoAndAudio();
+      }
+    });
+
     const gestureEvents = ['click', 'pointerdown', 'keydown', 'touchstart'];
     const handleUniversalGesture = () => {
       activateVideoAndAudio();
@@ -311,7 +308,6 @@
     };
     gestureEvents.forEach(evt => window.addEventListener(evt, handleUniversalGesture, { capture: true, passive: true }));
 
-    // Keyboard shortcut Shift+E untuk memicu video dari detik 6
     window.addEventListener("keydown", (event) => {
       if (event.altKey || event.ctrlKey || event.metaKey || event.repeat) return;
       const key = event.key.toLowerCase();
@@ -322,7 +318,6 @@
     });
   }
 
-  // 4. Dynamic About Language Switcher (ID, EN, JP Flag Icons)
   const initLanguageSwitcher = () => {
     const textElem = document.getElementById("about-desc-content");
     const langBtns = document.querySelectorAll(".lang-flag-btn, .lang-btn");
@@ -337,6 +332,7 @@
     const setLanguage = (lang) => {
       const activeLang = translations[lang] ? lang : "en";
       textElem.textContent = translations[activeLang];
+      document.documentElement.lang = activeLang === 'jp' ? 'ja' : activeLang;
 
       langBtns.forEach((btn) => {
         const isActive = btn.dataset.lang === activeLang;
@@ -357,6 +353,19 @@
           playCyberSound('click');
           setLanguage(lang);
         }
+        langBtns.forEach((other) => {
+          if (other !== btn) other.classList.remove("is-clicked");
+        });
+        btn.classList.add("is-clicked");
+        setTimeout(() => {
+          btn.classList.remove("is-clicked");
+        }, 600);
+      });
+      btn.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          btn.click();
+        }
       });
     });
 
@@ -374,7 +383,6 @@
 
   initLanguageSwitcher();
 
-  // 5. Easter Egg Keyboard Shortcuts (T+S: Theme, T+D: Dance)
   const activeKeys = new Set();
   window.addEventListener("keydown", (event) => {
     if (event.altKey || event.ctrlKey || event.metaKey || event.repeat) return;
@@ -398,54 +406,39 @@
     activeKeys.delete(event.key.toLowerCase());
   });
 
-  // 6. Title Change on Tab Blur
   const originalTitle = document.title;
   document.addEventListener("visibilitychange", () => {
     document.title = document.hidden ? "戻ってきて！ (PORTFOLIO STANDBY)" : originalTitle;
   });
 
-  // 7. Core Language Iconbox Interactive Click & Touch Handler
-  const coreLangItems = document.querySelectorAll(".core-lang-item");
-  coreLangItems.forEach((item) => {
-    const handleActivate = () => {
-      coreLangItems.forEach((other) => {
-        if (other !== item) other.classList.remove("is-clicked");
+  const bindInteractiveGroup = (selector) => {
+    const elements = document.querySelectorAll(selector);
+    elements.forEach((item) => {
+      const handleActivate = () => {
+        elements.forEach((other) => {
+          if (other !== item) other.classList.remove("is-clicked");
+        });
+        item.classList.add("is-clicked");
+        playCyberSound('click');
+        setTimeout(() => {
+          item.classList.remove("is-clicked");
+        }, 700);
+      };
+
+      item.addEventListener("click", handleActivate);
+      item.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          if (item.tagName.toLowerCase() !== 'a') {
+            e.preventDefault();
+          }
+          handleActivate();
+        }
       });
-      item.classList.add("is-clicked");
-      playCyberSound('click');
-      setTimeout(() => {
-        item.classList.remove("is-clicked");
-      }, 700);
-    };
-
-    item.addEventListener("click", handleActivate);
-    item.addEventListener("keydown", (e) => {
-      if (e.key === "Enter" || e.key === " ") {
-        e.preventDefault();
-        handleActivate();
-      }
     });
-  });
+  };
 
-  // 8. Social Profile Iconbox Interactive Click & Touch Handler
-  const socialSlotLinks = document.querySelectorAll(".social-slot-link");
-  socialSlotLinks.forEach((link) => {
-    const handleSocialActivate = () => {
-      socialSlotLinks.forEach((other) => {
-        if (other !== link) other.classList.remove("is-clicked");
-      });
-      link.classList.add("is-clicked");
-      playCyberSound('click');
-      setTimeout(() => {
-        link.classList.remove("is-clicked");
-      }, 700);
-    };
-
-    link.addEventListener("click", handleSocialActivate);
-    link.addEventListener("keydown", (e) => {
-      if (e.key === "Enter" || e.key === " ") {
-        handleSocialActivate();
-      }
-    });
-  });
+  bindInteractiveGroup(".core-lang-item");
+  bindInteractiveGroup(".social-slot-link");
+  bindInteractiveGroup(".tool-slot-item");
+  bindInteractiveGroup(".skill-pill-item");
 })();

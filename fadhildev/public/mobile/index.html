@@ -1,0 +1,1612 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <script>
+      (function() {
+        try {
+          // Explicit view preference override (e.g., ?view=desktop or ?view=mobile)
+          var params = new URLSearchParams(window.location.search);
+          var viewParam = params.get('view');
+          var isFadhilPath = window.location.pathname.startsWith('/fadhil');
+          var desktopTarget = isFadhilPath ? '/fadhil/' : '/';
+
+          if (viewParam === 'mobile') {
+            sessionStorage.setItem('cariearsa_fadhil_pref', 'mobile');
+            return;
+          }
+          if (viewParam === 'desktop') {
+            sessionStorage.setItem('cariearsa_fadhil_pref', 'desktop');
+            window.location.replace(desktopTarget + window.location.search + window.location.hash);
+            return;
+          }
+          if (sessionStorage.getItem('cariearsa_fadhil_pref') === 'mobile') {
+            return;
+          }
+          if (sessionStorage.getItem('cariearsa_fadhil_pref') === 'desktop') {
+            window.location.replace(desktopTarget + window.location.search + window.location.hash);
+            return;
+          }
+
+          var ua = navigator.userAgent || navigator.vendor || window.opera || '';
+          var platform = navigator.platform || '';
+
+          // 1. Dedicated TV / SmartTV / Console Detection (Always filter to desktop /*)
+          var isTV = /SmartTV|HbbTV|BRAVIA|NetCast|Tizen|Viera|AppleTV|Xbox|PlayStation|Nintendo|Roku/i.test(ua);
+          if (isTV) {
+            window.location.replace(desktopTarget + window.location.search + window.location.hash);
+            return;
+          }
+
+          // 2. High-precision User-Agent Client Hints (Chromium / Modern Edge / Chrome)
+          var uaData = navigator.userAgentData;
+          if (uaData && uaData.mobile === true) {
+            // Confirmed mobile device -> stay on /mobile
+            return;
+          }
+
+          // 3. Mobile / Tablet User Agent matching (Phones, iPads, Tablets, Foldables, Android)
+          var isMobileUA = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|Tablet|Silk|Kindle|PlayBook|Nexus|SM-|Pixel|XiaoMi|Oppo|Vivo|Realme|HarmonyOS|Huawei/i.test(ua);
+          var isIPadOS = (platform === 'MacIntel' || ua.includes('Macintosh')) && (navigator.maxTouchPoints && navigator.maxTouchPoints > 1);
+          if (isMobileUA || isIPadOS) {
+            // Confirmed mobile or tablet -> stay on /mobile
+            return;
+          }
+
+          // 4. Hardware pointer & touch capabilities
+          var hasTouch = (navigator.maxTouchPoints && navigator.maxTouchPoints > 0) || ('ontouchstart' in window);
+          var isCoarse = window.matchMedia && (window.matchMedia('(pointer: coarse)').matches || window.matchMedia('(hover: none)').matches);
+          var isFine = window.matchMedia && window.matchMedia('(pointer: fine)').matches && window.matchMedia('(hover: hover)').matches;
+
+          // 5. Screen & Viewport Dimensions
+          var screenMin = (window.screen && window.screen.width && window.screen.height)
+            ? Math.min(window.screen.width, window.screen.height)
+            : window.innerWidth;
+          var isMobileOrTabletDim = screenMin <= 1024 || window.innerWidth <= 1024;
+
+          // If mobile touch or tablet dimensions -> stay on /mobile
+          if ((hasTouch && isMobileOrTabletDim) || (isCoarse && isMobileOrTabletDim)) {
+            return;
+          }
+
+          // 6. Desktop OS (Windows, Mac non-iPad, Linux non-Android, ChromeOS) with mouse / fine pointer or widescreen
+          var isWindows = /Windows NT|Win64|WOW64|Win32/i.test(ua) || platform.indexOf('Win') !== -1;
+          var isMacDesktop = (/Macintosh|MacIntel|MacPPC|Mac68K/i.test(ua) || platform.indexOf('Mac') !== -1) && !isIPadOS;
+          var isLinuxDesktop = /Linux x86_64|Linux i686/i.test(ua) && !/Android/i.test(ua);
+          var isCrOSDesktop = /CrOS x86_64/i.test(ua);
+          var isDesktopOS = (isWindows || isMacDesktop || isLinuxDesktop || isCrOSDesktop) && isFine;
+
+          // If desktop OS, laptop, widescreen, or mouse with width > 1024 -> redirect to desktop /*
+          if (isDesktopOS || (isFine && window.innerWidth > 1024) || (!isMobileUA && !isIPadOS && window.innerWidth > 1024)) {
+            window.location.replace(desktopTarget + window.location.search + window.location.hash);
+          }
+        } catch (e) {}
+      })();
+    </script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fadhil Akbar Cariearsa - Developer Portfolio</title>
+    <meta
+      name="description"
+      content="Official portfolio of Fadhil Akbar Cariearsa showcasing software development projects, interactive web applications, technical skills, and core tools."
+    />
+    <meta
+      name="keywords"
+      content="Fadhil Akbar Cariearsa, developer portfolio, software engineering, web applications, programming skills, developer tools, fadhil.dev, cariearsa.com"
+    />
+    <meta name="author" content="Fadhil Akbar Cariearsa" />
+    <meta name="creator" content="Fadhil Akbar Cariearsa" />
+    <meta name="publisher" content="Fadhil Akbar Cariearsa" />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <meta name="googlebot" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <meta name="bingbot" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <meta name="theme-color" content="#05060A" />
+
+    <!-- Canonical and Alternate hreflang Links for Google Search & Browsers -->
+    <link rel="canonical" href="https://cariearsa.com/fadhil/" />
+    <link rel="alternate" media="only screen and (max-width: 1024px)" href="https://cariearsa.com/fadhil/mobile/" />
+    <link rel="alternate" hreflang="x-default" href="https://cariearsa.com/fadhil/" />
+    <link rel="alternate" hreflang="en" href="https://cariearsa.com/fadhil/" />
+    <link rel="alternate" hreflang="id" href="https://cariearsa.com/fadhil/" />
+    <link rel="alternate" hreflang="ja" href="https://cariearsa.com/fadhil/" />
+
+    <!-- Open Graph Protocol / Social Embed Preview (Discord, WhatsApp, Telegram, LinkedIn, Facebook) -->
+    <meta property="og:site_name" content="Fadhil Akbar Cariearsa - Developer Portfolio" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://cariearsa.com/fadhil/mobile/" />
+    <meta property="og:title" content="Fadhil Akbar Cariearsa - Developer Portfolio" />
+    <meta property="og:description" content="Official portfolio of Fadhil Akbar Cariearsa showcasing software development projects, interactive web applications, technical skills, and core tools." />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:locale:alternate" content="id_ID" />
+    <meta property="og:locale:alternate" content="ja_JP" />
+    <meta property="og:image" content="https://cariearsa.com/fadhil/assets/images/portfolio-banner.jpg" />
+    <meta property="og:image:secure_url" content="https://cariearsa.com/fadhil/assets/images/portfolio-banner.jpg" />
+    <meta property="og:image:type" content="image/jpeg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Fadhil Akbar Cariearsa - Developer Portfolio Preview" />
+
+    <!-- Twitter / X Cards -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@cariearsa" />
+    <meta name="twitter:creator" content="@cariearsa" />
+    <meta name="twitter:title" content="Fadhil Akbar Cariearsa - Developer Portfolio" />
+    <meta name="twitter:description" content="Official portfolio of Fadhil Akbar Cariearsa showcasing software development projects, interactive web applications, technical skills, and core tools." />
+    <meta name="twitter:image" content="https://cariearsa.com/fadhil/assets/images/portfolio-banner.jpg" />
+    <meta name="twitter:image:alt" content="Fadhil Akbar Cariearsa - Developer Portfolio Preview" />
+
+    <!-- Schema.org Structured Data (JSON-LD) for Search Engine Rich Snippets -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "WebSite",
+            "@id": "https://cariearsa.com/fadhil/#website",
+            "url": "https://cariearsa.com/fadhil/",
+            "name": "Fadhil Akbar Cariearsa - Developer Portfolio",
+            "description": "Official portfolio of Fadhil Akbar Cariearsa showcasing software development projects, interactive web applications, technical skills, and core tools.",
+            "inLanguage": ["en", "id", "ja"]
+          },
+          {
+            "@type": "ProfilePage",
+            "@id": "https://cariearsa.com/fadhil/#profilepage-mobile",
+            "url": "https://cariearsa.com/fadhil/mobile/",
+            "name": "Fadhil Akbar Cariearsa - Developer Portfolio",
+            "isPartOf": {
+              "@id": "https://cariearsa.com/fadhil/#website"
+            },
+            "description": "Official portfolio of Fadhil Akbar Cariearsa showcasing software development projects, interactive web applications, technical skills, and core tools.",
+            "mainEntity": {
+              "@type": "Person",
+              "@id": "https://cariearsa.com/fadhil/#person",
+              "name": "Fadhil Akbar Cariearsa",
+              "alternateName": ["Fadhil Cariearsa", "fadhil.dev"],
+              "url": "https://cariearsa.com/fadhil/",
+              "image": "https://cariearsa.com/fadhil/assets/images/portfolio-banner.jpg",
+              "jobTitle": "Software Developer & Designer",
+              "sameAs": [
+                "https://github.com/futurisme",
+                "https://linkedin.com/in/cariearsa",
+                "https://instagram.com/cariearsa",
+                "https://leetcode.com/cariearsa",
+                "https://tryhackme.com/p/cariearsa",
+                "https://app.daily.dev/cariearsa"
+              ]
+            }
+          }
+        ]
+      }
+    </script>
+
+    <!-- Favicon & Touch Icons -->
+    <link rel="icon" type="image/svg+xml" href="/fadhil/favicon.svg" />
+    <link rel="apple-touch-icon" href="/fadhil/apple-touch-icon.png" />
+    <link rel="manifest" href="/fadhil/site.webmanifest" />
+
+    <!-- Fonts: Oswald, Bangers, Noto Sans JP -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bangers&family=Noto+Sans+JP:wght@400;700;900&family=Oswald:wght@500;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Preloaded Critical Visual Assets -->
+    <link rel="preload" as="image" href="/fadhil/assets/images/portfolio-banner.avif" type="image/avif" fetchpriority="high" />
+    <link rel="preload" as="image" href="/fadhil/assets/images/shareideas-banner.avif" type="image/avif" fetchpriority="low" />
+    <link rel="preload" as="image" href="/fadhil/assets/images/mindmapmaker-banner.avif" type="image/avif" fetchpriority="low" />
+    <link rel="preload" as="image" href="/fadhil/assets/images/theme.avif" type="image/avif" fetchpriority="high" />
+
+    <!-- Cyber Manga Style -->
+    <link rel="stylesheet" href="/fadhil/app/styles.css?v=20260913_socials_v3" />
+
+    <!-- Direct Guaranteed Theme Variants (Core Languages & 14 Social Profiles) -->
+    <style id="fadhil-theme-variants">
+      /* --- CORE PROGRAMMING LANGUAGES (6 PRIMARY) --- */
+      .core-lang-item.core-lang-variant-1,
+      .core-lang-item:nth-child(3n + 1) {
+        border: 2px solid #FFE600 !important;
+        background-color: #1E0207 !important;
+        box-shadow: 3px 3px 0px #FF003C !important;
+      }
+      .core-lang-item.core-lang-variant-1:hover,
+      .core-lang-item.core-lang-variant-1:active,
+      .core-lang-item.core-lang-variant-1:focus-visible,
+      .core-lang-item.core-lang-variant-1.is-clicked,
+      .core-lang-item:nth-child(3n + 1):hover,
+      .core-lang-item:nth-child(3n + 1):active,
+      .core-lang-item:nth-child(3n + 1):focus-visible,
+      .core-lang-item:nth-child(3n + 1).is-clicked {
+        border-color: #FF007F !important;
+        background-color: #060D20 !important;
+        box-shadow: 4px 4px 0px #FFE600 !important;
+        transform: translate(-1.5px, -1.5px);
+      }
+      .core-lang-item.core-lang-variant-1:active,
+      .core-lang-item:nth-child(3n + 1):active {
+        transform: translate(1px, 1px);
+        box-shadow: 2px 2px 0px #FFE600 !important;
+      }
+
+      .core-lang-item.core-lang-variant-2,
+      .core-lang-item:nth-child(3n + 2) {
+        border: 2px solid #FF007F !important;
+        background-color: #000000 !important;
+        box-shadow: 3px 3px 0px #FFE600 !important;
+      }
+      .core-lang-item.core-lang-variant-2:hover,
+      .core-lang-item.core-lang-variant-2:active,
+      .core-lang-item.core-lang-variant-2:focus-visible,
+      .core-lang-item.core-lang-variant-2.is-clicked,
+      .core-lang-item:nth-child(3n + 2):hover,
+      .core-lang-item:nth-child(3n + 2):active,
+      .core-lang-item:nth-child(3n + 2):focus-visible,
+      .core-lang-item:nth-child(3n + 2).is-clicked {
+        border-color: #FFE600 !important;
+        background-color: #000000 !important;
+        box-shadow: 4px 4px 0px #FF007F !important;
+        transform: translate(-1.5px, -1.5px);
+      }
+      .core-lang-item.core-lang-variant-2:active,
+      .core-lang-item:nth-child(3n + 2):active {
+        transform: translate(1px, 1px);
+        box-shadow: 2px 2px 0px #FF007F !important;
+      }
+
+      .core-lang-item.core-lang-variant-3,
+      .core-lang-item:nth-child(3n) {
+        border: 2px solid #00E5FF !important;
+        background-color: #060D20 !important;
+        box-shadow: 3px 3px 0px #FF003C !important;
+      }
+      .core-lang-item.core-lang-variant-3:hover,
+      .core-lang-item.core-lang-variant-3:active,
+      .core-lang-item.core-lang-variant-3:focus-visible,
+      .core-lang-item.core-lang-variant-3.is-clicked,
+      .core-lang-item:nth-child(3n):hover,
+      .core-lang-item:nth-child(3n):active,
+      .core-lang-item:nth-child(3n):focus-visible,
+      .core-lang-item:nth-child(3n).is-clicked {
+        border-color: #FF007F !important;
+        background-color: #1E0207 !important;
+        box-shadow: 4px 4px 0px #00E5FF !important;
+        transform: translate(-1.5px, -1.5px);
+      }
+      .core-lang-item.core-lang-variant-3:active,
+      .core-lang-item:nth-child(3n):active {
+        transform: translate(1px, 1px);
+        box-shadow: 2px 2px 0px #00E5FF !important;
+      }
+
+      /* --- SOCIAL PROFILES (14 CLICKABLE) - ZIG ZAG 3 VARIANTS --- */
+      .social-slot-link.social-variant-1,
+      .socials-14-grid li:nth-child(1) .social-slot-link,
+      .socials-14-grid li:nth-child(4) .social-slot-link,
+      .socials-14-grid li:nth-child(7) .social-slot-link,
+      .socials-14-grid li:nth-child(10) .social-slot-link,
+      .socials-14-grid li:nth-child(13) .social-slot-link {
+        border: 2px solid #00E5FF !important;
+        background-color: #000000 !important;
+        box-shadow: 3px 3px 0px #FF007F !important;
+      }
+      .social-slot-link.social-variant-1:hover,
+      .social-slot-link.social-variant-1:active,
+      .social-slot-link.social-variant-1:focus-visible,
+      .social-slot-link.social-variant-1.is-clicked,
+      .socials-14-grid li:nth-child(1) .social-slot-link:hover,
+      .socials-14-grid li:nth-child(1) .social-slot-link:active,
+      .socials-14-grid li:nth-child(1) .social-slot-link:focus-visible,
+      .socials-14-grid li:nth-child(1) .social-slot-link.is-clicked,
+      .socials-14-grid li:nth-child(4) .social-slot-link:hover,
+      .socials-14-grid li:nth-child(4) .social-slot-link:active,
+      .socials-14-grid li:nth-child(4) .social-slot-link:focus-visible,
+      .socials-14-grid li:nth-child(4) .social-slot-link.is-clicked,
+      .socials-14-grid li:nth-child(7) .social-slot-link:hover,
+      .socials-14-grid li:nth-child(7) .social-slot-link:active,
+      .socials-14-grid li:nth-child(7) .social-slot-link:focus-visible,
+      .socials-14-grid li:nth-child(7) .social-slot-link.is-clicked,
+      .socials-14-grid li:nth-child(10) .social-slot-link:hover,
+      .socials-14-grid li:nth-child(10) .social-slot-link:active,
+      .socials-14-grid li:nth-child(10) .social-slot-link:focus-visible,
+      .socials-14-grid li:nth-child(10) .social-slot-link.is-clicked,
+      .socials-14-grid li:nth-child(13) .social-slot-link:hover,
+      .socials-14-grid li:nth-child(13) .social-slot-link:active,
+      .socials-14-grid li:nth-child(13) .social-slot-link:focus-visible,
+      .socials-14-grid li:nth-child(13) .social-slot-link.is-clicked {
+        border-color: #FF007F !important;
+        background-color: #000000 !important;
+        box-shadow: 4px 4px 0px #00E5FF !important;
+        transform: translate(-1.5px, -1.5px);
+      }
+      .social-slot-link.social-variant-1:active,
+      .socials-14-grid li:nth-child(1) .social-slot-link:active,
+      .socials-14-grid li:nth-child(4) .social-slot-link:active,
+      .socials-14-grid li:nth-child(7) .social-slot-link:active,
+      .socials-14-grid li:nth-child(10) .social-slot-link:active,
+      .socials-14-grid li:nth-child(13) .social-slot-link:active {
+        transform: translate(1px, 1px);
+        box-shadow: 2px 2px 0px #00E5FF !important;
+      }
+
+      .social-slot-link.social-variant-2,
+      .socials-14-grid li:nth-child(2) .social-slot-link,
+      .socials-14-grid li:nth-child(5) .social-slot-link,
+      .socials-14-grid li:nth-child(8) .social-slot-link,
+      .socials-14-grid li:nth-child(11) .social-slot-link,
+      .socials-14-grid li:nth-child(14) .social-slot-link {
+        border: 2px solid #FFE600 !important;
+        background-color: #000000 !important;
+        box-shadow: 3px 3px 0px #00E5FF !important;
+      }
+      .social-slot-link.social-variant-2:hover,
+      .social-slot-link.social-variant-2:active,
+      .social-slot-link.social-variant-2:focus-visible,
+      .social-slot-link.social-variant-2.is-clicked,
+      .socials-14-grid li:nth-child(2) .social-slot-link:hover,
+      .socials-14-grid li:nth-child(2) .social-slot-link:active,
+      .socials-14-grid li:nth-child(2) .social-slot-link:focus-visible,
+      .socials-14-grid li:nth-child(2) .social-slot-link.is-clicked,
+      .socials-14-grid li:nth-child(5) .social-slot-link:hover,
+      .socials-14-grid li:nth-child(5) .social-slot-link:active,
+      .socials-14-grid li:nth-child(5) .social-slot-link:focus-visible,
+      .socials-14-grid li:nth-child(5) .social-slot-link.is-clicked,
+      .socials-14-grid li:nth-child(8) .social-slot-link:hover,
+      .socials-14-grid li:nth-child(8) .social-slot-link:active,
+      .socials-14-grid li:nth-child(8) .social-slot-link:focus-visible,
+      .socials-14-grid li:nth-child(8) .social-slot-link.is-clicked,
+      .socials-14-grid li:nth-child(11) .social-slot-link:hover,
+      .socials-14-grid li:nth-child(11) .social-slot-link:active,
+      .socials-14-grid li:nth-child(11) .social-slot-link:focus-visible,
+      .socials-14-grid li:nth-child(11) .social-slot-link.is-clicked,
+      .socials-14-grid li:nth-child(14) .social-slot-link:hover,
+      .socials-14-grid li:nth-child(14) .social-slot-link:active,
+      .socials-14-grid li:nth-child(14) .social-slot-link:focus-visible,
+      .socials-14-grid li:nth-child(14) .social-slot-link.is-clicked {
+        border-color: #00E5FF !important;
+        background-color: #000000 !important;
+        box-shadow: 4px 4px 0px #FFE600 !important;
+        transform: translate(-1.5px, -1.5px);
+      }
+      .social-slot-link.social-variant-2:active,
+      .socials-14-grid li:nth-child(2) .social-slot-link:active,
+      .socials-14-grid li:nth-child(5) .social-slot-link:active,
+      .socials-14-grid li:nth-child(8) .social-slot-link:active,
+      .socials-14-grid li:nth-child(11) .social-slot-link:active,
+      .socials-14-grid li:nth-child(14) .social-slot-link:active {
+        transform: translate(1px, 1px);
+        box-shadow: 2px 2px 0px #FFE600 !important;
+      }
+
+      .social-slot-link.social-variant-3,
+      .socials-14-grid li:nth-child(3) .social-slot-link,
+      .socials-14-grid li:nth-child(6) .social-slot-link,
+      .socials-14-grid li:nth-child(9) .social-slot-link,
+      .socials-14-grid li:nth-child(12) .social-slot-link {
+        border: 2px solid #00FF66 !important;
+        background-color: #000000 !important;
+        box-shadow: 3px 3px 0px #FFE600 !important;
+      }
+      .social-slot-link.social-variant-3:hover,
+      .social-slot-link.social-variant-3:active,
+      .social-slot-link.social-variant-3:focus-visible,
+      .social-slot-link.social-variant-3.is-clicked,
+      .socials-14-grid li:nth-child(3) .social-slot-link:hover,
+      .socials-14-grid li:nth-child(3) .social-slot-link:active,
+      .socials-14-grid li:nth-child(3) .social-slot-link:focus-visible,
+      .socials-14-grid li:nth-child(3) .social-slot-link.is-clicked,
+      .socials-14-grid li:nth-child(6) .social-slot-link:hover,
+      .socials-14-grid li:nth-child(6) .social-slot-link:active,
+      .socials-14-grid li:nth-child(6) .social-slot-link:focus-visible,
+      .socials-14-grid li:nth-child(6) .social-slot-link.is-clicked,
+      .socials-14-grid li:nth-child(9) .social-slot-link:hover,
+      .socials-14-grid li:nth-child(9) .social-slot-link:active,
+      .socials-14-grid li:nth-child(9) .social-slot-link:focus-visible,
+      .socials-14-grid li:nth-child(9) .social-slot-link.is-clicked,
+      .socials-14-grid li:nth-child(12) .social-slot-link:hover,
+      .socials-14-grid li:nth-child(12) .social-slot-link:active,
+      .socials-14-grid li:nth-child(12) .social-slot-link:focus-visible,
+      .socials-14-grid li:nth-child(12) .social-slot-link.is-clicked {
+        border-color: #FFE600 !important;
+        background-color: #000000 !important;
+        box-shadow: 4px 4px 0px #00FF66 !important;
+        transform: translate(-1.5px, -1.5px);
+      }
+      .social-slot-link.social-variant-3:active,
+      .socials-14-grid li:nth-child(3) .social-slot-link:active,
+      .socials-14-grid li:nth-child(6) .social-slot-link:active,
+      .socials-14-grid li:nth-child(9) .social-slot-link:active,
+      .socials-14-grid li:nth-child(12) .social-slot-link:active {
+        transform: translate(1px, 1px);
+        box-shadow: 2px 2px 0px #00FF66 !important;
+      }
+
+      /* --- TOOLS AND PLATFORMS (10 ITEMS) - 3 VARIANTS PATTERN --- */
+      .tool-slot-item {
+        background-color: #000000 !important;
+        cursor: pointer;
+        user-select: none;
+        -webkit-tap-highlight-color: transparent;
+        outline: none;
+        transition: transform 0.16s cubic-bezier(0.2, 0.8, 0.2, 1),
+                    background-color 0.16s ease,
+                    border-color 0.16s ease,
+                    box-shadow 0.16s ease;
+      }
+      .tool-slot-item picture,
+      .tool-slot-item img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        display: block;
+        pointer-events: none;
+        transition: transform 0.16s ease;
+        filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.2));
+      }
+      .tool-slot-item:hover img,
+      .tool-slot-item:active img,
+      .tool-slot-item.is-clicked img {
+        transform: scale(1.08);
+      }
+
+      /* VARIAN 1: default outline pink cerah terang (#FF007F), bayangan biru langit cerah (#00E5FF), inner-fill hitam (#000000)
+         hover/click: outline biru langit cerah (#00E5FF), bayangan pink cerah (#FF007F), inner-fill hitam (#000000) */
+      .tool-slot-item.tool-variant-1,
+      .tools-14-grid li:nth-child(3n + 1),
+      .tools-10-grid li:nth-child(3n + 1) {
+        border: 2px solid #FF007F !important;
+        background-color: #000000 !important;
+        box-shadow: 3px 3px 0px #00E5FF !important;
+      }
+      .tool-slot-item.tool-variant-1:hover,
+      .tool-slot-item.tool-variant-1:active,
+      .tool-slot-item.tool-variant-1:focus-visible,
+      .tool-slot-item.tool-variant-1.is-clicked,
+      .tools-14-grid li:nth-child(3n + 1):hover,
+      .tools-14-grid li:nth-child(3n + 1):active,
+      .tools-14-grid li:nth-child(3n + 1):focus-visible,
+      .tools-14-grid li:nth-child(3n + 1).is-clicked,
+      .tools-10-grid li:nth-child(3n + 1):hover,
+      .tools-10-grid li:nth-child(3n + 1):active,
+      .tools-10-grid li:nth-child(3n + 1):focus-visible,
+      .tools-10-grid li:nth-child(3n + 1).is-clicked {
+        border-color: #00E5FF !important;
+        background-color: #000000 !important;
+        box-shadow: 4px 4px 0px #FF007F !important;
+        transform: translate(-1.5px, -1.5px);
+      }
+      .tool-slot-item.tool-variant-1:active,
+      .tools-14-grid li:nth-child(3n + 1):active,
+      .tools-10-grid li:nth-child(3n + 1):active {
+        transform: translate(1px, 1px);
+        box-shadow: 2px 2px 0px #FF007F !important;
+      }
+
+      /* VARIAN 2: default outline biru langit cerah terang (#00E5FF), bayangan pink cerah (#FF007F), inner-fill hitam (#000000)
+         hover/click: outline pink cerah (#FF007F), bayangan biru cerah terang (#00E5FF), inner-fill hitam (#000000) */
+      .tool-slot-item.tool-variant-2,
+      .tools-14-grid li:nth-child(3n + 2),
+      .tools-10-grid li:nth-child(3n + 2) {
+        border: 2px solid #00E5FF !important;
+        background-color: #000000 !important;
+        box-shadow: 3px 3px 0px #FF007F !important;
+      }
+      .tool-slot-item.tool-variant-2:hover,
+      .tool-slot-item.tool-variant-2:active,
+      .tool-slot-item.tool-variant-2:focus-visible,
+      .tool-slot-item.tool-variant-2.is-clicked,
+      .tools-14-grid li:nth-child(3n + 2):hover,
+      .tools-14-grid li:nth-child(3n + 2):active,
+      .tools-14-grid li:nth-child(3n + 2):focus-visible,
+      .tools-14-grid li:nth-child(3n + 2).is-clicked,
+      .tools-10-grid li:nth-child(3n + 2):hover,
+      .tools-10-grid li:nth-child(3n + 2):active,
+      .tools-10-grid li:nth-child(3n + 2):focus-visible,
+      .tools-10-grid li:nth-child(3n + 2).is-clicked {
+        border-color: #FF007F !important;
+        background-color: #000000 !important;
+        box-shadow: 4px 4px 0px #00E5FF !important;
+        transform: translate(-1.5px, -1.5px);
+      }
+      .tool-slot-item.tool-variant-2:active,
+      .tools-14-grid li:nth-child(3n + 2):active,
+      .tools-10-grid li:nth-child(3n + 2):active {
+        transform: translate(1px, 1px);
+        box-shadow: 2px 2px 0px #00E5FF !important;
+      }
+
+      /* VARIAN 3: default outline orange cerah terang (#FF7A00), bayangan kuning cerah (#FFE600), inner-fill hitam (#000000)
+         hover/click: outline kuning cerah (#FFE600), bayangan orange cerah terang (#FF7A00), inner-fill hitam (#000000) */
+      .tool-slot-item.tool-variant-3,
+      .tools-14-grid li:nth-child(3n),
+      .tools-10-grid li:nth-child(3n) {
+        border: 2px solid #FF7A00 !important;
+        background-color: #000000 !important;
+        box-shadow: 3px 3px 0px #FFE600 !important;
+      }
+      .tool-slot-item.tool-variant-3:hover,
+      .tool-slot-item.tool-variant-3:active,
+      .tool-slot-item.tool-variant-3:focus-visible,
+      .tool-slot-item.tool-variant-3.is-clicked,
+      .tools-14-grid li:nth-child(3n):hover,
+      .tools-14-grid li:nth-child(3n):active,
+      .tools-14-grid li:nth-child(3n):focus-visible,
+      .tools-14-grid li:nth-child(3n).is-clicked,
+      .tools-10-grid li:nth-child(3n):hover,
+      .tools-10-grid li:nth-child(3n):active,
+      .tools-10-grid li:nth-child(3n):focus-visible,
+      .tools-10-grid li:nth-child(3n).is-clicked {
+        border-color: #FFE600 !important;
+        background-color: #000000 !important;
+        box-shadow: 4px 4px 0px #FF7A00 !important;
+        transform: translate(-1.5px, -1.5px);
+      }
+      .tool-slot-item.tool-variant-3:active,
+      .tools-14-grid li:nth-child(3n):active,
+      .tools-10-grid li:nth-child(3n):active {
+        transform: translate(1px, 1px);
+        box-shadow: 2px 2px 0px #FF7A00 !important;
+      }
+
+      /* --- LANGUAGE FLAGBOXES (ID, EN, JP) --- */
+      .lang-flags-group {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+      }
+      .lang-flag-btn {
+        padding: 3px 6px;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        cursor: pointer;
+        border-radius: 0;
+        outline: none;
+        user-select: none;
+        -webkit-tap-highlight-color: transparent;
+        transition: transform 0.15s cubic-bezier(0.2, 0.8, 0.2, 1),
+                    box-shadow 0.15s ease,
+                    background-color 0.15s ease,
+                    border-color 0.15s ease,
+                    color 0.15s ease;
+        font-family: var(--font-display, 'Oswald', sans-serif);
+        font-size: 0.72rem;
+        font-weight: 800;
+        line-height: 1;
+      }
+      /* ID */
+      .lang-flag-btn[data-lang="id"] {
+        background-color: #00E5FF !important;
+        border: 2px solid #000000 !important;
+        box-shadow: 2px 2px 0px #FF003C !important;
+        color: #000000 !important;
+      }
+      .lang-flag-btn[data-lang="id"]:hover,
+      .lang-flag-btn[data-lang="id"]:focus-visible,
+      .lang-flag-btn[data-lang="id"]:active,
+      .lang-flag-btn[data-lang="id"].is-clicked {
+        background-color: #FFE600 !important;
+        border-color: #FF007F !important;
+        box-shadow: 3px 3px 0px #00E5FF !important;
+        color: #000000 !important;
+        transform: translate(-1.5px, -1.5px);
+      }
+      .lang-flag-btn[data-lang="id"]:active {
+        transform: translate(1px, 1px);
+        box-shadow: 1px 1px 0px #00E5FF !important;
+      }
+      /* EN */
+      .lang-flag-btn[data-lang="en"] {
+        background-color: #FFE600 !important;
+        border: 2px solid #000000 !important;
+        box-shadow: 2px 2px 0px #00E5FF !important;
+        color: #000000 !important;
+      }
+      .lang-flag-btn[data-lang="en"]:hover,
+      .lang-flag-btn[data-lang="en"]:focus-visible,
+      .lang-flag-btn[data-lang="en"]:active,
+      .lang-flag-btn[data-lang="en"].is-clicked {
+        background-color: #00E5FF !important;
+        border-color: #FF007F !important;
+        box-shadow: 3px 3px 0px #FFE600 !important;
+        color: #000000 !important;
+        transform: translate(-1.5px, -1.5px);
+      }
+      .lang-flag-btn[data-lang="en"]:active {
+        transform: translate(1px, 1px);
+        box-shadow: 1px 1px 0px #FFE600 !important;
+      }
+      /* JP: default inner-fill manga-red (#FF003C), outline hitam (#000000), bayangan kuning cerah terang (#FFE600)
+         hover/click: inner-fill biru langit cerah terang (#00E5FF), outline kuning cerah terang (#FFE600), bayangan pink (#FF007F) */
+      .lang-flag-btn[data-lang="jp"] {
+        background-color: #FF003C !important;
+        border: 2px solid #000000 !important;
+        box-shadow: 2px 2px 0px #FFE600 !important;
+        color: #FFFFFF !important;
+      }
+      .lang-flag-btn[data-lang="jp"]:hover,
+      .lang-flag-btn[data-lang="jp"]:focus-visible,
+      .lang-flag-btn[data-lang="jp"]:active,
+      .lang-flag-btn[data-lang="jp"].is-clicked {
+        background-color: #00E5FF !important;
+        border-color: #FFE600 !important;
+        box-shadow: 3px 3px 0px #FF007F !important;
+        color: #000000 !important;
+        transform: translate(-1.5px, -1.5px);
+      }
+      .lang-flag-btn[data-lang="jp"]:active {
+        transform: translate(1px, 1px);
+        box-shadow: 1px 1px 0px #FF007F !important;
+      }
+      /* Aturan khusus: Bahasa aktif tidak memiliki indikator/perbedaan */
+      .lang-flag-btn.active {
+        outline: none;
+      }
+
+      /* --- SKILLS TEXTBOXES (ZIG-ZAG 2 VARIANTS) --- */
+      .skill-pill-item {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 5px 10px 5px 14px;
+        font-family: var(--font-display, 'Oswald', sans-serif);
+        font-weight: 800;
+        font-size: 0.86rem;
+        letter-spacing: 0.5px;
+        min-height: 34px;
+        box-sizing: border-box;
+        cursor: pointer;
+        user-select: none;
+        -webkit-tap-highlight-color: transparent;
+        outline: none;
+        transition: transform 0.16s cubic-bezier(0.2, 0.8, 0.2, 1),
+                    background-color 0.16s ease,
+                    border-color 0.16s ease,
+                    box-shadow 0.16s ease,
+                    color 0.16s ease;
+      }
+      .skill-pill-item > span {
+        position: relative;
+        z-index: 6;
+        pointer-events: none;
+      }
+      .skill-pill-item .skill-jp {
+        font-family: var(--font-jp, 'Noto Sans JP', sans-serif);
+        font-size: 0.68rem;
+        font-weight: 700;
+        margin-left: 6px;
+        white-space: nowrap;
+        transition: color 0.16s ease;
+      }
+      .skill-pill-item::before {
+        content: "";
+        position: absolute;
+        top: -2px;
+        bottom: -2px;
+        left: -2px;
+        width: 5px;
+        z-index: 5;
+        pointer-events: none;
+        transition: background-color 0.16s ease;
+      }
+      /* Skill Varian 1 */
+      .skill-pill-item.skill-variant-1 {
+        background-color: #FFE600 !important;
+        border: 2px solid #FFFFFF !important;
+        color: #000000 !important;
+        box-shadow: none !important;
+      }
+      .skill-pill-item.skill-variant-1::before {
+        background-color: #00E5FF !important;
+      }
+      .skill-pill-item.skill-variant-1 .skill-jp {
+        color: #000000 !important;
+      }
+      .skill-pill-item.skill-variant-1:hover,
+      .skill-pill-item.skill-variant-1:active,
+      .skill-pill-item.skill-variant-1:focus-visible,
+      .skill-pill-item.skill-variant-1.is-clicked {
+        background-color: #00E5FF !important;
+        border-color: #000000 !important;
+        box-shadow: 2px 2px 0px #FFE600 !important;
+        color: #000000 !important;
+        transform: translate(-1.5px, -1.5px);
+      }
+      .skill-pill-item.skill-variant-1:hover::before,
+      .skill-pill-item.skill-variant-1:active::before,
+      .skill-pill-item.skill-variant-1:focus-visible::before,
+      .skill-pill-item.skill-variant-1.is-clicked::before {
+        background-color: #FF003C !important;
+      }
+      .skill-pill-item.skill-variant-1:hover .skill-jp,
+      .skill-pill-item.skill-variant-1:active .skill-jp,
+      .skill-pill-item.skill-variant-1.is-clicked .skill-jp {
+        color: #000000 !important;
+      }
+      .skill-pill-item.skill-variant-1:active {
+        transform: translate(1px, 1px);
+        box-shadow: 1px 1px 0px #FFE600 !important;
+      }
+      /* Skill Varian 2 */
+      .skill-pill-item.skill-variant-2 {
+        background-color: #FF003C !important;
+        border: 2px solid #FFFFFF !important;
+        color: #FFFFFF !important;
+        box-shadow: 2px 2px 0px #000000 !important;
+      }
+      .skill-pill-item.skill-variant-2::before {
+        background-color: #FFE600 !important;
+      }
+      .skill-pill-item.skill-variant-2 .skill-jp {
+        color: #FFFFFF !important;
+      }
+      .skill-pill-item.skill-variant-2:hover,
+      .skill-pill-item.skill-variant-2:active,
+      .skill-pill-item.skill-variant-2:focus-visible,
+      .skill-pill-item.skill-variant-2.is-clicked {
+        background-color: #FFE600 !important;
+        border-color: #000000 !important;
+        box-shadow: 2px 2px 0px #FF003C !important;
+        color: #000000 !important;
+        transform: translate(-1.5px, -1.5px);
+      }
+      .skill-pill-item.skill-variant-2:hover::before,
+      .skill-pill-item.skill-variant-2:active::before,
+      .skill-pill-item.skill-variant-2:focus-visible::before,
+      .skill-pill-item.skill-variant-2.is-clicked::before {
+        background-color: #00E5FF !important;
+      }
+      .skill-pill-item.skill-variant-2:hover .skill-jp,
+      .skill-pill-item.skill-variant-2:active .skill-jp,
+      .skill-pill-item.skill-variant-2.is-clicked .skill-jp {
+        color: #000000 !important;
+      }
+      .skill-pill-item.skill-variant-2:active {
+        transform: translate(1px, 1px);
+        box-shadow: 1px 1px 0px #FF003C !important;
+      }
+    </style>
+    <style id="fadhil-mobile-adjustments">
+      /* ==========================================================================
+         MOBILE OPTIMIZATIONS: SLIM COMPACT HEADER ACTIONS & SINGLE-COLUMN ORDER
+         ========================================================================== */
+      .fadhil-header {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+        padding: 4px 0 6px;
+      }
+      .header-left {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex-wrap: wrap;
+        width: 100%;
+      }
+      .cyber-logo-badge {
+        flex-shrink: 0;
+      }
+      .cyber-cariearsa-tag-btn {
+        flex-shrink: 0;
+      }
+      /* Compact action buttons row - fit without wasting screen space */
+      .header-actions {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        flex-wrap: wrap;
+        width: 100%;
+        margin-top: 2px;
+      }
+      /* Cloud Database Button & Portfolios Button sizing */
+      .cyber-action-btn {
+        padding: 4px 10px;
+        font-size: 0.78rem;
+        letter-spacing: 0.8px;
+        gap: 5px;
+        filter: drop-shadow(2px 2px 0px var(--manga-accent));
+      }
+      .cyber-action-btn::before {
+        clip-path: polygon(6px 0%, 100% 0%, 100% calc(100% - 6px), calc(100% - 6px) 100%, 0% 100%, 0% 6px);
+      }
+      .cyber-action-btn::after {
+        clip-path: polygon(5px 0%, 100% 0%, 100% calc(100% - 5px), calc(100% - 5px) 100%, 0% 100%, 0% 5px);
+      }
+      .cyber-action-btn.btn-cloud-db {
+        padding: 4px 10px;
+        font-size: 0.78rem;
+        letter-spacing: 0.8px;
+        gap: 5px;
+        filter: drop-shadow(2px 2px 0px var(--manga-red));
+      }
+      /* Email Pill sizing */
+      .email-cyber-btn {
+        padding: 4px 8px;
+        font-size: 0.76rem;
+        letter-spacing: 0.5px;
+        box-shadow: 2px 2px 0px var(--manga-red);
+      }
+      /* Theme toggle button sizing */
+      .cyber-theme-btn {
+        width: 28px;
+        height: 28px;
+        padding: 2px;
+        border-width: 1.5px;
+      }
+      .cyber-theme-btn img {
+        width: 18px;
+        height: 18px;
+      }
+      /* Single column mobile flow grid */
+      .mobile-bento-flow {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 12px !important;
+      }
+      .mobile-bento-flow > .cyber-frame {
+        width: 100% !important;
+        grid-column: span 12 !important;
+      }
+      .tools-14-grid {
+        display: grid !important;
+        grid-template-columns: repeat(7, 1fr) !important;
+        gap: 6px !important;
+        list-style: none !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+      }
+      .tools-14-grid .tool-slot-item {
+        width: 100% !important;
+        max-width: 48px !important;
+        aspect-ratio: 1 / 1 !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        padding: 3px !important;
+        box-sizing: border-box !important;
+        margin: 0 auto !important;
+      }
+      .tools-14-grid .tool-slot-item img {
+        width: 100% !important;
+        height: 100% !important;
+        max-width: 36px !important;
+        max-height: 36px !important;
+        object-fit: contain !important;
+      }
+      @media (max-width: 380px) {
+        .tools-14-grid {
+          gap: 4px !important;
+        }
+        .tools-14-grid .tool-slot-item {
+          padding: 2px !important;
+        }
+        .tools-14-grid .tool-slot-item img {
+          max-width: 30px !important;
+          max-height: 30px !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Top Infinite Neon Billboard Runner (Matching /*) -->
+    <div class="cyber-marquee" aria-label="Cyber Billboard Ticker">
+      <div class="marquee-track">
+        <span class="marquee-node neon-white">FADHIL.DEV</span>
+        <span class="marquee-node neon-yellow jp-text">キャリーアルサ</span>
+        <span class="marquee-node neon-white">CARIEARSA.COM</span>
+        <span class="marquee-node neon-yellow jp-text">ファディル</span>
+        <span class="marquee-node neon-ruby">PORTFOLIOS</span>
+        <span class="marquee-node neon-yellow jp-text">ポートフォリオ</span>
+        <span class="marquee-node neon-white">CYBER ARCHIVE</span>
+        <span class="marquee-node neon-yellow jp-text">サイバー開発者</span>
+        <span class="marquee-node neon-ruby">DEFENSIVE SECURITY</span>
+        <span class="marquee-node neon-yellow jp-text">防御的セキュリティ</span>
+      </div>
+      <div class="marquee-track" aria-hidden="true">
+        <span class="marquee-node neon-white">FADHIL.DEV</span>
+        <span class="marquee-node neon-yellow jp-text">キャリーアルサ</span>
+        <span class="marquee-node neon-white">CARIEARSA.COM</span>
+        <span class="marquee-node neon-yellow jp-text">ファディル</span>
+        <span class="marquee-node neon-ruby">PORTFOLIOS</span>
+        <span class="marquee-node neon-yellow jp-text">ポートフォリオ</span>
+        <span class="marquee-node neon-white">CYBER ARCHIVE</span>
+        <span class="marquee-node neon-yellow jp-text">サイバー開発者</span>
+        <span class="marquee-node neon-ruby">DEFENSIVE SECURITY</span>
+        <span class="marquee-node neon-yellow jp-text">防御的セキュリティ</span>
+      </div>
+    </div>
+
+    <!-- Main High-Density Desktop Shell -->
+    <div class="fadhil-shell">
+      <!-- Header & Navigation Strip -->
+      <header class="fadhil-header" role="banner">
+        <div class="header-left">
+          <a href="/fadhil/" id="btn-cyber-logo" class="cyber-logo-badge" title="Fadhil Akbar Cariearsa Official Portfolio" aria-label="Fadhil Dev Home">
+            <div class="logo-box-wrapper" id="logo-fadhil-wrapper">
+              <!-- Outline Kuning Cerah Terang (#FFE600): membentuk batas luar polygon cut-corner -->
+              <div class="logo-outline-layer" aria-hidden="true"></div>
+              <!-- Inner Plate Hitam: urutan index 2 -->
+              <div class="logo-inner-plate" id="logo-inner-plate">
+                <h1 class="cyber-logo-title" id="cyber-logo-heading">
+                  <span class="logo-bracket bracket-open">&lt;</span><span class="logo-part-white">FA</span><span class="logo-part-pink">DH</span><span class="logo-part-sky">IL</span><span class="logo-part-yellow">.DEV</span><span class="logo-bracket bracket-close">&gt;</span>
+                </h1>
+              </div>
+              <!-- Garis Tegak Biru Langit Cerah: diawal textbox judul, urutan index 10 -->
+              <div class="logo-vertical-blue-bar" aria-hidden="true"></div>
+            </div>
+          </a>
+          <!-- Direct Button CARIEARSA.COM: Cyber parallelogram with bottom-right chamfer cut, white outline, bright green shadow (#00FF66) -->
+          <a href="https://cariearsa.com" id="btn-cariearsa-tag" class="cyber-cariearsa-tag-btn" title="Kunjungi CARIEARSA.COM" target="_blank" rel="noopener noreferrer" aria-label="Visit CARIEARSA.COM">
+            <div class="cariearsa-outline-layer" aria-hidden="true"></div>
+            <div class="cariearsa-btn-plate" id="cariearsa-tag-plate">
+              <span class="cariearsa-btn-text">CARIEARSA.COM</span>
+            </div>
+          </a>
+        </div>
+
+        <nav class="header-actions" aria-label="Portfolio navigation">
+          <!-- Cloud Database -->
+          <a href="/cloud/" class="cyber-action-btn btn-cloud-db" id="btn-cloud-database" title="Buka Cloud Database">
+            <span>☁</span>
+            <span>CLOUD DATABASE</span>
+          </a>
+
+          <!-- Email Pill -->
+          <a href="mailto:fadhil@fadhil.dev" class="email-cyber-btn" id="btn-email-fadhil" title="Kirim email ke fadhil@fadhil.dev">
+            <span>
+              <span class="email-user">fadhil</span><span class="email-domain">@fadhil.dev</span>
+            </span>
+          </a>
+
+          <!-- Portfolios Jump -->
+          <a href="#portfolios-section" class="cyber-action-btn" title="Lihat daftar aplikasi portofolio">
+            <span>📂</span>
+            <span>PORTFOLIOS</span>
+          </a>
+
+          <!-- Theme Toggle -->
+          <button
+            type="button"
+            class="cyber-theme-btn theme-toggle"
+            aria-label="Switch between Dark Manga and Light Manga theme"
+            aria-pressed="false"
+            title="Ganti Tema (Dark / Light)"
+          >
+            <img src="/fadhil/assets/images/theme.avif" alt="Theme" width="24" height="24" />
+          </button>
+        </nav>
+      </header>
+
+      <!-- Mobile Bento Manga Grid (Ordered Top-to-Bottom: Banner -> About -> Socials -> Tools -> Skills -> Portfolios) -->
+      <main class="bento-grid mobile-bento-flow" role="main">
+          <!-- Hero Banner & Interactive Video Card (100% Size, Zero Top/Bottom Bezel) -->
+          <div class="cyber-frame cyber-frame-cut-all hero-banner-frame">
+            <div class="cyber-card-content hero-card-bleed">
+              <!-- Interactive Media Wrap (Click to Play YouTube Video) -->
+              <div
+                class="hero-media-wrap hero-video-trigger"
+                data-youtube-video-id="r_UrlnA-6z4"
+                data-youtube-start="6"
+                tabindex="0"
+                role="button"
+                aria-label="Play Fadhil Akbar portfolio video (start at 0:06 with audio)"
+                title="Klik untuk memutar video YouTube interaktif jernih 100% (Start 0:06)"
+              >
+                <!-- Responsive YouTube Embed Layer (Layer 1, di bawah image) -->
+                <div class="hero-video-frame-layer">
+                  <iframe
+                    id="fadhil-hero-yt"
+                    class="hero-yt-iframe"
+                    width="100%"
+                    height="100%"
+                    src="https://www.youtube.com/embed/r_UrlnA-6z4?si=MzDoxi9AW-lhCFSV&amp;start=6&amp;enablejsapi=1&amp;autoplay=1&amp;mute=1&amp;controls=1&amp;playsinline=1&amp;rel=0&amp;vq=hd1080"
+                    title="YouTube video player"
+                    frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    referrerpolicy="strict-origin-when-cross-origin"
+                    allowfullscreen>
+                  </iframe>
+                </div>
+
+                <!-- Picture Layer (Layer 2, di atas video, selang-seling tampil 2s dan hide 3s saat dimainkan) -->
+                <picture class="hero-picture-layer" id="hero-banner-picture">
+                  <source srcset="/fadhil/assets/images/portfolio-banner.avif" type="image/avif" />
+                  <source srcset="/fadhil/assets/images/portfolio-banner.webp" type="image/webp" />
+                  <img
+                    src="/fadhil/assets/images/portfolio-banner.jpg"
+                    alt="Fadhil Akbar Portfolio Banner"
+                    width="1600"
+                    height="900"
+                    loading="eager"
+                    decoding="async"
+                  />
+                </picture>
+
+                <!-- Hero Content Overlay (Pristine typography from original) -->
+                <div class="hero-overlay-content">
+                  <div class="hero-name-badge">
+                    <span>Fadhil Akbar</span>
+                    <span class="neon-dot">●</span>
+                    <span style="font-size: 1.2rem; color: var(--manga-accent); font-style: normal;">CARIEARSA</span>
+                  </div>
+                  <div class="hero-desc-badge">
+                    Hobbyist Developer, Designer & Cybersecurity Enthusiast.
+                  </div>
+                  <div class="hero-tech-strip">
+                    <span class="hero-tag-pill">Full-Stack Development</span>
+                    <span class="hero-tag-pill">UI/UX Design</span>
+                    <span class="hero-tag-pill">System Security</span>
+                    <button type="button" id="hero-sound-btn" class="hero-sound-pill" title="Aktifkan audio video YouTube 100%">
+                      <span class="sound-icon">🔊</span>
+                      <span class="sound-label">SOUND 100%</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 1: About Me & Core Tech Stack -->
+          <div class="cyber-frame about-cyber-frame">
+            <div class="cyber-card-content">
+              <div class="card-header-bar">
+                <div class="card-title-tag">
+                  <span class="cyber-title-box">ABOUT ME</span>
+                  <span class="cyber-jp-box">自己紹介</span>
+                </div>
+                <!-- Language Switcher Flags (Matching /*) -->
+                <div class="lang-flags-group" role="group" aria-label="Language Selector">
+                  <button type="button" class="lang-flag-btn" data-lang="id" title="Bahasa Indonesia" aria-label="Ganti bahasa ke Indonesia">
+                    <svg class="flag-icon" viewBox="0 0 24 16" width="18" height="12" aria-hidden="true">
+                      <rect width="24" height="8" fill="#E70011"/>
+                      <rect y="8" width="24" height="8" fill="#FFFFFF"/>
+                      <rect width="24" height="16" fill="none" stroke="#000000" stroke-width="1"/>
+                    </svg>
+                    <span class="flag-code">ID</span>
+                  </button>
+                  <button type="button" class="lang-flag-btn" data-lang="en" title="English" aria-label="Switch language to English">
+                    <svg class="flag-icon" viewBox="0 0 60 40" width="18" height="12" aria-hidden="true">
+                      <clipPath id="uk-flag-clip-fadhil">
+                        <rect width="60" height="40"/>
+                      </clipPath>
+                      <g clip-path="url(#uk-flag-clip-fadhil)">
+                        <rect width="60" height="40" fill="#012169"/>
+                        <path d="M0,0 L60,40 M60,0 L0,40" stroke="#fff" stroke-width="8"/>
+                        <path d="M0,0 L60,40 M60,0 L0,40" stroke="#C8102E" stroke-width="4"/>
+                        <path d="M30,0 v40 M0,20 h60" stroke="#fff" stroke-width="12"/>
+                        <path d="M30,0 v40 M0,20 h60" stroke="#C8102E" stroke-width="7"/>
+                        <rect width="60" height="40" fill="none" stroke="#000000" stroke-width="2"/>
+                      </g>
+                    </svg>
+                    <span class="flag-code">EN</span>
+                  </button>
+                  <button type="button" class="lang-flag-btn" data-lang="jp" title="日本語 (Japanese)" aria-label="言語を日本語に変更">
+                    <svg class="flag-icon" viewBox="0 0 24 16" width="18" height="12" aria-hidden="true">
+                      <rect width="24" height="16" fill="#FFFFFF"/>
+                      <circle cx="12" cy="8" r="4.8" fill="#BC002D"/>
+                      <rect width="24" height="16" fill="none" stroke="#000000" stroke-width="1"/>
+                    </svg>
+                    <span class="flag-code">JP</span>
+                  </button>
+                </div>
+              </div>
+
+              <div class="about-card-body">
+                <div class="about-author-header">
+                  <div class="about-author-title-group">
+                    <div class="about-author-name">FADHIL AKBAR CARIEARSA</div>
+                    <div class="cyber-badge-student" title="Status: Student">
+                      <span class="cyber-badge-student-inner">STUDENT</span>
+                    </div>
+                    <div class="cyber-badge-hobbyist" title="Status: Hobbyist">
+                      <span class="cyber-badge-hobbyist-inner">HOBBYIST</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="about-quote-box">
+                  <p id="about-desc-content">
+                    A generalist hobbyist with interests in design, development, animation, cybersecurity, and 2D art (strictly as a hobby and personal interest, not pursued seriously).
+                  </p>
+                </div>
+
+                <!-- Core 6 Languages Grid (Pola Selang-Seling 3 Varian Warna) -->
+                <ul class="core-lang-grid" aria-label="Core Programming Languages">
+                  <!-- HTML5: Varian 1 (Kuning Cerah / Marun Gelap / Bayangan Manga Red) -->
+                  <li class="core-lang-item core-lang-variant-1" title="HTML5" tabindex="0" role="button" aria-label="HTML5 Iconbox">
+                    <picture>
+                      <source srcset="/fadhil/assets/images/platform-icons/html-224.avif" type="image/avif" />
+                      <img src="/fadhil/assets/images/platform-icons/html-224.webp" alt="HTML5" width="48" height="48" loading="eager" />
+                    </picture>
+                  </li>
+                  <!-- JavaScript: Varian 2 (Biru Langit Cerah / Hitam / Bayangan Manga Red) -->
+                  <li class="core-lang-item core-lang-variant-2" title="JavaScript" tabindex="0" role="button" aria-label="JavaScript Iconbox">
+                    <picture>
+                      <source srcset="/fadhil/assets/images/platform-icons/javascript-224.avif" type="image/avif" />
+                      <img src="/fadhil/assets/images/platform-icons/javascript-224.webp" alt="JavaScript" width="48" height="48" loading="eager" />
+                    </picture>
+                  </li>
+                  <!-- CSS3: Varian 3 (Pink Cerah Terang / Marun Gelap / Bayangan Biru Langit Cerah) -->
+                  <li class="core-lang-item core-lang-variant-3" title="CSS3" tabindex="0" role="button" aria-label="CSS3 Iconbox">
+                    <picture>
+                      <source srcset="/fadhil/assets/images/platform-icons/css-224.avif" type="image/avif" />
+                      <img src="/fadhil/assets/images/platform-icons/css-224.webp" alt="CSS3" width="48" height="48" loading="eager" />
+                    </picture>
+                  </li>
+                  <!-- TypeScript: Varian 1 (Kuning Cerah / Marun Gelap / Bayangan Manga Red) -->
+                  <li class="core-lang-item core-lang-variant-1" title="TypeScript" tabindex="0" role="button" aria-label="TypeScript Iconbox">
+                    <picture>
+                      <source srcset="/fadhil/assets/images/platform-icons/typescript-224.avif" type="image/avif" />
+                      <img src="/fadhil/assets/images/platform-icons/typescript-224.webp" alt="TypeScript" width="48" height="48" loading="eager" />
+                    </picture>
+                  </li>
+                  <!-- Luau: Varian 2 (Biru Langit Cerah / Hitam / Bayangan Manga Red) -->
+                  <li class="core-lang-item core-lang-variant-2" title="Luau" tabindex="0" role="button" aria-label="Luau Iconbox">
+                    <picture>
+                      <source srcset="/fadhil/assets/images/platform-icons/luau-224.avif" type="image/avif" />
+                      <img src="/fadhil/assets/images/platform-icons/luau-224.webp" alt="Luau" width="48" height="48" loading="eager" />
+                    </picture>
+                  </li>
+                  <!-- Python: Varian 3 (Pink Cerah Terang / Marun Gelap / Bayangan Biru Langit Cerah) -->
+                  <li class="core-lang-item core-lang-variant-3" title="Python" tabindex="0" role="button" aria-label="Python Iconbox">
+                    <picture>
+                      <source srcset="/fadhil/assets/images/platform-icons/python-224.avif" type="image/avif" />
+                      <img src="/fadhil/assets/images/platform-icons/python-224.webp" alt="Python" width="48" height="48" loading="eager" />
+                    </picture>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 2: Active Social Profiles (14 Clickable) -->
+          <div class="cyber-frame socials-cyber-frame">
+            <div class="cyber-card-content">
+              <div class="card-header-bar">
+                <div class="card-title-tag">
+                  <span class="cyber-title-box">SOCIAL PROFILES</span>
+                  <span class="cyber-jp-box">ソーシャル</span>
+                </div>
+                <span class="card-status-pill">14 CLICKABLE</span>
+              </div>
+              <div class="socials-card-body">
+                <ul class="socials-14-grid" aria-label="Active social profiles">
+                  <!-- 1. MAL -->
+                  <li>
+                    <a href="https://myanimelist.net/profile/fadhilakbar" target="_blank" rel="noopener noreferrer" class="social-slot-link social-variant-1" title="MyAnimeList">
+                      <picture>
+                        <source srcset="/fadhil/assets/images/social/myanimelist.avif" type="image/avif" />
+                        <source srcset="/fadhil/assets/images/social/myanimelist.webp" type="image/webp" />
+                        <img src="/fadhil/assets/images/social/myanimelist.jpg" alt="MyAnimeList" width="36" height="36" loading="lazy" />
+                      </picture>
+                    </a>
+                  </li>
+                  <!-- 2. Discord -->
+                  <li>
+                    <a href="https://discord.com/users/1323914885238624298" target="_blank" rel="noopener noreferrer" class="social-slot-link social-variant-2" title="Discord">
+                      <picture>
+                        <source srcset="/fadhil/assets/images/social/discord.avif" type="image/avif" />
+                        <source srcset="/fadhil/assets/images/social/discord.webp" type="image/webp" />
+                        <img src="/fadhil/assets/images/social/discord.jpg" alt="Discord" width="36" height="36" loading="lazy" />
+                      </picture>
+                    </a>
+                  </li>
+                  <!-- 3. Instagram -->
+                  <li>
+                    <a href="https://www.instagram.com/fadhil.akbar.cariearsa?igsh=MWxraXQ2cjh0b3JyZA==" target="_blank" rel="noopener noreferrer" class="social-slot-link social-variant-3" title="Instagram">
+                      <picture>
+                        <source srcset="/fadhil/assets/images/social/instagram.avif" type="image/avif" />
+                        <source srcset="/fadhil/assets/images/social/instagram.webp" type="image/webp" />
+                        <img src="/fadhil/assets/images/social/instagram.jpg" alt="Instagram" width="36" height="36" loading="lazy" />
+                      </picture>
+                    </a>
+                  </li>
+                  <!-- 4. Duolingo -->
+                  <li>
+                    <a href="https://www.duolingo.com/profile/MTsN3Malang" target="_blank" rel="noopener noreferrer" class="social-slot-link social-variant-1" title="Duolingo">
+                      <picture>
+                        <source srcset="/fadhil/assets/images/social/duolingo.avif" type="image/avif" />
+                        <source srcset="/fadhil/assets/images/social/duolingo.webp" type="image/webp" />
+                        <img src="/fadhil/assets/images/social/duolingo.jpg" alt="Duolingo" width="36" height="36" loading="lazy" />
+                      </picture>
+                    </a>
+                  </li>
+                  <!-- 5. LeetCode -->
+                  <li>
+                    <a href="https://leetcode.com/u/FadhilAkbarCariearsa" target="_blank" rel="noopener noreferrer" class="social-slot-link social-variant-2" title="LeetCode">
+                      <picture>
+                        <source srcset="/fadhil/assets/images/social/leetcode.avif" type="image/avif" />
+                        <source srcset="/fadhil/assets/images/social/leetcode.webp" type="image/webp" />
+                        <img src="/fadhil/assets/images/social/leetcode.jpg" alt="LeetCode" width="36" height="36" loading="lazy" />
+                      </picture>
+                    </a>
+                  </li>
+                  <!-- 6. Monkeytype -->
+                  <li>
+                    <a href="https://monkeytype.com/profile/fadhilakbar" target="_blank" rel="noopener noreferrer" class="social-slot-link social-variant-3" title="Monkeytype">
+                      <picture>
+                        <source srcset="/fadhil/assets/images/social/monkeytype.avif" type="image/avif" />
+                        <source srcset="/fadhil/assets/images/social/monkeytype.webp" type="image/webp" />
+                        <img src="/fadhil/assets/images/social/monkeytype.jpg" alt="Monkeytype" width="36" height="36" loading="lazy" />
+                      </picture>
+                    </a>
+                  </li>
+                  <!-- 7. GitHub -->
+                  <li>
+                    <a href="https://github.com/fadhilakbarcariearsaindonesia" target="_blank" rel="noopener noreferrer" class="social-slot-link social-variant-1" title="GitHub">
+                      <picture>
+                        <source srcset="/fadhil/assets/images/social/github.avif" type="image/avif" />
+                        <source srcset="/fadhil/assets/images/social/github.webp" type="image/webp" />
+                        <img src="/fadhil/assets/images/social/github.jpg" alt="GitHub" width="36" height="36" loading="lazy" />
+                      </picture>
+                    </a>
+                  </li>
+                  <!-- 8. TryHackMe -->
+                  <li>
+                    <a href="https://tryhackme.com/p/fadhilakbar" target="_blank" rel="noopener noreferrer" class="social-slot-link social-variant-2" title="TryHackMe">
+                      <picture>
+                        <source srcset="/fadhil/assets/images/social/tryhackme.avif" type="image/avif" />
+                        <source srcset="/fadhil/assets/images/social/tryhackme.webp" type="image/webp" />
+                        <img src="/fadhil/assets/images/social/tryhackme.jpg" alt="TryHackMe" width="36" height="36" loading="lazy" />
+                      </picture>
+                    </a>
+                  </li>
+                  <!-- 9. Spotify -->
+                  <li>
+                    <a href="https://open.spotify.com/user/31atjyxnu3ck3yxvr3vsk7igsoqi" target="_blank" rel="noopener noreferrer" class="social-slot-link social-variant-3" title="Spotify">
+                      <picture>
+                        <source srcset="/fadhil/assets/images/social/spotify.avif" type="image/avif" />
+                        <source srcset="/fadhil/assets/images/social/spotify.webp" type="image/webp" />
+                        <img src="/fadhil/assets/images/social/spotify.jpg" alt="Spotify" width="36" height="36" loading="lazy" />
+                      </picture>
+                    </a>
+                  </li>
+                  <!-- 10. IMDb -->
+                  <li>
+                    <a href="https://www.imdb.com/user/p.bl7qolkdgr7bhx2kf7hxuhokau?ref_=hm_nv_profile" target="_blank" rel="noopener noreferrer" class="social-slot-link social-variant-1" title="IMDb">
+                      <picture>
+                        <source srcset="/fadhil/assets/images/social/imdb.avif" type="image/avif" />
+                        <source srcset="/fadhil/assets/images/social/imdb.webp" type="image/webp" />
+                        <img src="/fadhil/assets/images/social/imdb.jpg" alt="IMDb" width="36" height="36" loading="lazy" />
+                      </picture>
+                    </a>
+                  </li>
+                  <!-- 11. Wikipedia -->
+                  <li>
+                    <a href="https://id.wikipedia.org/wiki/Pengguna:Fadhil_Akbar_Cariearsa" target="_blank" rel="noopener noreferrer" class="social-slot-link social-variant-2" title="Wikipedia Profile">
+                      <picture>
+                        <source srcset="/fadhil/assets/images/social/wikipedia.avif" type="image/avif" />
+                        <source srcset="/fadhil/assets/images/social/wikipedia.webp" type="image/webp" />
+                        <img src="/fadhil/assets/images/social/wikipedia.jpg" alt="Wikipedia" width="36" height="36" loading="lazy" />
+                      </picture>
+                    </a>
+                  </li>
+                  <!-- 12. LinkedIn -->
+                  <li>
+                    <a href="https://www.linkedin.com/in/cariearsa/" target="_blank" rel="noopener noreferrer" class="social-slot-link social-variant-3" title="LinkedIn">
+                      <picture>
+                        <source srcset="/fadhil/assets/images/social/linkedin.avif" type="image/avif" />
+                        <source srcset="/fadhil/assets/images/social/linkedin.webp" type="image/webp" />
+                        <img src="/fadhil/assets/images/social/linkedin.jpg" alt="LinkedIn" width="36" height="36" loading="lazy" />
+                      </picture>
+                    </a>
+                  </li>
+                  <!-- 13. Roblox -->
+                  <li>
+                    <a href="https://www.roblox.com/users/profile?username=therealjeff_roblox" target="_blank" rel="noopener noreferrer" class="social-slot-link social-variant-1" title="Roblox">
+                      <picture>
+                        <source srcset="/fadhil/assets/images/social/roblox.avif" type="image/avif" />
+                        <source srcset="/fadhil/assets/images/social/roblox.webp" type="image/webp" />
+                        <img src="/fadhil/assets/images/social/roblox.jpg" alt="Roblox" width="36" height="36" loading="lazy" />
+                      </picture>
+                    </a>
+                  </li>
+                  <!-- 14. daily.dev -->
+                  <li>
+                    <a href="https://app.daily.dev/fadhilakbar" target="_blank" rel="noopener noreferrer" class="social-slot-link social-variant-2" title="daily.dev">
+                      <picture>
+                        <source srcset="/fadhil/assets/images/social/dailydev.avif" type="image/avif" />
+                        <source srcset="/fadhil/assets/images/social/dailydev.webp" type="image/webp" />
+                        <img src="/fadhil/assets/images/social/dailydev.jpg" alt="daily.dev" width="36" height="36" loading="lazy" />
+                      </picture>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="cyber-frame tools-cyber-frame" id="tools-cyber-frame">
+            <div class="cyber-card-content">
+              <div class="card-header-bar">
+                <div class="card-title-tag">
+                  <span class="cyber-title-box">TOOLS AND PLATFORMS</span>
+                  <span class="cyber-jp-box">開発ツール</span>
+                </div>
+                <span class="card-status-pill">14 PLATFORMS</span>
+              </div>
+              <div class="tools-card-body">
+                <ul class="tools-14-grid" aria-label="Development tools and platforms">
+                  <li class="tool-slot-item tool-variant-1" title="ibisPaint" tabindex="0" role="button" aria-label="ibisPaint Iconbox">
+                    <picture>
+                      <source srcset="/ibispaint-logo.avif" type="image/avif" />
+                      <img src="/ibispaint-logo.webp" alt="ibisPaint" width="40" height="40" loading="lazy" decoding="async" />
+                    </picture>
+                  </li>
+                  <li class="tool-slot-item tool-variant-2" title="VS Code" tabindex="0" role="button" aria-label="VS Code Iconbox">
+                    <picture>
+                      <source srcset="/vscode-logo.avif" type="image/avif" />
+                      <img src="/vscode-logo.webp" alt="VS Code" width="40" height="40" loading="lazy" decoding="async" />
+                    </picture>
+                  </li>
+                  <li class="tool-slot-item tool-variant-3" title="Cloudflare" tabindex="0" role="button" aria-label="Cloudflare Iconbox">
+                    <picture>
+                      <source srcset="/cloudflare-logo.avif" type="image/avif" />
+                      <img src="/cloudflare-logo.webp" alt="Cloudflare" width="40" height="40" loading="lazy" decoding="async" />
+                    </picture>
+                  </li>
+                  <li class="tool-slot-item tool-variant-1" title="Cloudflare Workers" tabindex="0" role="button" aria-label="Cloudflare Workers Iconbox">
+                    <picture>
+                      <source srcset="/cloudflare-workers-logo.avif" type="image/avif" />
+                      <img src="/cloudflare-workers-logo.webp" alt="Cloudflare Workers" width="40" height="40" loading="lazy" decoding="async" />
+                    </picture>
+                  </li>
+                  <li class="tool-slot-item tool-variant-2" title="Supabase" tabindex="0" role="button" aria-label="Supabase Iconbox">
+                    <picture>
+                      <source srcset="/supabase-logo.avif" type="image/avif" />
+                      <img src="/supabase-logo.webp" alt="Supabase" width="40" height="40" loading="lazy" decoding="async" />
+                    </picture>
+                  </li>
+                  <li class="tool-slot-item tool-variant-3" title="Git" tabindex="0" role="button" aria-label="Git Iconbox">
+                    <picture>
+                      <source srcset="/git-logo.avif" type="image/avif" />
+                      <img src="/git-logo.webp" alt="Git" width="40" height="40" loading="lazy" decoding="async" />
+                    </picture>
+                  </li>
+                  <li class="tool-slot-item tool-variant-1" title="Figma" tabindex="0" role="button" aria-label="Figma Iconbox">
+                    <picture>
+                      <source srcset="/figma-logo.avif" type="image/avif" />
+                      <img src="/figma-logo.webp" alt="Figma" width="40" height="40" loading="lazy" decoding="async" />
+                    </picture>
+                  </li>
+                  <li class="tool-slot-item tool-variant-2" title="PostgreSQL" tabindex="0" role="button" aria-label="PostgreSQL Iconbox">
+                    <picture>
+                      <source srcset="/postgresql-logo.avif" type="image/avif" />
+                      <img src="/postgresql-logo.webp" alt="PostgreSQL" width="40" height="40" loading="lazy" decoding="async" />
+                    </picture>
+                  </li>
+                  <li class="tool-slot-item tool-variant-3" title="MongoDB" tabindex="0" role="button" aria-label="MongoDB Iconbox">
+                    <picture>
+                      <source srcset="/mongodb-logo.avif" type="image/avif" />
+                      <img src="/mongodb-logo.webp" alt="MongoDB" width="40" height="40" loading="lazy" decoding="async" />
+                    </picture>
+                  </li>
+                  <li class="tool-slot-item tool-variant-1" title="Blender" tabindex="0" role="button" aria-label="Blender Iconbox">
+                    <picture>
+                      <source srcset="/blender-logo.avif" type="image/avif" />
+                      <img src="/blender-logo.webp" alt="Blender" width="40" height="40" loading="lazy" decoding="async" />
+                    </picture>
+                  </li>
+                  <li class="tool-slot-item tool-variant-2" title="Krita" tabindex="0" role="button" aria-label="Krita Iconbox">
+                    <picture>
+                      <source srcset="/krita-logo.avif" type="image/avif" />
+                      <img src="/krita-logo.webp" alt="Krita" width="40" height="40" loading="lazy" decoding="async" />
+                    </picture>
+                  </li>
+                  <li class="tool-slot-item tool-variant-3" title="Canva" tabindex="0" role="button" aria-label="Canva Iconbox">
+                    <picture>
+                      <source srcset="/canva-logo.avif" type="image/avif" />
+                      <img src="/canva-logo.webp" alt="Canva" width="40" height="40" loading="lazy" decoding="async" />
+                    </picture>
+                  </li>
+                  <li class="tool-slot-item tool-variant-1" title="Roblox Studio" tabindex="0" role="button" aria-label="Roblox Studio Iconbox">
+                    <picture>
+                      <source srcset="/roblox-studio-logo.avif" type="image/avif" />
+                      <img src="/roblox-studio-logo.webp" alt="Roblox Studio" width="40" height="40" loading="lazy" decoding="async" />
+                    </picture>
+                  </li>
+                  <li class="tool-slot-item tool-variant-2" title="Chrome DevTools" tabindex="0" role="button" aria-label="Chrome DevTools Iconbox">
+                    <picture>
+                      <source srcset="/devtool-logo.avif" type="image/avif" />
+                      <img src="/devtool-logo.webp" alt="Chrome DevTools" width="40" height="40" loading="lazy" decoding="async" />
+                    </picture>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card: Skills (3 Sub-Cards: Creative & Art, Technology & Development, Cyber & Research) -->
+          <div class="cyber-frame skills-cyber-frame" id="skills-cyber-frame">
+            <div class="cyber-card-content">
+              <div class="card-header-bar">
+                <div class="card-title-tag">
+                  <span class="cyber-title-box">SKILLS</span>
+                  <span class="cyber-jp-box">スキル</span>
+                </div>
+                <span class="card-status-pill">6 CAPABILITIES</span>
+              </div>
+              <div class="skills-box-inner" id="skills-box-inner">
+                <!-- Sub-card 1: CREATIVE AND ART -->
+                <div class="skill-subcard" id="skill-subcard-creative">
+                  <div class="skill-subcard-label">CREATIVE AND ART</div>
+                  <div class="skill-subcard-grid">
+                    <div class="skill-pill-item skill-variant-1" tabindex="0" role="button" aria-label="3D Animation">
+                      <span>3D Animation</span>
+                      <span class="skill-jp">3Dアニメーション</span>
+                    </div>
+                    <div class="skill-pill-item skill-variant-2" tabindex="0" role="button" aria-label="2D Art & Illustration">
+                      <span>2D Art &amp; Illustration</span>
+                      <span class="skill-jp">2Dアート＆イラスト</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Sub-card 2: TECHNOLOGY AND DEVELOPMENT (Zig-zag) -->
+                <div class="skill-subcard" id="skill-subcard-technology">
+                  <div class="skill-subcard-label">TECHNOLOGY AND DEVELOPMENT</div>
+                  <div class="skill-subcard-grid">
+                    <div class="skill-pill-item skill-variant-2" tabindex="0" role="button" aria-label="Full-Stack Development">
+                      <span>Full-Stack Development</span>
+                      <span class="skill-jp">フルスタック開発</span>
+                    </div>
+                    <div class="skill-pill-item skill-variant-1" tabindex="0" role="button" aria-label="UI/UX Design">
+                      <span>UI/UX Design</span>
+                      <span class="skill-jp">UI/UXデザイン</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Sub-card 3: CYBER AND RESEARCH (Zig-zag) -->
+                <div class="skill-subcard" id="skill-subcard-cyber">
+                  <div class="skill-subcard-label">CYBER AND RESEARCH</div>
+                  <div class="skill-subcard-grid">
+                    <div class="skill-pill-item skill-variant-1" tabindex="0" role="button" aria-label="Digital Psychology">
+                      <span>Digital Psychology</span>
+                      <span class="skill-jp">デジタル心理学</span>
+                    </div>
+                    <div class="skill-pill-item skill-variant-2" tabindex="0" role="button" aria-label="Technical Writing">
+                      <span>Technical Writing</span>
+                      <span class="skill-jp">テクニカルライティング</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        <!-- ===================================================================
+             FULL WIDTH ROW (12 COLS): 4 FEATURED LEARNING PORTFOLIO APPS
+             =================================================================== -->
+        <section id="portfolios-section" class="portfolios-section" aria-labelledby="portfolios-heading">
+          <div class="card-header-bar" style="border-radius: 4px;">
+            <div class="card-title-tag">
+              FEATURED LEARNING PORTFOLIOS
+              <span class="jp-sub" id="portfolios-heading">プロジェクトポートフォリオ (4 APPS)</span>
+            </div>
+            <span class="card-status-pill pill-green">ALL LIVE</span>
+          </div>
+
+          <div class="portfolios-grid-4">
+            <!-- 1. Share Ideas -->
+            <article class="portfolio-card-item">
+              <div class="portfolio-inner-plate">
+                <div class="portfolio-header-strip">
+                  <span class="portfolio-type-pill">EXPERIMENTAL DYNAMIC</span>
+                  <span class="card-status-pill">WEB APP</span>
+                </div>
+                <div class="portfolio-figure-wrap">
+                  <picture>
+                    <source srcset="/fadhil/assets/images/shareideas-banner.avif" type="image/avif" />
+                    <source srcset="/fadhil/assets/images/shareideas-banner.webp" type="image/webp" />
+                    <img src="/fadhil/assets/images/shareideas-banner.jpg" alt="Share Ideas Banner" width="480" height="270" loading="lazy" />
+                  </picture>
+                  <div class="portfolio-sfx-badge">ドンッ!!</div>
+                </div>
+                <div class="portfolio-meta-body">
+                  <h3 class="portfolio-app-title">Share Ideas</h3>
+                  <a href="https://fadhil.dev/shareideas" target="_blank" rel="noopener noreferrer" class="portfolio-launch-btn" title="Buka Share Ideas">
+                    <span>LAUNCH APP</span>
+                    <span>// 開く</span>
+                  </a>
+                </div>
+              </div>
+            </article>
+
+            <!-- 2. Mind Map Maker -->
+            <article class="portfolio-card-item">
+              <div class="portfolio-inner-plate">
+                <div class="portfolio-header-strip">
+                  <span class="portfolio-type-pill">EXPERIMENTAL DYNAMIC</span>
+                  <span class="card-status-pill">WEB APP</span>
+                </div>
+                <div class="portfolio-figure-wrap">
+                  <picture>
+                    <source srcset="/fadhil/assets/images/mindmapmaker-banner.avif" type="image/avif" />
+                    <source srcset="/fadhil/assets/images/mindmapmaker-banner.webp" type="image/webp" />
+                    <img src="/fadhil/assets/images/mindmapmaker-banner.jpg" alt="Mind Map Maker Banner" width="480" height="270" loading="lazy" />
+                  </picture>
+                  <div class="portfolio-sfx-badge">バァン!!</div>
+                </div>
+                <div class="portfolio-meta-body">
+                  <h3 class="portfolio-app-title">Mind Map Maker</h3>
+                  <a href="https://fadhil.dev/mindmapmaker" target="_blank" rel="noopener noreferrer" class="portfolio-launch-btn" title="Buka Mind Map Maker">
+                    <span>LAUNCH APP</span>
+                    <span>// 開く</span>
+                  </a>
+                </div>
+              </div>
+            </article>
+
+            <!-- 3. Flag Maker -->
+            <article class="portfolio-card-item">
+              <div class="portfolio-inner-plate">
+                <div class="portfolio-header-strip">
+                  <span class="portfolio-type-pill">STATIC CANVAS ENGINE</span>
+                  <span class="card-status-pill">TOOL</span>
+                </div>
+                <div class="portfolio-figure-wrap">
+                  <picture>
+                    <source srcset="/fadhil/assets/images/flagmaker-banner.avif" type="image/avif" />
+                    <source srcset="/fadhil/assets/images/flagmaker-banner.webp" type="image/webp" />
+                    <img src="/fadhil/assets/images/flagmaker-banner.jpg" alt="Flag Maker Banner" width="480" height="270" loading="lazy" />
+                  </picture>
+                  <div class="portfolio-sfx-badge">シュッ!!</div>
+                </div>
+                <div class="portfolio-meta-body">
+                  <h3 class="portfolio-app-title">Flag Maker</h3>
+                  <a href="https://fadhil.dev/Flag-Maker" target="_blank" rel="noopener noreferrer" class="portfolio-launch-btn" title="Buka Flag Maker">
+                    <span>LAUNCH APP</span>
+                    <span>// 開く</span>
+                  </a>
+                </div>
+              </div>
+            </article>
+
+            <!-- 4. Wikipedia Custom Profile -->
+            <article class="portfolio-card-item">
+              <div class="portfolio-inner-plate">
+                <div class="portfolio-header-strip">
+                  <span class="portfolio-type-pill">CUSTOM HTML, CSS, JS</span>
+                  <span class="card-status-pill">PROFILE</span>
+                </div>
+                <div class="portfolio-figure-wrap">
+                  <picture>
+                    <source srcset="/fadhil/assets/images/wikipediaindonesia-banner.avif" type="image/avif" />
+                    <source srcset="/fadhil/assets/images/wikipediaindonesia-banner.webp" type="image/webp" />
+                    <img src="/fadhil/assets/images/wikipediaindonesia-banner.jpg" alt="Wikipedia Custom Profile Banner" width="480" height="270" loading="lazy" />
+                  </picture>
+                  <div class="portfolio-sfx-badge">ズズズ</div>
+                </div>
+                <div class="portfolio-meta-body">
+                  <h3 class="portfolio-app-title">Wikipedia Custom Profile</h3>
+                  <a href="https://fadhil.dev/wikipediaindonesia" target="_blank" rel="noopener noreferrer" class="portfolio-launch-btn" title="Buka Wikipedia Custom Profile">
+                    <span>LAUNCH APP</span>
+                    <span>// 開く</span>
+                  </a>
+                </div>
+              </div>
+            </article>
+          </div>
+        </section>
+      </main>
+
+      <!-- Cyber Angled Footer -->
+      <footer class="fadhil-footer" role="contentinfo">
+        <div>
+          © 2026 <strong>FADHIL AKBAR CARIEARSA</strong>. ALL RIGHTS RESERVED. LICENSED UNDER CC BY-NC-ND 4.0.
+        </div>
+        <a href="#" class="footer-top-jump" title="Kembali ke atas">
+          <span>▲ TOP OF PAGE</span>
+          <span>// 先頭へ</span>
+        </a>
+      </footer>
+    </div>
+
+    <!-- YouTube IFrame API & Main Cyber Controller -->
+    <script src="https://www.youtube.com/iframe_api"></script>
+    <script src="/fadhil/app/main.js?v=20260913_zoom110" defer></script>
+  </body>
+</html>
