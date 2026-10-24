@@ -9,6 +9,10 @@ coverage/
 bun.lock
 bun.lockb
 fadhildev/
+fadhil/
+public/fadhil/
+public/fadhil-512x512.png
+public/fadhil.svg
 .playwright-cli/
 public/assets/aistudio/
 .aistudio/

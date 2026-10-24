@@ -2,8 +2,6 @@
 User-agent: *
 Allow: /
 Allow: /mobile/
-Allow: /fadhil/
-Allow: /fadhil/mobile/
 Allow: /cloud/
 Allow: /cloud/mobile/
 Allow: /hub/
@@ -34,8 +32,6 @@ Disallow: /api/
 User-agent: Googlebot
 Allow: /
 Allow: /mobile/
-Allow: /fadhil/
-Allow: /fadhil/mobile/
 Allow: /cloud/
 Allow: /hub/
 Allow: /japan/

@@ -112,19 +112,9 @@ async function startServer() {
     res.redirect(302, '/intro/');
   });
 
-  // Fadhil portfolio subdirectory redirect handlers
-  app.get('/fadhil', (req, res) => {
-    res.redirect(302, '/fadhil/');
-  });
-
-  app.get('/fadhil/mobile', (req, res) => {
-    res.redirect(302, '/fadhil/mobile/');
-  });
-
-  app.get('/fadhil/app/styles.css', (req, res) => {
-    res.setHeader('Content-Type', 'text/css; charset=utf-8');
-    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
-    res.sendFile(path.join(appDir, 'fadhil/app/styles.css'));
+  // Fadhil portfolio standalone redirect handler
+  app.get(['/fadhil', '/fadhil/*', '/fadhil/mobile', '/fadhil/mobile/*'], (_req, res) => {
+    res.redirect(301, 'https://fadhil.dev');
   });
 
   app.use((req, res, next) => {
@@ -132,21 +122,6 @@ async function startServer() {
       if (isMobileClient(req)) {
         const qs = req.url.includes('?') ? req.url.slice(req.url.indexOf('?')) : '';
         return res.redirect(302, `/mobile/${qs}`);
-      }
-    }
-    if (req.path === '/fadhil' || req.path === '/fadhil/' || req.path === '/fadhil/index.html') {
-      if (isMobileClient(req)) {
-        const qs = req.url.includes('?') ? req.url.slice(req.url.indexOf('?')) : '';
-        return res.redirect(302, `/fadhil/mobile/${qs}`);
-      }
-    }
-    if (req.path === '/fadhil/mobile' || req.path === '/fadhil/mobile/' || req.path === '/fadhil/mobile/index.html') {
-      const ua = (req.headers['user-agent'] as string) || '';
-      const isTV = /SmartTV|HbbTV|BRAVIA|NetCast|Tizen|Viera|AppleTV|Xbox|PlayStation|Nintendo|Roku/i.test(ua);
-      const isDesktop = isTV || (!isMobileClient(req) && /Windows NT|Macintosh|Linux x86_64|CrOS x86_64/i.test(ua));
-      if (isDesktop) {
-        const qs = req.url.includes('?') ? req.url.slice(req.url.indexOf('?')) : '';
-        return res.redirect(302, `/fadhil/${qs}`);
       }
     }
     next();
@@ -218,12 +193,6 @@ async function startServer() {
     });
     app.get(['/note', '/note/'], (req, res) => {
       res.sendFile(path.join(distPath, 'note/index.html'));
-    });
-    app.get(['/fadhil', '/fadhil/'], (req, res) => {
-      res.sendFile(path.join(distPath, 'fadhil/index.html'));
-    });
-    app.get(['/fadhil/mobile', '/fadhil/mobile/'], (req, res) => {
-      res.sendFile(path.join(distPath, 'fadhil/mobile/index.html'));
     });
     app.get(['/components', '/components/'], (req, res) => {
       res.sendFile(path.join(distPath, 'components/index.html'));

@@ -27,12 +27,9 @@ export default defineConfig(() => {
             apiApp.get('/api/health', (_r: any, s: any) => s.json({ status: 'ok', time: new Date().toISOString() }));
 
             server.middlewares.use((req: any, res: any, next: any) => {
-              if (req.url && req.url.startsWith('/fadhil/app/styles.css')) {
-                res.setHeader('Content-Type', 'text/css; charset=utf-8');
-                res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
-                const cssPath = path.resolve(process.cwd(), 'fadhil/app/styles.css');
-                const css = fs.readFileSync(cssPath, 'utf-8');
-                return res.end(css);
+              if (req.url && (req.url === '/fadhil' || req.url.startsWith('/fadhil/'))) {
+                res.writeHead(301, { Location: 'https://fadhil.dev' });
+                return res.end();
               }
               if (req.url && req.url.startsWith('/public/')) {
                 req.url = req.url.replace(/^\/public/, '');
@@ -48,14 +45,6 @@ export default defineConfig(() => {
                 res.writeHead(302, { Location: '/intro/' });
                 return res.end();
               }
-              if (req.url === '/fadhil') {
-                res.writeHead(302, { Location: '/fadhil/' });
-                return res.end();
-              }
-              if (req.url === '/fadhil/mobile') {
-                res.writeHead(302, { Location: '/fadhil/mobile/' });
-                return res.end();
-              }
               // Server-side mobile detection for dev
               if (req.url === '/' || req.url === '/index.html') {
                 const ua = req.headers['user-agent'] || '';
@@ -63,27 +52,6 @@ export default defineConfig(() => {
                 const isMobileUA = chMobile === '?1' || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|Tablet|Silk|Kindle|PlayBook|Nexus|SM-|Pixel|XiaoMi|Oppo|Vivo|Realme|HarmonyOS|Huawei/i.test(ua);
                 if (isMobileUA) {
                   res.writeHead(302, { Location: '/mobile/' });
-                  return res.end();
-                }
-              }
-              if (req.url === '/fadhil/' || req.url === '/fadhil/index.html') {
-                const ua = req.headers['user-agent'] || '';
-                const chMobile = req.headers['sec-ch-ua-mobile'];
-                const isTV = /SmartTV|HbbTV|BRAVIA|NetCast|Tizen|Viera|AppleTV|Xbox|PlayStation|Nintendo|Roku/i.test(ua);
-                const isMobileUA = !isTV && (chMobile === '?1' || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|Tablet|Silk|Kindle|PlayBook|Nexus|SM-|Pixel|XiaoMi|Oppo|Vivo|Realme|HarmonyOS|Huawei/i.test(ua));
-                if (isMobileUA) {
-                  res.writeHead(302, { Location: '/fadhil/mobile/' });
-                  return res.end();
-                }
-              }
-              if (req.url === '/fadhil/mobile/' || req.url === '/fadhil/mobile/index.html') {
-                const ua = req.headers['user-agent'] || '';
-                const chMobile = req.headers['sec-ch-ua-mobile'];
-                const isTV = /SmartTV|HbbTV|BRAVIA|NetCast|Tizen|Viera|AppleTV|Xbox|PlayStation|Nintendo|Roku/i.test(ua);
-                const isMobileUA = !isTV && (chMobile === '?1' || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|Tablet|Silk|Kindle|PlayBook|Nexus|SM-|Pixel|XiaoMi|Oppo|Vivo|Realme|HarmonyOS|Huawei/i.test(ua));
-                const isDesktop = isTV || (!isMobileUA && /Windows NT|Macintosh|Linux x86_64|CrOS x86_64/i.test(ua));
-                if (isDesktop) {
-                  res.writeHead(302, { Location: '/fadhil/' });
                   return res.end();
                 }
               }
@@ -126,9 +94,7 @@ export default defineConfig(() => {
           cloudMobile: path.resolve(__dirname, 'cloud/mobile/index.html'),
           note: path.resolve(__dirname, 'note/index.html'),
           introlab: path.resolve(__dirname, 'introlab/index.html'),
-          c360: path.resolve(__dirname, '360/index.html'),
-          fadhil: path.resolve(__dirname, 'fadhil/index.html'),
-          fadhilMobile: path.resolve(__dirname, 'fadhil/mobile/index.html')
+          c360: path.resolve(__dirname, '360/index.html')
         },
         output: {
           manualChunks(id) {
