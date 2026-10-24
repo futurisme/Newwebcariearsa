@@ -8,7 +8,7 @@ export interface FileData {
     size?: number;
     mimetype?: string;
     [key: string]: any;
-  };
+  } | null;
   publicUrl: string;
 }
 

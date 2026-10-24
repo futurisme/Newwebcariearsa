@@ -184,6 +184,25 @@
       }
     };
 
+    const updateSoundIndicator = (active) => {
+      isAudioActive = active;
+      if (!soundToggleBtn) return;
+      if (active && isPlaying) {
+        soundToggleBtn.classList.remove("is-muted");
+        soundToggleBtn.classList.add("is-active");
+        soundToggleBtn.innerHTML = '<span class="sound-icon">🔊</span><span class="sound-label">SOUND 100%</span>';
+        soundToggleBtn.title = "Audio aktif 100% (Klik untuk jeda/mute)";
+      } else {
+        soundToggleBtn.classList.remove("is-active");
+        soundToggleBtn.classList.add("is-muted");
+        soundToggleBtn.innerHTML = '<span class="sound-icon">🔇</span><span class="sound-label">CLICK FOR SOUND 100%</span>';
+        soundToggleBtn.title = "Click video or this button to play audio 100%";
+      }
+    };
+
+    // Initialize in blinking muted state
+    updateSoundIndicator(false);
+
     const activateVideoAndAudio = () => {
       isAudioActive = true;
       isPlaying = true;
@@ -208,12 +227,25 @@
         } catch (_) {}
       }
 
-      if (soundToggleBtn) {
-        soundToggleBtn.innerHTML = '<span class="sound-icon">🔊</span><span class="sound-label">SOUND 100%</span>';
-        soundToggleBtn.classList.add("is-active");
-      }
-
+      updateSoundIndicator(true);
       startBannerCycle();
+    };
+
+    const toggleVideoAndAudio = () => {
+      if (isAudioActive && isPlaying) {
+        sendYTCommand("pauseVideo");
+        sendYTCommand("mute");
+        if (ytPlayer && typeof ytPlayer.pauseVideo === "function") {
+          try {
+            ytPlayer.pauseVideo?.();
+            ytPlayer.mute?.();
+          } catch (_) {}
+        }
+        isPlaying = false;
+        updateSoundIndicator(false);
+      } else {
+        activateVideoAndAudio();
+      }
     };
 
     const initYT = () => {
@@ -235,6 +267,9 @@
                     event.target.unMute();
                     event.target.playVideo();
                   } catch (_) {}
+                  updateSoundIndicator(true);
+                } else {
+                  updateSoundIndicator(false);
                 }
               },
               onStateChange: (event) => {
@@ -242,9 +277,11 @@
                   event.target.setPlaybackQuality("hd1080");
                 } catch (_) {}
                 if (event.data === 0) {
+                  // Video finished/restart
                   event.target.seekTo(startTime, true);
                   event.target.playVideo();
                 } else if (event.data === 1) {
+                  // Playing
                   isPlaying = true;
                   startBannerCycle();
                   if (isAudioActive) {
@@ -252,7 +289,14 @@
                       event.target.unMute();
                       event.target.setVolume(100);
                     } catch (_) {}
+                    updateSoundIndicator(true);
+                  } else {
+                    updateSoundIndicator(false);
                   }
+                } else if (event.data === 2) {
+                  // Paused
+                  isPlaying = false;
+                  updateSoundIndicator(false);
                 }
               }
             }
@@ -290,23 +334,16 @@
 
     soundToggleBtn?.addEventListener("click", (e) => {
       e.stopPropagation();
-      activateVideoAndAudio();
+      toggleVideoAndAudio();
     });
 
     soundToggleBtn?.addEventListener("keydown", (e) => {
       if (e.key === "Enter" || e.key === " ") {
         e.preventDefault();
         e.stopPropagation();
-        activateVideoAndAudio();
+        toggleVideoAndAudio();
       }
     });
-
-    const gestureEvents = ['click', 'pointerdown', 'keydown', 'touchstart'];
-    const handleUniversalGesture = () => {
-      activateVideoAndAudio();
-      gestureEvents.forEach(evt => window.removeEventListener(evt, handleUniversalGesture, { capture: true }));
-    };
-    gestureEvents.forEach(evt => window.addEventListener(evt, handleUniversalGesture, { capture: true, passive: true }));
 
     window.addEventListener("keydown", (event) => {
       if (event.altKey || event.ctrlKey || event.metaKey || event.repeat) return;

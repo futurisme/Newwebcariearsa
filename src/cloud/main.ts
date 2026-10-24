@@ -1319,6 +1319,10 @@ async function fetchFiles(showLoading = true) {
           const { data: urlData } = supabaseClient.storage.from(BUCKET_NAME).getPublicUrl(file.name);
           return {
             ...file,
+            id: file.id || file.name,
+            created_at: file.created_at || new Date().toISOString(),
+            updated_at: file.updated_at || new Date().toISOString(),
+            last_accessed_at: file.last_accessed_at || new Date().toISOString(),
             publicUrl: urlData.publicUrl,
           };
         });

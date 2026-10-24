@@ -1,7 +1,0 @@
-# Cloudflare Pages redirect rules for fadhildev
-/fadhil/mobile /mobile/ 301
-/fadhil/mobile/ /mobile/ 301
-/fadhil / 301
-/fadhil/ / 301
-/fadhil/* /:splat 200
-

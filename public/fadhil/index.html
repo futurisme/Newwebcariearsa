@@ -599,12 +599,12 @@
         position: relative;
         display: flex;
         align-items: center;
-        justify-content: space-between;
-        padding: 5px 10px 5px 14px;
+        justify-content: flex-start;
+        padding: 5px 14px 5px 16px;
         font-family: var(--font-display, 'Oswald', sans-serif);
         font-weight: 800;
-        font-size: 0.86rem;
-        letter-spacing: 0.5px;
+        font-size: 0.90rem;
+        letter-spacing: 0.6px;
         min-height: 34px;
         box-sizing: border-box;
         cursor: pointer;
@@ -945,21 +945,10 @@
                 </picture>
 
                 <div class="hero-overlay-content">
-                  <div class="hero-name-badge">
-                    <span>Fadhil Akbar</span>
-                    <span class="neon-dot">●</span>
-                    <span style="font-size: 1.2rem; color: var(--manga-accent); font-style: normal;">CARIEARSA</span>
-                  </div>
-                  <div class="hero-desc-badge">
-                    Hobbyist Developer, Designer & Cybersecurity Enthusiast.
-                  </div>
-                  <div class="hero-tech-strip">
-                    <span class="hero-tag-pill">Full-Stack Development</span>
-                    <span class="hero-tag-pill">UI/UX Design</span>
-                    <span class="hero-tag-pill">System Security</span>
-                    <button type="button" id="hero-sound-btn" class="hero-sound-pill" title="Aktifkan audio video YouTube 100%">
-                      <span class="sound-icon">🔊</span>
-                      <span class="sound-label">SOUND 100%</span>
+                  <div class="hero-sound-wrap">
+                    <button type="button" id="hero-sound-btn" class="hero-sound-pill is-muted" title="Click to play video with 100% audio">
+                      <span class="sound-icon">🔇</span>
+                      <span class="sound-label">CLICK FOR SOUND 100%</span>
                     </button>
                   </div>
                 </div>
@@ -972,7 +961,6 @@
               <div class="card-header-bar">
                 <div class="card-title-tag">
                   <span class="cyber-title-box">SKILLS</span>
-                  <span class="cyber-jp-box">スキル</span>
                 </div>
                 <span class="card-status-pill">6 CAPABILITIES</span>
               </div>
@@ -983,11 +971,9 @@
                   <div class="skill-subcard-grid">
                     <div class="skill-pill-item skill-variant-1" tabindex="0" role="button" aria-label="3D Animation">
                       <span>3D Animation</span>
-                      <span class="skill-jp">3Dアニメーション</span>
                     </div>
                     <div class="skill-pill-item skill-variant-2" tabindex="0" role="button" aria-label="2D Art & Illustration">
                       <span>2D Art &amp; Illustration</span>
-                      <span class="skill-jp">2Dアート＆イラスト</span>
                     </div>
                   </div>
                 </div>
@@ -997,11 +983,9 @@
                   <div class="skill-subcard-grid">
                     <div class="skill-pill-item skill-variant-2" tabindex="0" role="button" aria-label="Full-Stack Development">
                       <span>Full-Stack Development</span>
-                      <span class="skill-jp">フルスタック開発</span>
                     </div>
                     <div class="skill-pill-item skill-variant-1" tabindex="0" role="button" aria-label="UI/UX Design">
                       <span>UI/UX Design</span>
-                      <span class="skill-jp">UI/UXデザイン</span>
                     </div>
                   </div>
                 </div>
@@ -1011,11 +995,9 @@
                   <div class="skill-subcard-grid">
                     <div class="skill-pill-item skill-variant-1" tabindex="0" role="button" aria-label="Digital Psychology">
                       <span>Digital Psychology</span>
-                      <span class="skill-jp">デジタル心理学</span>
                     </div>
                     <div class="skill-pill-item skill-variant-2" tabindex="0" role="button" aria-label="Technical Writing">
                       <span>Technical Writing</span>
-                      <span class="skill-jp">テクニカルライティング</span>
                     </div>
                   </div>
                 </div>
@@ -1031,7 +1013,6 @@
               <div class="card-header-bar">
                 <div class="card-title-tag">
                   <span class="cyber-title-box">ABOUT ME</span>
-                  <span class="cyber-jp-box">自己紹介</span>
                 </div>
                 
                 <div class="lang-flags-group" role="group" aria-label="Language Selector">
@@ -1142,7 +1123,6 @@
               <div class="card-header-bar">
                 <div class="card-title-tag">
                   <span class="cyber-title-box">SOCIAL PROFILES</span>
-                  <span class="cyber-jp-box">ソーシャル</span>
                 </div>
                 <span class="card-status-pill">14 CLICKABLE</span>
               </div>
@@ -1298,7 +1278,6 @@
               <div class="card-header-bar">
                 <div class="card-title-tag">
                   <span class="cyber-title-box">TOOLS AND PLATFORMS</span>
-                  <span class="cyber-jp-box">開発ツール</span>
                 </div>
                 <span class="card-status-pill">14 PLATFORMS</span>
               </div>
@@ -1406,8 +1385,7 @@
         <section id="portfolios-section" class="portfolios-section" aria-labelledby="portfolios-heading">
           <div class="card-header-bar" style="border-radius: 4px;">
             <div class="card-title-tag">
-              FEATURED LEARNING PORTFOLIOS
-              <span class="jp-sub" id="portfolios-heading">プロジェクトポートフォリオ (4 APPS)</span>
+              <span class="cyber-title-box" id="portfolios-heading">FEATURED LEARNING PORTFOLIOS</span>
             </div>
             <span class="card-status-pill pill-green">ALL LIVE</span>
           </div>
@@ -1426,13 +1404,11 @@
                     <source srcset="/fadhil/assets/images/shareideas-banner.webp" type="image/webp" />
                     <img src="/fadhil/assets/images/shareideas-banner.jpg" alt="Share Ideas Banner" width="480" height="270" loading="lazy" />
                   </picture>
-                  <div class="portfolio-sfx-badge">ドンッ!!</div>
                 </div>
                 <div class="portfolio-meta-body">
                   <h3 class="portfolio-app-title">Share Ideas</h3>
                   <a href="https://fadhil.dev/shareideas" target="_blank" rel="noopener noreferrer" class="portfolio-launch-btn" title="Buka Share Ideas">
                     <span>LAUNCH APP</span>
-                    <span>// 開く</span>
                   </a>
                 </div>
               </div>
@@ -1450,13 +1426,11 @@
                     <source srcset="/fadhil/assets/images/mindmapmaker-banner.webp" type="image/webp" />
                     <img src="/fadhil/assets/images/mindmapmaker-banner.jpg" alt="Mind Map Maker Banner" width="480" height="270" loading="lazy" />
                   </picture>
-                  <div class="portfolio-sfx-badge">バァン!!</div>
                 </div>
                 <div class="portfolio-meta-body">
                   <h3 class="portfolio-app-title">Mind Map Maker</h3>
                   <a href="https://fadhil.dev/mindmapmaker" target="_blank" rel="noopener noreferrer" class="portfolio-launch-btn" title="Buka Mind Map Maker">
                     <span>LAUNCH APP</span>
-                    <span>// 開く</span>
                   </a>
                 </div>
               </div>
@@ -1474,13 +1448,11 @@
                     <source srcset="/fadhil/assets/images/flagmaker-banner.webp" type="image/webp" />
                     <img src="/fadhil/assets/images/flagmaker-banner.jpg" alt="Flag Maker Banner" width="480" height="270" loading="lazy" />
                   </picture>
-                  <div class="portfolio-sfx-badge">シュッ!!</div>
                 </div>
                 <div class="portfolio-meta-body">
                   <h3 class="portfolio-app-title">Flag Maker</h3>
                   <a href="https://fadhil.dev/Flag-Maker" target="_blank" rel="noopener noreferrer" class="portfolio-launch-btn" title="Buka Flag Maker">
                     <span>LAUNCH APP</span>
-                    <span>// 開く</span>
                   </a>
                 </div>
               </div>
@@ -1498,13 +1470,11 @@
                     <source srcset="/fadhil/assets/images/wikipediaindonesia-banner.webp" type="image/webp" />
                     <img src="/fadhil/assets/images/wikipediaindonesia-banner.jpg" alt="Wikipedia Custom Profile Banner" width="480" height="270" loading="lazy" />
                   </picture>
-                  <div class="portfolio-sfx-badge">ズズズ</div>
                 </div>
                 <div class="portfolio-meta-body">
                   <h3 class="portfolio-app-title">Wikipedia Custom Profile</h3>
                   <a href="https://fadhil.dev/wikipediaindonesia" target="_blank" rel="noopener noreferrer" class="portfolio-launch-btn" title="Buka Wikipedia Custom Profile">
                     <span>LAUNCH APP</span>
-                    <span>// 開く</span>
                   </a>
                 </div>
               </div>
@@ -1519,7 +1489,6 @@
         </div>
         <a href="#" class="footer-top-jump" title="Kembali ke atas">
           <span>▲ TOP OF PAGE</span>
-          <span>// 先頭へ</span>
         </a>
       </footer>
     </div>
